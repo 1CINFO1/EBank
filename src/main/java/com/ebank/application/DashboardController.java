@@ -1,4 +1,4 @@
-package com.abcbank.application;
+package com.ebank.application;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,10 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import com.ebank.application.utils.MaConnexion;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +30,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 
 public class DashboardController implements Initializable {
 
@@ -132,7 +132,6 @@ public class DashboardController implements Initializable {
     @FXML
     private Pane withdrawPane;
 
-
     @FXML
     void showDepositPane() {
         homePane.setVisible(false);
@@ -179,32 +178,31 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(true);
     }
 
-    protected
-    String errorStyle = "-fx-text-fill: RED;";
+    protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
-    
+
     public User currentUser = new User();
 
     ResultSet rs = null;
     PreparedStatement pst = null;
+    Connection conn = MaConnexion.getInstance().getCnx();
 
     public void setLabels() {
         name.setText(currentUser.getName());
         dob.setText(currentUser.getDob().toString());
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
-        balance.setText(String.format("%.2f",currentUser.getBalance()) +"$");
+        balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
 
-    
     public void deposit(double amount) {
         double total = amount + currentUser.getBalance();
         currentUser.setBalance(total);
-        try{
-            if(amount<= 0.0){
+        try {
+            if (amount <= 0.0) {
                 throw new IllegalArgumentException();
             }
-            Connection conn = MySQLConnect.connectDB();
+            ;
             String sql = "UPDATE users SET balance = ? Where email = ?";
             assert conn != null;
             pst = conn.prepareStatement(sql);
@@ -214,35 +212,32 @@ public class DashboardController implements Initializable {
             depositConfirmationText.setText("Deposit Succeeded");
             depositConfirmationText.setStyle(successStyle);
             depositAmountTextField.setText("");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             depositConfirmationText.setText("Please Enter a Positive Value");
             depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");            
+            depositAmountTextField.setText("");
+        }
     }
-}
 
     @FXML
     public void confirmDeposit() {
-        try{
+        try {
             double amount = Double.parseDouble(depositAmountTextField.getText());
-            deposit(amount);}
-        catch(NumberFormatException e){
+            deposit(amount);
+        } catch (NumberFormatException e) {
             depositConfirmationText.setText("Please Enter a Numeric Value");
             depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");            
+            depositAmountTextField.setText("");
         }
     }
-    
-    
+
     public void withdraw(double amount) {
-        if(((currentUser.getBalance() - amount) < 0.0)  || (amount <= 0)){
+        if (((currentUser.getBalance() - amount) < 0.0) || (amount <= 0)) {
             throw new IllegalArgumentException();
         }
         double total = currentUser.getBalance() - amount;
         currentUser.setBalance(total);
-        try{
-            Connection conn = MySQLConnect.connectDB();
+        try {
             String sql = "UPDATE users SET balance = ? Where email = ?";
             assert conn != null;
             pst = conn.prepareStatement(sql);
@@ -252,51 +247,49 @@ public class DashboardController implements Initializable {
             withdrawConfirmationText.setText("Withdraw Succeeded");
             withdrawConfirmationText.setStyle(successStyle);
             withdrawAmountTextField.setText("");
-        }catch(Exception e){
+        } catch (Exception e) {
             withdrawConfirmationText.setText("Sorry, Your Balance is Too Low");
             withdrawConfirmationText.setStyle(errorStyle);
             withdrawAmountTextField.setText("");
         }
-}
+    }
 
-     public void confirmWithdraw() {
-        try{
+    public void confirmWithdraw() {
+        try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
-            withdraw(amount);}
-        catch(Exception e){
-            if(e instanceof IllegalArgumentException){
+            withdraw(amount);
+        } catch (Exception e) {
+            if (e instanceof IllegalArgumentException) {
                 withdrawConfirmationText.setText("Sorry Your Balance is Too Low");
-            }
-            else{
+            } else {
                 withdrawConfirmationText.setText("Please Enter a Numeric Value");
             }
             withdrawConfirmationText.setStyle(errorStyle);
             withdrawAmountTextField.setText("");
         }
     }
-     
-     
-    public void transfer(double amount) throws SQLException{
-        if(recieverTextField.getText().isBlank() || Objects.equals(recieverTextField.getText(), String.valueOf(currentUser.getAcc_num()))){
+
+    public void transfer(double amount) throws SQLException {
+        if (recieverTextField.getText().isBlank()
+                || Objects.equals(recieverTextField.getText(), String.valueOf(currentUser.getAcc_num()))) {
             throw new IllegalArgumentException("Invalid receiver account number");
         }
         int recieverAccNumber = Integer.parseInt(recieverTextField.getText());
-        Connection conn = MySQLConnect.connectDB();
+
         String sql = "SELECT* FROM users WHERE acc_num = ?";
         assert conn != null;
         pst = conn.prepareStatement(sql);
         pst.setInt(1, recieverAccNumber);
         rs = pst.executeQuery();
-        if(rs.next()){
+        if (rs.next()) {
             User reciever = new User(
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getDate("dob").toLocalDate(),
                     rs.getInt("acc_num"),
-                    rs.getDouble("balance")
-            );
-            try{
-                if(amount < 0 || amount > currentUser.getBalance() || recieverTextField.getText().length() != 8){
+                    rs.getDouble("balance"));
+            try {
+                if (amount < 0 || amount > currentUser.getBalance() || recieverTextField.getText().length() != 8) {
                     throw new IllegalArgumentException();
                 }
                 withdraw(Double.parseDouble(transferAmountTextField.getText()));
@@ -308,29 +301,27 @@ public class DashboardController implements Initializable {
                 transferConfirmationText.setStyle(successStyle);
                 recieverTextField.setText("");
                 transferAmountTextField.setText("");
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 transferConfirmationText.setText("Transfer Failed!");
                 transferConfirmationText.setStyle(errorStyle);
             }
-        }
-        else{
+        } else {
             transferConfirmationText.setText("User Not Found!");
             transferConfirmationText.setStyle(errorStyle);
         }
     }
-    
-    public void confirmTransfer(){
-        try{
+
+    public void confirmTransfer() {
+        try {
             double amount = Double.parseDouble(transferAmountTextField.getText());
-            transfer(amount);}
-        catch(Exception e){
+            transfer(amount);
+        } catch (Exception e) {
             transferConfirmationText.setText("Transfer Failed!");
             transferConfirmationText.setStyle(errorStyle);
         }
     }
-    
-    public void logout() throws IOException{
+
+    public void logout() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
         Parent root1 = fxmlLoader.load();
         Stage stage = new Stage();
@@ -344,13 +335,12 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    public void resetConverter(){
+    public void resetConverter() {
         firstCurrency.setValue("");
         secondCurrency.setValue("");
         resultAmount.setText("");
         convertAmount.setText("");
     }
-
 
     public double convert(String from, String to, double amount) throws IOException {
         double result;
@@ -373,8 +363,9 @@ public class DashboardController implements Initializable {
         }
         return 0;
     }
+
     @FXML
-    public void convertButtonAction(){
+    public void convertButtonAction() {
         double amount;
         String from = firstCurrency.getValue();
         String to = secondCurrency.getValue();
@@ -382,8 +373,7 @@ public class DashboardController implements Initializable {
         if (Objects.equals(firstCurrency.getValue(), "") || Objects.equals(secondCurrency.getValue(), "")) {
             converterLabel.setText("Please Select a Currency!");
             return;
-        }
-        else
+        } else
             converterLabel.setText("");
         try {
             amount = Double.parseDouble(convertAmount.getText());
@@ -396,19 +386,21 @@ public class DashboardController implements Initializable {
         }
     }
 
-    public void swap(){
+    public void swap() {
         String val = firstCurrency.getValue();
         firstCurrency.setValue(secondCurrency.getValue());
         secondCurrency.setValue(val);
         convertButtonAction();
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loginController.limitTextField(recieverTextField);
         loginController.limitTextField(depositAmountTextField);
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
-        String[] currencies = new String[]{"USD","EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF", "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD"};
+        String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
     }

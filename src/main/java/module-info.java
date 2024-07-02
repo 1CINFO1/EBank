@@ -1,4 +1,4 @@
-module com.abcbank.application {
+module com.ebank.application {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
@@ -6,6 +6,7 @@ module com.abcbank.application {
     requires mysql.connector.j;
     requires com.google.gson;
 
-    opens com.abcbank.application to javafx.fxml;
-    exports com.abcbank.application;
+    opens com.ebank.application to javafx.fxml;
+
+    exports com.ebank.application;
 }

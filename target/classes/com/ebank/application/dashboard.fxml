@@ -17,7 +17,9 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abcbank.application.DashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="700.0"
+   xmlns="http://javafx.com/javafx/19"
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.DashboardController">
    <left>
       <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
@@ -183,15 +185,18 @@
                   <Label fx:id="name" layoutX="73.0" layoutY="40.0" prefHeight="27.0" prefWidth="447.0" textFill="#ff9900">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                   <Label fx:id="accNumber" layoutX="177.0" layoutY="228.0" prefHeight="27.0" prefWidth="280.0">
                      <font>
                         <Font size="18.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                   <Label fx:id="dob" layoutX="141.0" layoutY="279.0" prefHeight="27.0" prefWidth="278.0">
                      <font>
                         <Font size="18.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                   <Label layoutX="18.0" layoutY="40.0" text="Hello, " textFill="#ff9900">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
@@ -205,7 +210,8 @@
                   <Label fx:id="emailLabel" layoutX="70.0" layoutY="178.0" prefHeight="27.0" prefWidth="285.0">
                      <font>
                         <Font size="18.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -233,11 +239,13 @@
                               <Color red="0.3686274588108063" green="0.3450980484485626" blue="0.3450980484485626" />
                            </color>
                         </DropShadow>
-                     </effect></Button>
+                     </effect>
+                  </Button>
                   <Label fx:id="depositConfirmationText" alignment="CENTER" layoutX="14.0" layoutY="225.0" prefHeight="35.0" prefWidth="478.0" textAlignment="CENTER">
                      <font>
                         <Font size="14.0" />
-                     </font></Label>
+                     </font>
+                  </Label>
                   <Label layoutX="195.0" layoutY="14.0" text="Deposit Money">
                      <font>
                         <Font name="Constantia Italic" size="24.0" />
@@ -302,7 +310,8 @@
                               <Color red="0.3686274588108063" green="0.3450980484485626" blue="0.3450980484485626" />
                            </color>
                         </DropShadow>
-                     </effect></Button>
+                     </effect>
+                  </Button>
                   <Label layoutX="14.0" layoutY="229.0" text="Please Enter The Reciever Account Number Below : ">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -391,7 +400,8 @@
                      </graphic>
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                     </cursor>
+                  </Button>
                </children>
             </Pane>
          </children>

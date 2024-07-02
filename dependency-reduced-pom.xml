@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.ABCBank</groupId>
+  <groupId>com.ebank</groupId>
   <artifactId>Application</artifactId>
   <name>Online Banking App</name>
   <version>1.0-SNAPSHOT</version>
@@ -31,7 +32,7 @@
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
-              <mainClass>com.abcbank.application.Login</mainClass>
+              <mainClass>com.ebank.application.Login</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -52,7 +53,7 @@
               <transformers>
                 <transformer>
                   <manifestEntries>
-                    <Main-Class>com.abcbank.application.Login</Main-Class>
+                    <Main-Class>com.ebank.application.Login</Main-Class>
                     <Build-Number>123</Build-Number>
                   </manifestEntries>
                 </transformer>
@@ -69,7 +70,7 @@
           <execution>
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.abcbank.application.Login</mainClass>
+              <mainClass>com.ebank.application.Login</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

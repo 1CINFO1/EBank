@@ -1,7 +1,6 @@
-package com.abcbank.application;
+package com.ebank.application;
 
 import java.time.LocalDate;
-
 
 public class User {
     String name;
@@ -10,27 +9,26 @@ public class User {
     LocalDate dob;
     String password;
     String email;
-    
-    public User(){
-        
+
+    public User() {
+
     }
-    public User(String name, String email, LocalDate dob, int acc_num){
+
+    public User(String name, String email, LocalDate dob, int acc_num) {
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = 0;
     }
-    
 
-    public User(String name, String email, LocalDate dob, int acc_num, double balance){
+    public User(String name, String email, LocalDate dob, int acc_num, double balance) {
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = balance;
     }
-    
 
     public String getName() {
         return name;
@@ -79,5 +77,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
 }
