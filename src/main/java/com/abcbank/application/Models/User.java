@@ -1,4 +1,4 @@
-package com.abcbank.application;
+package com.abcbank.application.Models;
 
 import java.time.LocalDate;
 

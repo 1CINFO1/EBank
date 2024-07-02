@@ -8,4 +8,8 @@ module com.abcbank.application {
 
     opens com.abcbank.application to javafx.fxml;
     exports com.abcbank.application;
+    exports com.abcbank.application.Utils;
+    opens com.abcbank.application.Utils to javafx.fxml;
+    exports com.abcbank.application.Models;
+    opens com.abcbank.application.Models to javafx.fxml;
 }
