@@ -1,4 +1,4 @@
-package com.ebank.application;
+package com.ebank.application.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.ebank.application.User;
 import com.ebank.application.utils.MaConnexion;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -142,7 +143,7 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    void showHomePane() {
+    public void showHomePane() {
         homePane.setVisible(true);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
@@ -322,11 +323,16 @@ public class DashboardController implements Initializable {
     }
 
     public void logout() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
+        URL location = getClass().getResource("/com/ebank/application/login.fxml");
+        if (location == null) {
+            throw new IOException("Cannot find login.fxml");
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root1 = fxmlLoader.load();
         Stage stage = new Stage();
         stage.setTitle("ABC Bank");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/icon.png"))));
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
         stage.setScene(new Scene(root1));
         stage.setResizable(false);
         stage.show();

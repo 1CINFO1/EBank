@@ -1,4 +1,4 @@
-package com.mainbank.bank.interfaces;
+package com.ebank.application.interfaces;
 
 import java.util.List;
 

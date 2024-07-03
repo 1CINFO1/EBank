@@ -1,4 +1,4 @@
-package com.ebank.application;
+package com.ebank.application.controllers;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
+import com.ebank.application.User;
 import com.ebank.application.utils.MaConnexion;
 
 public class loginController implements Initializable {
@@ -162,15 +163,20 @@ public class loginController implements Initializable {
     }
 
     private void launchDashboard(User c) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dashboard.fxml"));
+        URL location = getClass().getResource("/com/ebank/application/dashboard.fxml");
+        if (location == null) {
+            throw new IOException("Cannot find dashboard.fxml");
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root1 = fxmlLoader.load();
         DashboardController dController = fxmlLoader.getController();
         dController.currentUser = c;
         dController.setLabels();
         dController.showHomePane();
         Stage stage = new Stage();
-        stage.setTitle("ABC Bank");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/icon.png"))));
+        stage.setTitle("E-Bank");
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
         stage.setScene(new Scene(root1));
         stage.show();
     }

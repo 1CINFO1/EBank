@@ -8,5 +8,8 @@ module com.ebank.application {
 
     opens com.ebank.application to javafx.fxml;
 
+    opens com.ebank.application.controllers to javafx.fxml;
+
     exports com.ebank.application;
+    exports com.ebank.application.controllers ;
 }
