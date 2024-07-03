@@ -350,24 +350,32 @@ public class DashboardController implements Initializable {
 
     public double convert(String from, String to, double amount) throws IOException {
         double result;
-        String url_str = "https://api.exchangerate.host/convert?from=" + from + "&to=" + to;
+        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/latest/" + from;
         URL url = new URL(url_str);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
+        
         int responseCode = request.getResponseCode();
-
+    
         if (responseCode == HttpURLConnection.HTTP_OK) {
             JsonParser jp = new JsonParser();
             JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
             JsonObject jsonobj = root.getAsJsonObject();
+            
             String req_result = jsonobj.get("result").getAsString();
-            result = Double.parseDouble(req_result);
-            return amount * result;
+            
+            if (req_result.equals("success")) {
+                JsonObject conversionRates = jsonobj.getAsJsonObject("conversion_rates");
+                double rate = conversionRates.get(to).getAsDouble();
+                result = amount * rate;
+                return result;
+            } else {
+                throw new IOException("API request was not successful");
+            }
         } else {
-            converterLabel.setText("Connection Failed!");
+            throw new IOException("HTTP connection failed with response code: " + responseCode);
         }
-        return 0;
     }
 
     @FXML

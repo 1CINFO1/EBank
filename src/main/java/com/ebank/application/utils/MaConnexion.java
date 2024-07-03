@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class MaConnexion {
     // DB
-    final String URL = "jdbc:mysql://127.0.0.1:3306/ebank";
+    final String URL = "jdbc:mysql://127.0.0.1:3306/ebank2";
     final String USR = "root";
-    final String PWD = "0000";
+    final String PWD = "admin";
 
     // var
     Connection cnx;
