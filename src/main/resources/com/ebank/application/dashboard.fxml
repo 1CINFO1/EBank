@@ -115,9 +115,9 @@
             </Button>
             <Button fx:id="messagesButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showMessagesView" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Messages" textAlignment="CENTER" textFill="WHITE">
                <graphic>
-                  <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/convert.gif" />
+                        <Image url="@icons/message.png" />
                      </image>
                   </ImageView>
                </graphic>
