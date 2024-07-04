@@ -13,7 +13,7 @@ public class MessageService implements InterfaceCRUD<Message> {
     Connection cnx = MaConnexion.getInstance().getCnx();
 
     @Override
-    public void add(Message m) {
+    public String add(Message m) {
         String req = "INSERT INTO `message`(`contenu`, `date_envoi`, `id_discution`, `id_emetteur`, `id_recepteur`) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
@@ -22,8 +22,15 @@ public class MessageService implements InterfaceCRUD<Message> {
             ps.setInt(3, m.getIdDiscution());
             ps.setInt(4, m.getIdEmetteur());
             ps.setInt(5, m.getIdRecepteur());
-            ps.executeUpdate();
-            System.out.println("Message ajouté avec succès!");
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Message ajouté avec succès!");
+
+                return "Publication added successfully  ";
+            } else {
+                return "Failed to add publication.";
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
