@@ -3,12 +3,13 @@ package com.ebank.application.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class MaConnexion {
     // DB
-    final String URL = "jdbc:mysql://127.0.0.1:3306/ebank";
-    final String USR = "root";
-    final String PWD = "0000";
+    private final String URL;
+    private final String USR;
+    private final String PWD;
 
     // var
     Connection cnx;
@@ -16,6 +17,11 @@ public class MaConnexion {
 
     // Constructeur
     private MaConnexion() {
+        Dotenv dotenv = Dotenv.load();
+        URL = dotenv.get("DB_URL");
+        USR = dotenv.get("DB_USER");
+        PWD = dotenv.get("DB_PASSWORD");
+
         try {
             cnx = DriverManager.getConnection(URL, USR, PWD);
             System.out.println("Connexion etablie avec succes!");

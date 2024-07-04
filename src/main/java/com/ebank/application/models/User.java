@@ -1,4 +1,6 @@
-package com.ebank.application;
+package com.ebank.application.models;
+
+import com.ebank.application.enumeration.Role;
 
 import java.time.LocalDate;
 
@@ -9,6 +11,7 @@ public class User {
     LocalDate dob;
     String password;
     String email;
+    private Role role;
 
     public User() {
 
@@ -23,11 +26,20 @@ public class User {
     }
 
     public User(String name, String email, LocalDate dob, int acc_num, double balance) {
+
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = balance;
+    }
+    public User(String name, String email, LocalDate dob, int acc_num, double balance, String password) {
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+        this.password = password;
     }
 
     public String getName() {
