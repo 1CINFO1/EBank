@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface InterfaceCRUD<T> {
     // CRUD
-    public void add(T t);
+    public String add(T t);
 
     public void delete(int t);
 

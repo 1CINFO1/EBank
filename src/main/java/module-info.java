@@ -12,4 +12,6 @@ module com.ebank.application {
 
     exports com.ebank.application;
     exports com.ebank.application.controllers ;
+    exports com.ebank.application.models;
+    opens com.ebank.application.models to javafx.fxml;
 }
