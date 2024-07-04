@@ -134,6 +134,9 @@ public class DashboardController implements Initializable {
     private Pane withdrawPane;
 
     @FXML
+    private Button messagesButton;
+
+    @FXML
     void showDepositPane() {
         homePane.setVisible(false);
         depositPane.setVisible(true);
@@ -409,5 +412,23 @@ public class DashboardController implements Initializable {
                 "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+
+        messagesButton.setOnAction(event -> {
+            try {
+                showMessagesView();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @FXML
+    void showMessagesView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setTitle("Messages");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
