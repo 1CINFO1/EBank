@@ -17,7 +17,9 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="844.0" stylesheets="@styleCharity.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="844.0" stylesheets="@styleCharity.css"
+   xmlns="http://javafx.com/javafx/21"
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
    <left>
       <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
@@ -119,21 +121,6 @@
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/convert.gif" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="reclamationid" onAction="#showReclamationPane" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false"  prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Charity" textAlignment="CENTER" textFill="WHITE">
-               <graphic>
-                  <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons/reclamation.jpeg" />
                      </image>
                   </ImageView>
                </graphic>
@@ -438,12 +425,12 @@
             </Pane>
             <Pane fx:id="charityPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" stylesheets="@styleCharity.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
-                  <VBox fx:id="publicationListVBox" layoutX="50" layoutY="10" spacing="15">
+               <VBox fx:id="publicationListVBox" layoutX="50" layoutY="10" spacing="15">
                   <!-- Items will be added here dynamically -->
                </VBox>
             </Pane>
 
-            
+
             <Pane fx:id="reclamationPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label layoutX="14.0" layoutY="60.0" text="Please Enter The title of your reclamation : ">
@@ -456,7 +443,7 @@
                         <Font size="18.0" />
                      </font>
                   </TextField>
-                  
+
 
                   <Label layoutX="14.0" layoutY="260.0" text="Please Enter some details about your issue : ">
                      <font>
@@ -472,17 +459,17 @@
 
 
 
-                  <Button fx:id="sendReclamationButton" onAction="#sendReclamation" layoutX="14.0" layoutY="400.0" mnemonicParsing="false"  prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Send" textFill="WHITE">
+                  <Button fx:id="sendReclamationButton" onAction="#sendReclamation" layoutX="14.0" layoutY="400.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Send" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="cancelReclamationButton"  onAction="#cancelReclamation"  layoutX="150.0" layoutY="400.0" mnemonicParsing="false"  prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Cancel" textFill="WHITE">
+                  <Button fx:id="cancelReclamationButton" onAction="#cancelReclamation" layoutX="150.0" layoutY="400.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Cancel" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Button>
-                 
+
                </children>
             </Pane>
 

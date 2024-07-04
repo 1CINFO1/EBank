@@ -8,13 +8,11 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.ebank.application.models.Publication;
-import com.ebank.application.models.Reclamation;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.ReclamationService;
@@ -24,7 +22,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -35,7 +32,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -167,21 +163,13 @@ public class DashboardController implements Initializable {
     @FXML
     private Label reclamationConfirmationText;
 
-
     @FXML
     private TextField recieverTextField1;
 
     @FXML
     private TextField recieverTextField2;
 
-
-
-
-
-    private int currentUserId;
-
-
-    private final TransferService transferService  = new TransferService();
+    private final TransferService transferService = new TransferService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
     private final ReclamationService reclamationService = new ReclamationService();
     // ReclamationController reclamationController= new ReclamationController();
@@ -199,6 +187,7 @@ public class DashboardController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+
     public void getAllPublication() {
         try {
             List<Publication> publications = ipublicationImple.getAll();
@@ -207,12 +196,11 @@ public class DashboardController implements Initializable {
                 for (Publication pub : publications) {
                     Label publicationLabel = new Label(
 
-                                    "Title: " + pub.getTitle() + "\n" +
+                            "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
-                                    "Picture: " + pub.getPicture() + "\n"
-                    );
+                                    "Picture: " + pub.getPicture() + "\n");
 
                     // Create a button for donation
                     Button donateButton = new Button("Donate");
@@ -232,7 +220,8 @@ public class DashboardController implements Initializable {
                     // Create a VBox to hold the label and donate button
                     VBox publicationBox = new VBox();
                     publicationBox.getChildren().addAll(publicationLabel, donateButton);
-                    publicationBox.setStyle("-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
+                    publicationBox.setStyle(
+                            "-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
 
                     // Add the VBox to the publicationListVBox
                     publicationListVBox.getChildren().add(publicationBox);
@@ -256,6 +245,8 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(true);
         getAllPublication();
     }
+
+    private Button messagesButton;
 
     @FXML
     void showDepositPane() {
@@ -312,7 +303,6 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
 
     }
-
 
     @FXML
     public void confirmDeposit() {
@@ -392,8 +382,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-
-
     private void handleFailure() {
         Platform.runLater(() -> {
             try {
@@ -414,8 +402,6 @@ public class DashboardController implements Initializable {
             }
         });
     }
-
-
 
     public void logout() throws IOException {
         URL location = getClass().getResource("/com/ebank/application/login.fxml");
@@ -443,8 +429,8 @@ public class DashboardController implements Initializable {
         convertAmount.setText("");
     }
 
-
-public double convert(String from, String to, double amount) throws IOException {
+    @SuppressWarnings("deprecation")
+    public double convert(String from, String to, double amount) throws IOException {
 
         double result;
         String url_str = "https://v6.exchangerate-api.com/v6/e46d7d25fb4e41bae9710eef/latest/" + from;
@@ -452,15 +438,15 @@ public double convert(String from, String to, double amount) throws IOException 
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
-        
+
         int responseCode = request.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             JsonParser jp = new JsonParser();
             JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
             JsonObject jsonobj = root.getAsJsonObject();
-            
+
             String req_result = jsonobj.get("result").getAsString();
-            
+
             if (req_result.equals("success")) {
                 JsonObject conversionRates = jsonobj.getAsJsonObject("conversion_rates");
                 double rate = conversionRates.get(to).getAsDouble();
@@ -510,15 +496,35 @@ public double convert(String from, String to, double amount) throws IOException 
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
         String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY","TND", "ARS", "LYD", "AUD" };
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "TND", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+
+        messagesButton.setOnAction(event -> {
+            try {
+                showMessagesView();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
-public void updateTransferStatisticsChart() {
+
+    @FXML
+    void showMessagesView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setTitle("Messages");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void updateTransferStatisticsChart() {
         try {
             LocalDate startDate = LocalDate.now().minusMonths(1);
             LocalDate endDate = LocalDate.now();
-            List<Double> statistics = TransferController.getTransferStatistics(currentUser.getAcc_num(), startDate, endDate);
+            List<Double> statistics = TransferController.getTransferStatistics(currentUser.getAcc_num(), startDate,
+                    endDate);
 
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName("Transfer Statistics");
@@ -537,23 +543,23 @@ public void updateTransferStatisticsChart() {
     }
     // @FXML
     // private void openReclamationForm() {
-    //     try {
-    //         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/reclamation.fxml"));
-    //         Parent root = loader.load();
-    //         Stage stage = new Stage();
-    //         stage.getIcons().add(new Image(
-    //             Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
-    //         stage.setScene(new Scene(root));
-    //         stage.setTitle("New Reclamation");
-    //         stage.initModality(Modality.APPLICATION_MODAL);
-    //         stage.showAndWait();
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
+    // try {
+    // FXMLLoader loader = new
+    // FXMLLoader(getClass().getResource("/com/ebank/application/reclamation.fxml"));
+    // Parent root = loader.load();
+    // Stage stage = new Stage();
+    // stage.getIcons().add(new Image(
+    // Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+    // stage.setScene(new Scene(root));
+    // stage.setTitle("New Reclamation");
+    // stage.initModality(Modality.APPLICATION_MODAL);
+    // stage.showAndWait();
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
     // }
     // @FXML
     // private TextArea contenuField;
-
 
     // @FXML
     // private TextField idSenderField;
@@ -570,12 +576,10 @@ public void updateTransferStatisticsChart() {
     // @FXML
     // private Button cancelButton;
 
-
     // private ReclamationService reclamationService;
 
-
     // public ReclamationController() {
-    //     reclamationService = new ReclamationService();
+    // reclamationService = new ReclamationService();
     // }
 
     @FXML
@@ -594,9 +598,8 @@ public void updateTransferStatisticsChart() {
         charityPane.setVisible(false);
         reclamationPane.setVisible(true);
 
-
     }
-    
+
     @FXML
     private void sendReclamation() {
         String title = recieverTextField1.getText();
@@ -605,9 +608,9 @@ public void updateTransferStatisticsChart() {
             recieverTextField2.setText("Please enter your reclamation before submitting.");
             return;
         }
-        
+
         try {
-            String result = reclamationService.submitReclamation(title,description, currentUser);
+            String result = reclamationService.submitReclamation(title, description, currentUser);
             System.out.println(result);
             recieverTextField2.setText(result);
             recieverTextField1.clear();
@@ -622,7 +625,4 @@ public void updateTransferStatisticsChart() {
         recieverTextField2.clear();
     }
 
-
-    
 }
-
