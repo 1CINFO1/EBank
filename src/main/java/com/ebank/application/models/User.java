@@ -1,5 +1,7 @@
 package com.ebank.application.models;
 
+import com.ebank.application.enumeration.Role;
+
 import java.time.LocalDate;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     LocalDate dob;
     String password;
     String email;
+    private Role role;
 
     public User() {
 

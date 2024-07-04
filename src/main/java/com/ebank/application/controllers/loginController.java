@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.ebank.application.models.CharityCampaignModel;
+import com.ebank.application.models.AdminUser;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -210,6 +211,31 @@ public class loginController implements Initializable {
 
     }
 
+    private void launchDashboard2(AdminUser c) throws IOException {
+        {
+            URL location = getClass().getResource("/com/ebank/application/adminDashboard.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find dashboard.fxml");
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader(location);
+            Parent root1 = fxmlLoader.load();
+            adminController dController = fxmlLoader.getController();
+            dController.currentUser = c;
+            dController.setLabels();
+            dController.showHomePane();
+            Stage stage = new Stage();
+            stage.setTitle("E-Bank");
+            stage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+            stage.setScene(new Scene(root1));
+            stage.show();
+            // Additional customization for regular user dashboard
+        }
+
+    }
+
+
     @FXML
     private void Login() {
         if (email.getText().isBlank() || loginPassword.getText().isBlank()) {
@@ -221,6 +247,7 @@ public class loginController implements Initializable {
 
         String charityQuery = "SELECT * FROM charitycampaignmodel WHERE email = ? AND password = ?";
         String userQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String adminQuery = "SELECT * FROM adminuser WHERE email = ? AND password = ?";
 
         try {
             assert conn != null;
@@ -243,31 +270,54 @@ public class loginController implements Initializable {
 
                 CharityCampaignModel loggedInUser = new CharityCampaignModel(name, userEmail, dob, accNum, balance, loginPassword.getText(), compagnieDeDonPatente);
                 launchDashboard1(loggedInUser); // Launch charity campaign dashboard
-            } else {
-                closeWindow();
-                // Check in users table
-                pst = conn.prepareStatement(userQuery);
-                pst.setString(1, email.getText());
-                pst.setString(2, loginPassword.getText());
-                rs = pst.executeQuery();
-
-                if (rs.next()) {
-                    // User is a regular user
-                    String name = rs.getString("name");
-                    String userEmail = rs.getString("email");
-                    LocalDate dob = rs.getDate("dob").toLocalDate();
-                    int accNum = rs.getInt("acc_num");
-                    double balance = rs.getDouble("balance");
-
-                    User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
-                    launchDashboard(loggedInUser); // Launch regular user dashboard
-                } else {
-                    // No user found in either table
-                    email.setStyle(errorStyle);
-                    loginPassword.setStyle(errorStyle);
-                    loginLabel.setText("Email or password is invalid!");
-                }
+                return;
             }
+
+            // Check in users table
+            pst = conn.prepareStatement(userQuery);
+            pst.setString(1, email.getText());
+            pst.setString(2, loginPassword.getText());
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                closeWindow();
+                // User is a regular user
+                String name = rs.getString("name");
+                String userEmail = rs.getString("email");
+                LocalDate dob = rs.getDate("dob").toLocalDate();
+                int accNum = rs.getInt("acc_num");
+                double balance = rs.getDouble("balance");
+
+                User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                launchDashboard(loggedInUser); // Launch regular user dashboard
+                return;
+            }
+
+            // Check in admin table
+            pst = conn.prepareStatement(adminQuery);
+            pst.setString(1, email.getText());
+            pst.setString(2, loginPassword.getText());
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                closeWindow();
+                // User is an admin
+                String name = rs.getString("name");
+                String userEmail = rs.getString("email");
+                LocalDate dob = rs.getDate("dob").toLocalDate();
+                int accNum = rs.getInt("acc_num");
+                double balance = rs.getDouble("balance");
+
+                AdminUser loggedInUser = new AdminUser(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                launchDashboard2(loggedInUser); // Launch admin dashboard
+                return;
+            }
+
+            // No user found in any table
+            email.setStyle(errorStyle);
+            loginPassword.setStyle(errorStyle);
+            loginLabel.setText("Email or password is invalid!");
+
         } catch (SQLException | IOException e) {
             e.printStackTrace();
             loginLabel.setText("Connection failed, please check your internet.");
