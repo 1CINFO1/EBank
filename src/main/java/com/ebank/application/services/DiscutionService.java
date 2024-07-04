@@ -13,14 +13,21 @@ public class DiscutionService implements InterfaceCRUD<Discution> {
     Connection cnx = MaConnexion.getInstance().getCnx();
 
     @Override
-    public void add(Discution d) {
+    public String add(Discution d) {
         String req = "INSERT INTO `discution`(`nom`, `date_creation`) VALUES (?, ?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setString(1, d.getNom());
             ps.setTimestamp(2, Timestamp.valueOf(d.getDateCreation()));
-            ps.executeUpdate();
-            System.out.println("Discution ajoutée avec succès!");
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Message ajouté avec succès!");
+
+                return "Publication added successfully  ";
+            } else {
+                return "Failed to add publication.";
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
