@@ -1,8 +1,0 @@
-com\ebank\application\utils\MaConnexion.class
-module-info.class
-com\ebank\application\controllers\DashboardController.class
-com\ebank\application\User.class
-com\ebank\application\Connect.class
-com\ebank\application\Login.class
-com\ebank\application\App.class
-com\ebank\application\controllers\loginController.class
