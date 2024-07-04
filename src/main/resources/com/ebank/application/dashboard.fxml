@@ -118,9 +118,9 @@
                   <Insets bottom="10.0" top="10.0" />
                </VBox.margin>
                <graphic>
-                  <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/convert.gif" />
+                        <Image url="@icons/message.png" />
                      </image>
                   </ImageView>
                </graphic>
