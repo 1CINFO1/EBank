@@ -1,16 +1,6 @@
 package com.ebank.application.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
@@ -18,22 +8,35 @@ import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import javafx.scene.layout.VBox;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class DashboardController implements Initializable {
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
+public class CharityController implements Initializable {
+
 
     @FXML
     private Button charityButton;
@@ -148,7 +151,7 @@ public class DashboardController implements Initializable {
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
-    public User currentUser = new User();
+    public CharityCampaignModel currentUser = new CharityCampaignModel();
 
     ResultSet rs = null;
 
@@ -167,7 +170,7 @@ public class DashboardController implements Initializable {
                 for (Publication pub : publications) {
                     Label publicationLabel = new Label(
 
-                                    "Title: " + pub.getTitle() + "\n" +
+                            "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
@@ -206,16 +209,7 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
-    void showCharityPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        charityPane.setVisible(true);
-        getAllPublication();
-    }
+
 
     @FXML
     void showDepositPane() {
@@ -224,7 +218,7 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+
 
     }
 
@@ -235,7 +229,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
 
         setLabels();
     }
@@ -247,7 +240,7 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+
 
     }
 
@@ -258,7 +251,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
 
     }
 
@@ -269,7 +261,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(true);
-        charityPane.setVisible(false);
 
     }
 
@@ -436,4 +427,14 @@ public class DashboardController implements Initializable {
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
     }
+
+    public void updatePublication(ActionEvent actionEvent) {
+    }
+
+    public void addPublication(ActionEvent actionEvent) {
+    }
+
+    public void deletePublication(ActionEvent actionEvent) {
+    }
 }
+

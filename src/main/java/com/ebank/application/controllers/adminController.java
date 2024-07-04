@@ -1,25 +1,14 @@
 package com.ebank.application.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
+import com.ebank.application.models.AdminUser;
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
-import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import javafx.scene.layout.VBox;
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,9 +20,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class DashboardController implements Initializable {
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
+
+public class adminController implements Initializable {
+
 
     @FXML
     private Button charityButton;
@@ -148,8 +150,8 @@ public class DashboardController implements Initializable {
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
-    public User currentUser = new User();
 
+    public AdminUser currentUser = new AdminUser();
     ResultSet rs = null;
 
     public void setLabels() {
@@ -158,7 +160,9 @@ public class DashboardController implements Initializable {
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
+
     }
+
     public void getAllPublication() {
         try {
             List<Publication> publications = ipublicationImple.getAll();
@@ -167,7 +171,7 @@ public class DashboardController implements Initializable {
                 for (Publication pub : publications) {
                     Label publicationLabel = new Label(
 
-                                    "Title: " + pub.getTitle() + "\n" +
+                            "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
@@ -206,16 +210,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
-    void showCharityPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        charityPane.setVisible(true);
-        getAllPublication();
-    }
 
     @FXML
     void showDepositPane() {
@@ -224,7 +218,7 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+
 
     }
 
@@ -235,7 +229,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
 
         setLabels();
     }
@@ -247,7 +240,7 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+
 
     }
 
@@ -258,7 +251,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
 
     }
 
@@ -269,7 +261,6 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(true);
-        charityPane.setVisible(false);
 
     }
 
@@ -431,9 +422,18 @@ public class DashboardController implements Initializable {
         loginController.limitTextField(depositAmountTextField);
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
-        String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
+        String[] currencies = new String[]{"USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD"};
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+    }
+
+    public void updatePublication(ActionEvent actionEvent) {
+    }
+
+    public void addPublication(ActionEvent actionEvent) {
+    }
+
+    public void deletePublication(ActionEvent actionEvent) {
     }
 }

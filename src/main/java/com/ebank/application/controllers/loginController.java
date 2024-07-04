@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.ebank.application.models.CharityCampaignModel;
+import com.ebank.application.models.AdminUser;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
-import com.ebank.application.User;
+import com.ebank.application.models.User;
 import com.ebank.application.utils.MaConnexion;
 
 public class loginController implements Initializable {
@@ -162,14 +164,17 @@ public class loginController implements Initializable {
         stage.close();
     }
 
-    private void launchDashboard(User c) throws IOException {
-        URL location = getClass().getResource("/com/ebank/application/dashboard.fxml");
+
+    private void launchDashboard1(CharityCampaignModel c) throws IOException {
+
+        URL location = getClass().getResource("/com/ebank/application/CharityCampDashboard.fxml");
         if (location == null) {
             throw new IOException("Cannot find dashboard.fxml");
         }
+
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root1 = fxmlLoader.load();
-        DashboardController dController = fxmlLoader.getController();
+        CharityController dController = fxmlLoader.getController();
         dController.currentUser = c;
         dController.setLabels();
         dController.showHomePane();
@@ -179,7 +184,57 @@ public class loginController implements Initializable {
                 Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
         stage.setScene(new Scene(root1));
         stage.show();
+        // Additional customization for charity dashboard
     }
+
+    private void launchDashboard(User c) throws IOException {
+         {
+             URL location = getClass().getResource("/com/ebank/application/dashboard.fxml");
+             if (location == null) {
+                 throw new IOException("Cannot find dashboard.fxml");
+             }
+
+             FXMLLoader fxmlLoader = new FXMLLoader(location);
+             Parent root1 = fxmlLoader.load();
+             DashboardController dController = fxmlLoader.getController();
+             dController.currentUser = c;
+             dController.setLabels();
+             dController.showHomePane();
+             Stage stage = new Stage();
+             stage.setTitle("E-Bank");
+             stage.getIcons().add(new Image(
+                     Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+             stage.setScene(new Scene(root1));
+             stage.show();
+            // Additional customization for regular user dashboard
+        }
+
+    }
+
+    private void launchDashboard2(AdminUser c) throws IOException {
+        {
+            URL location = getClass().getResource("/com/ebank/application/adminDashboard.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find dashboard.fxml");
+            }
+
+            FXMLLoader fxmlLoader = new FXMLLoader(location);
+            Parent root1 = fxmlLoader.load();
+            adminController dController = fxmlLoader.getController();
+            dController.currentUser = c;
+            dController.setLabels();
+            dController.showHomePane();
+            Stage stage = new Stage();
+            stage.setTitle("E-Bank");
+            stage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+            stage.setScene(new Scene(root1));
+            stage.show();
+            // Additional customization for regular user dashboard
+        }
+
+    }
+
 
     @FXML
     private void Login() {
@@ -189,28 +244,81 @@ public class loginController implements Initializable {
             loginLabel.setText("Missing Email or Password!");
             return;
         }
-        String sql = "Select * From users Where email = ? And password = ?";
+
+        String charityQuery = "SELECT * FROM charitycampaignmodel WHERE email = ? AND password = ?";
+        String userQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
+        String adminQuery = "SELECT * FROM adminuser WHERE email = ? AND password = ?";
+
         try {
             assert conn != null;
-            pst = conn.prepareStatement(sql);
+
+            // Check in charitycampaignmodel table first
+            pst = conn.prepareStatement(charityQuery);
             pst.setString(1, email.getText());
             pst.setString(2, loginPassword.getText());
             rs = pst.executeQuery();
+
             if (rs.next()) {
                 closeWindow();
-                User c = new User(
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getDate("dob").toLocalDate(),
-                        rs.getInt("acc_num"),
-                        rs.getDouble("balance"));
-                launchDashboard(c);
-            } else {
-                email.setStyle(errorStyle);
-                loginPassword.setStyle(errorStyle);
-                loginLabel.setText("Email or password is invalid!");
+                // User is a charity campaign member
+                String name = rs.getString("name");
+                String userEmail = rs.getString("email");
+                LocalDate dob = rs.getDate("dob").toLocalDate();
+                int accNum = rs.getInt("acc_num");
+                double balance = rs.getDouble("balance");
+                String compagnieDeDonPatente = rs.getString("compagnieDeDon_Patente");
+
+                CharityCampaignModel loggedInUser = new CharityCampaignModel(name, userEmail, dob, accNum, balance, loginPassword.getText(), compagnieDeDonPatente);
+                launchDashboard1(loggedInUser); // Launch charity campaign dashboard
+                return;
             }
-        } catch (Exception e) {
+
+            // Check in users table
+            pst = conn.prepareStatement(userQuery);
+            pst.setString(1, email.getText());
+            pst.setString(2, loginPassword.getText());
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                closeWindow();
+                // User is a regular user
+                String name = rs.getString("name");
+                String userEmail = rs.getString("email");
+                LocalDate dob = rs.getDate("dob").toLocalDate();
+                int accNum = rs.getInt("acc_num");
+                double balance = rs.getDouble("balance");
+
+                User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                launchDashboard(loggedInUser); // Launch regular user dashboard
+                return;
+            }
+
+            // Check in admin table
+            pst = conn.prepareStatement(adminQuery);
+            pst.setString(1, email.getText());
+            pst.setString(2, loginPassword.getText());
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                closeWindow();
+                // User is an admin
+                String name = rs.getString("name");
+                String userEmail = rs.getString("email");
+                LocalDate dob = rs.getDate("dob").toLocalDate();
+                int accNum = rs.getInt("acc_num");
+                double balance = rs.getDouble("balance");
+
+                AdminUser loggedInUser = new AdminUser(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                launchDashboard2(loggedInUser); // Launch admin dashboard
+                return;
+            }
+
+            // No user found in any table
+            email.setStyle(errorStyle);
+            loginPassword.setStyle(errorStyle);
+            loginLabel.setText("Email or password is invalid!");
+
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
             loginLabel.setText("Connection failed, please check your internet.");
             loginLabel.setStyle(textFillError);
