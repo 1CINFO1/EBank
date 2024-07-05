@@ -429,6 +429,8 @@
                   <!-- Items will be added here dynamically -->
                </VBox>
             </Pane>
+            <Pane fx:id="messagerPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
 
 
             <Pane fx:id="reclamationPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

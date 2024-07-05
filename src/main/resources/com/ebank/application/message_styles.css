@@ -7,7 +7,7 @@
   -fx-pref-width: 200;
   -fx-max-width: 200;
   -fx-padding: 10;
-  -fx-background-color: #2c3e50;
+  -fx-background-color: #004b96;
 }
 
 .chat-container {
@@ -84,7 +84,7 @@
 }
 
 .message-right {
-  -fx-background-color: #ff70b3;
+  -fx-background-color: #ffb229;
   -fx-text-fill: white;
   -fx-alignment: center-right;
 }
