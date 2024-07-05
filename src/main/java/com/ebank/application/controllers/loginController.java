@@ -1,11 +1,6 @@
 package com.ebank.application.controllers;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.Date;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,7 +24,6 @@ import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
 import com.ebank.application.models.User;
-import com.ebank.application.utils.MaConnexion;
 
 public class loginController implements Initializable {
 
@@ -87,7 +81,6 @@ public class loginController implements Initializable {
 
     private final LoginService loginService = new LoginService();
 
-
     public void showLoginPane() {
         loginPane.setVisible(true);
         signUpPane.setVisible(false);
@@ -106,30 +99,14 @@ public class loginController implements Initializable {
 
     @FXML
     void showPassword() {
-        if (toggleButton.isSelected()) {
-            shownPassword.setText(signupPassword.getText());
-            shownPassword.visibleProperty().unbind();
-            shownPassword.setVisible(true);
-            signupPassword.setVisible(false);
-        } else {
-            signupPassword.setText(shownPassword.getText());
-            signupPassword.setVisible(true);
-            shownPassword.setVisible(false);
-        }
+        // eyesImageView.setImage(closedEye);
+        // eyesImageView.setImage(openEye);
+        shownPassword.setVisible(toggleButton.isSelected());
     }
 
     @FXML
     void showLoginPassword() {
-        if (loginToggleButton.isSelected()) {
-            shownLoginPassword.setText(loginPassword.getText());
-            shownLoginPassword.visibleProperty().unbind();
-            shownLoginPassword.setVisible(true);
-            loginPassword.setVisible(false);
-        } else {
-            loginPassword.setText(shownLoginPassword.getText());
-            loginPassword.setVisible(true);
-            shownLoginPassword.setVisible(false);
-        }
+        shownLoginPassword.setVisible(loginToggleButton.isSelected());
     }
 
     private void closeWindow() {
@@ -201,6 +178,7 @@ public class loginController implements Initializable {
     void Login() throws SQLException, IOException {
         String emailText = email.getText();
         String passwordText = loginPassword.getText();
+        System.out.println("==>> " + emailText + " pw==>>" + passwordText);
 
         if (emailText.isBlank() || passwordText.isBlank()) {
             JOptionPane.showMessageDialog(null, "Email or Password is empty");
@@ -228,12 +206,8 @@ public class loginController implements Initializable {
             return;
         }
 
-
         JOptionPane.showMessageDialog(null, "Invalid email or password");
     }
-
-
-
 
     @FXML
     void signUp() throws SQLException {
@@ -267,8 +241,11 @@ public class loginController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        shownPassword.visibleProperty().bind(Bindings.createBooleanBinding(() -> toggleButton.isSelected(), toggleButton.selectedProperty()));
-        shownLoginPassword.visibleProperty().bind(Bindings.createBooleanBinding(() -> loginToggleButton.isSelected(), loginToggleButton.selectedProperty()));
+    public void initialize(URL url, ResourceBundle rb) {
+        limitTextField(signupAccountNumber);
+        signupDOB.setValue(LocalDate.of(2000, 1, 1));
+        Bindings.bindBidirectional(signupPassword.textProperty(), shownPassword.textProperty());
+        Bindings.bindBidirectional(loginPassword.textProperty(), shownLoginPassword.textProperty());
+        showLoginPane();
     }
 }
