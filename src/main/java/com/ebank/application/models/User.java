@@ -11,10 +11,9 @@ public class User {
     LocalDate dob;
     String password;
     String email;
-    private Role role;
+    private final String role = "USER";
 
     public User() {
-
     }
 
     public User(String name, String email, LocalDate dob, int acc_num) {
@@ -26,13 +25,13 @@ public class User {
     }
 
     public User(String name, String email, LocalDate dob, int acc_num, double balance) {
-
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = balance;
     }
+
     public User(String name, String email, LocalDate dob, int acc_num, double balance, String password) {
         this.name = name;
         this.email = email;
@@ -90,4 +89,7 @@ public class User {
         this.email = email;
     }
 
+    public String getRole() {
+        return role;
+    }
 }

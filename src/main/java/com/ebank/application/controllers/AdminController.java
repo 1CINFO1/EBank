@@ -1,7 +1,6 @@
 package com.ebank.application.controllers;
 
 import com.ebank.application.models.AdminUser;
-import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
@@ -34,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class adminController implements Initializable {
+public class AdminController implements Initializable {
 
 
     @FXML

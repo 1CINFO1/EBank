@@ -156,7 +156,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ToggleButton>
-            <Button alignment="CENTER" layoutX="37.0" layoutY="428.0" mnemonicParsing="false" onAction="#addUser" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Signup" textAlignment="CENTER" textFill="WHITE">
+            <Button alignment="CENTER" layoutX="37.0" layoutY="428.0" mnemonicParsing="false" onAction="#signUp" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Signup" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
