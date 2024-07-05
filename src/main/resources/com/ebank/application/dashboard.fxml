@@ -425,9 +425,7 @@
                   <VBox fx:id="publicationListVBox" layoutX="50" layoutY="10" spacing="15">
                   <!-- Items will be added here dynamically -->
                </VBox>
-
             </Pane>
-
          </children>
       </AnchorPane>
    </center>

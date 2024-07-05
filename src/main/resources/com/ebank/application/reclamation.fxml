@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.ebank.application.controllers.ReclamationController"
+            prefHeight="400.0" prefWidth="500.0">
+    <VBox spacing="10" padding="20">
+        <Label text="New Reclamation" style="-fx-font-size: 24;">
+            <font>
+                <Font name="Constantia Italic" size="24.0" />
+            </font>
+        </Label>
+        
+        <Label text="Content:"/>
+        <TextArea fx:id="contenuField" prefHeight="100" wrapText="true"/>
+        
+        <Label text="Transaction ID:"/>
+        <TextField fx:id="idTransactionField"/>
+        
+        <Label text="State:"/>
+        <ComboBox fx:id="stateComboBox" prefWidth="200"/>
+        
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" 
+                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" 
+                    textFill="WHITE" prefWidth="120">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" 
+                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" 
+                    textFill="WHITE" prefWidth="120">
+                <font>
+                    <Font name="System Bold" size="14.0" />
+                </font>
+            </Button>
+        </HBox>
+    </VBox>
+</AnchorPane>

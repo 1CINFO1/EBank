@@ -6,6 +6,7 @@ module com.ebank.application {
     requires mysql.connector.j;
     requires com.google.gson;
     requires java.dotenv;
+    requires java.mail;
 
     opens com.ebank.application to javafx.fxml;
 

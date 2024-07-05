@@ -4,7 +4,7 @@ import com.ebank.application.models.AdminUser;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.services.IpublicationImple;
-import com.ebank.application.services.TransfertService;
+import com.ebank.application.services.ConverterService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -144,7 +144,7 @@ public class adminController implements Initializable {
     @FXML
     private VBox publicationListVBox;
 
-    private final TransfertService transfertService = new TransfertService();
+    private final ConverterService transfertService = new ConverterService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
 
     protected String errorStyle = "-fx-text-fill: RED;";
