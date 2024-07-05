@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class AdminUser extends User{
 
-    private final String role ="admin";
+    private final String role ="ADMIN";
 
 
     public AdminUser(String name, String email, LocalDate dob, int acc_num, double balance, String password) {
