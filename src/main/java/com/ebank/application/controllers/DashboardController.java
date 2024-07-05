@@ -65,6 +65,9 @@ public class DashboardController implements Initializable {
     private Pane converterPane;
 
     @FXML
+    private Pane messagerPane;
+
+    @FXML
     private TextField depositAmountTextField;
 
     @FXML
@@ -138,6 +141,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Button messagesButton;
+
+    @FXML
     private Pane charityPane;
 
     @FXML
@@ -216,6 +221,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(true);
+        messagerPane.setVisible(false);
         getAllPublication();
     }
 
@@ -227,6 +233,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        messagerPane.setVisible(false);
 
     }
 
@@ -238,6 +245,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        messagerPane.setVisible(false);
 
         setLabels();
     }
@@ -250,6 +258,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(true);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        messagerPane.setVisible(false);
 
     }
 
@@ -261,6 +270,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        messagerPane.setVisible(false);
 
     }
 
@@ -272,6 +282,19 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(true);
         charityPane.setVisible(false);
+        messagerPane.setVisible(false);
+
+    }
+
+    @FXML
+    void showMessagerPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        messagerPane.setVisible(true);
 
     }
 
@@ -436,23 +459,21 @@ public class DashboardController implements Initializable {
                 "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+        loadMessagesView();
 
-        messagesButton.setOnAction(event -> {
-            try {
-                showMessagesView();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
-    @FXML
-    void showMessagesView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
-        Parent root = loader.load();
-        Stage stage = new Stage();
-        stage.setTitle("Messages");
-        stage.setScene(new Scene(root));
-        stage.show();
+    private void loadMessagesView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
+            Pane messagesView = loader.load();
+            messagerPane.getChildren().add(messagesView);
+
+            // Bind the size of the loaded view to the messagerPane
+            messagesView.prefWidthProperty().bind(messagerPane.widthProperty());
+            messagesView.prefHeightProperty().bind(messagerPane.heightProperty());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
