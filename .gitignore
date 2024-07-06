@@ -1,3 +1,4 @@
+# Maven specific ignores
 /target/*
 /target
 /target/**
@@ -58,4 +59,5 @@ Thumbs.db
 *.map
 
 # env
+.env
 .env
