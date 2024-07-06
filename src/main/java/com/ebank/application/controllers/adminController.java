@@ -436,4 +436,19 @@ public class adminController implements Initializable {
 
     public void deletePublication(ActionEvent actionEvent) {
     }
+    @FXML
+    private Button jobsButton;
+
+    @FXML
+    private void handleJobsButtonAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobListViewAdmin.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Job List");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

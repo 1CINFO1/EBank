@@ -17,9 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0"
-   xmlns="http://javafx.com/javafx/19"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.loginController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.loginController">
    <children>
       <Pane prefHeight="500.0" prefWidth="350.0" styleClass="login-backgroundColor" stylesheets="@style.css">
          <children>
@@ -98,6 +96,21 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
+            <Button layoutX="181.0" layoutY="31.0" mnemonicParsing="false" onAction="#Jobs" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Jobs" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" height="12.0" radius="5.5" width="12.0">
+                     <color>
+                        <Color red="0.3686274588108063" green="0.3450980484485626" blue="0.3450980484485626" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Button>
          </children>
       </Pane>
       <Pane fx:id="signUpPane" layoutX="350.0" prefHeight="500.0" prefWidth="350.0" style="-fx-background-color: white;" visible="false">

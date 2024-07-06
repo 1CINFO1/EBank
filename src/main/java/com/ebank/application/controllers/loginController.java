@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.AdminUser;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,6 +49,8 @@ public class loginController implements Initializable {
 
     @FXML
     private TextField email;
+    @FXML
+    private Button Jobs; // Assuming this is the "Job offre" button from main.fxml
 
     @FXML
     private PasswordField signupPassword;
@@ -382,4 +385,19 @@ public class loginController implements Initializable {
         Bindings.bindBidirectional(loginPassword.textProperty(), shownLoginPassword.textProperty());
         showLoginPane();
     }
+    @FXML
+     void Jobs(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobList.fxml"));
+            Parent root = loader.load();
+            JobListController jobListController = loader.getController();
+            // Optionally, pass any necessary data to the controller
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
