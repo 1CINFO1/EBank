@@ -87,4 +87,27 @@ public class CandidatureService implements InterfaceCRUD<Candidature> {
         }
         return candidatures;
     }
+    public List<Candidature> getCandidatesForJobId(int jobId) {
+        List<Candidature> candidates = new ArrayList<>();
+        String req = "SELECT `id`, `job_id`, `nom`, `prenom`, `CV` FROM `Candidature` WHERE `job_id` = ?";
+        try {
+            PreparedStatement ps = cnx.prepareStatement(req);
+            ps.setInt(1, jobId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int job_id = rs.getInt("job_id");
+                String nom = rs.getString("nom");
+                String prenom = rs.getString("prenom");
+                String CV = rs.getString("CV");
+                Candidature candidature = new Candidature(id, job_id, nom, prenom, CV);
+                candidates.add(candidature);
+            }
+            System.out.println("Liste des candidats pour l'offre d'emploi " + jobId + " récupérée avec succès!");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la récupération des candidats pour l'offre d'emploi " + jobId, e);
+        }
+        return candidates;
+    }
+    
 }

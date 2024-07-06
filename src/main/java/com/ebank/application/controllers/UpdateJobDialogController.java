@@ -5,6 +5,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.ebank.application.models.OffreEmploi;
 
+import java.time.LocalDate;
+
 public class UpdateJobDialogController {
 
     @FXML
@@ -37,7 +39,7 @@ public class UpdateJobDialogController {
         sujetField.setText(offreEmploi.getSujet());
         typeField.setText(offreEmploi.getType());
         emplacementField.setText(offreEmploi.getEmplacement());
-        dateExpirationField.setText(offreEmploi.getDate_expiration().toString()); // Assuming LocalDate or similar
+        dateExpirationField.setText(offreEmploi.getDate_expiration().toString()); // Convert LocalDate to String
     }
 
     public void setJobListController(JobListControllerAdmin jobListController) {
@@ -52,11 +54,15 @@ public class UpdateJobDialogController {
         offreEmploi.setType(typeField.getText());
         offreEmploi.setEmplacement(emplacementField.getText());
         // Parse or handle date update as per your application's needs
-        // Example:
-        // offreEmploi.setDateExpiration(LocalDate.parse(dateExpirationField.getText()));
+        offreEmploi.setDate_expiration(LocalDate.parse(dateExpirationField.getText())); // Example: parsing LocalDate
 
-        // Update in database or service
-        jobListController.updateJob(offreEmploi);
+        // Update in the list and database via the parent controller
+        if (jobListController != null) {
+            jobListController.updateJobInList(offreEmploi);
+        } else {
+            System.err.println("JobListControllerAdmin is not initialized!");
+            // Handle this case appropriately, maybe show an error message to the user
+        }
 
         // Close the dialog
         dialogStage.close();
