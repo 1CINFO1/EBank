@@ -35,7 +35,6 @@ import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
 
-
     @FXML
     private Button charityButton;
     @FXML
@@ -143,12 +142,17 @@ public class AdminController implements Initializable {
     @FXML
     private VBox publicationListVBox;
 
+    @FXML
+    private Button messagesButton;
+
+    @FXML
+    private Pane messagerPane;
+
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
 
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
-
 
     public AdminUser currentUser = new AdminUser();
     ResultSet rs = null;
@@ -174,8 +178,7 @@ public class AdminController implements Initializable {
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
-                                    "Picture: " + pub.getPicture() + "\n"
-                    );
+                                    "Picture: " + pub.getPicture() + "\n");
 
                     // Create a button for donation
                     Button donateButton = new Button("Donate");
@@ -195,7 +198,8 @@ public class AdminController implements Initializable {
                     // Create a VBox to hold the label and donate button
                     VBox publicationBox = new VBox();
                     publicationBox.getChildren().addAll(publicationLabel, donateButton);
-                    publicationBox.setStyle("-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
+                    publicationBox.setStyle(
+                            "-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
 
                     // Add the VBox to the publicationListVBox
                     publicationListVBox.getChildren().add(publicationBox);
@@ -209,7 +213,6 @@ public class AdminController implements Initializable {
         }
     }
 
-
     @FXML
     void showDepositPane() {
         homePane.setVisible(false);
@@ -217,7 +220,7 @@ public class AdminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-
+        messagerPane.setVisible(false);
 
     }
 
@@ -228,6 +231,7 @@ public class AdminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
+        messagerPane.setVisible(false);
 
         setLabels();
     }
@@ -239,7 +243,7 @@ public class AdminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-
+        messagerPane.setVisible(false);
 
     }
 
@@ -250,6 +254,7 @@ public class AdminController implements Initializable {
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
+        messagerPane.setVisible(false);
 
     }
 
@@ -260,9 +265,21 @@ public class AdminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(true);
+        messagerPane.setVisible(false);
 
     }
 
+    @FXML
+    void showMessagerPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        // charityPane.setVisible(false);
+        messagerPane.setVisible(true);
+
+    }
 
     @FXML
     public void confirmDeposit() {
@@ -337,7 +354,6 @@ public class AdminController implements Initializable {
         }
     }
 
-
     public void logout() throws IOException {
         URL location = getClass().getResource("/com/ebank/application/login.fxml");
         if (location == null) {
@@ -366,7 +382,8 @@ public class AdminController implements Initializable {
 
     public double convert(String from, String to, double amount) throws IOException {
         double result;
-        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to=" + to;
+        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
+                + to;
         URL url = new URL(url_str);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
@@ -421,10 +438,12 @@ public class AdminController implements Initializable {
         loginController.limitTextField(depositAmountTextField);
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
-        String[] currencies = new String[]{"USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD"};
+        String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+        loadMessagesView();
+
     }
 
     public void updatePublication(ActionEvent actionEvent) {
@@ -435,6 +454,7 @@ public class AdminController implements Initializable {
 
     public void deletePublication(ActionEvent actionEvent) {
     }
+
     @FXML
     private Button jobsButton;
 
@@ -446,6 +466,20 @@ public class AdminController implements Initializable {
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Job List");
             stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadMessagesView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
+            Pane messagesView = loader.load();
+            messagerPane.getChildren().add(messagesView);
+
+            // Bind the size of the loaded view to the messagerPane
+            messagesView.prefWidthProperty().bind(messagerPane.widthProperty());
+            messagesView.prefHeightProperty().bind(messagerPane.heightProperty());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -19,7 +19,9 @@
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.AdminController" stylesheets="@styleCharity.css">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0"
+    xmlns="http://javafx.com/javafx/22"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.AdminController" stylesheets="@styleCharity.css">
     <left>
         <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
             <children>
@@ -114,7 +116,21 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-
+                <Button fx:id="messagesButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showMessagerPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Messages" textAlignment="CENTER" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/message.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
             </children>
             <BorderPane.margin>
                 <Insets />
@@ -214,7 +230,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                         <Button layoutX="181.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleJobsButtonAction" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Jobs" textFill="WHITE" />
+                        <Button layoutX="181.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleJobsButtonAction" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Jobs" textFill="WHITE" />
 
                     </children>
                 </Pane>
@@ -408,6 +424,8 @@
                         </Button>
                     </children>
                 </Pane>
+                <Pane fx:id="messagerPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
                 <Pane fx:id="managePublicationsPane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;" visible="false">
                     <children>
                         <TableView fx:id="publicationsTable" layoutX="14.0" layoutY="14.0" prefHeight="350.0" prefWidth="518.0">
