@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.ebank.application.controllers.CondidatListController">
+    <children>
+        <ListView fx:id="condidatListView" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="572.0" />
+        <Button layoutX="14.0" layoutY="430.0" mnemonicParsing="false" onAction="#refreshCandidateList" text="Refresh" />
+        <Button layoutX="120.0" layoutY="430.0" mnemonicParsing="false" onAction="#backToJobList" text="Back to Jobs" />
+    </children>
+</AnchorPane>
