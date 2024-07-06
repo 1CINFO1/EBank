@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ebank.application.interfaces.IDiscution;
 import com.ebank.application.models.Discution;
+import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
 public class DiscutionService implements IDiscution<Discution> {

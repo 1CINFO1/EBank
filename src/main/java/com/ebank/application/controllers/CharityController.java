@@ -164,6 +164,7 @@ public class CharityController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+
     public void getAllPublication() {
         try {
             List<Publication> publications = ipublicationImple.getAll();
@@ -221,8 +222,8 @@ public class CharityController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
 
-
     }
+
 
     @FXML
     public void showHomePane() {
