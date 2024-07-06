@@ -7,6 +7,9 @@ module com.ebank.application {
     requires com.google.gson;
     requires java.dotenv;
     requires java.mail;
+    requires javafx.graphics;
+    requires Java.WebSocket;
+    requires org.json;
 
     opens com.ebank.application to javafx.fxml;
 
