@@ -81,4 +81,9 @@ public class DiscutionService implements InterfaceCRUD<Discution> {
         }
         return discussions;
     }
+
+    @Override
+    public List<Discution> getByid(int i) {
+        return List.of();
+    }
 }

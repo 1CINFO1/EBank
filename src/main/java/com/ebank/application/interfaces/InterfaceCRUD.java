@@ -11,4 +11,5 @@ public interface InterfaceCRUD<T> {
     public void update(T t, int id);
 
     public List<T> getAll();
+    public List<T> getByid(int i);
 }

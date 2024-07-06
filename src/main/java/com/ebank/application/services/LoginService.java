@@ -30,16 +30,16 @@ public class LoginService {
     }
 
     public boolean accountNumberAlreadyExists(String accountNumber) throws SQLException {
-        String sql = "SELECT * FROM users WHERE account_number = ?";
+        String sql = "SELECT * FROM users WHERE acc_num = ?";
         pst = conn.prepareStatement(sql);
         pst.setString(1, accountNumber);
         rs = pst.executeQuery();
         return rs.next();
     }
 
-    public boolean isValid(String name, String email, String accountNumber, String password, LocalDate dob) throws SQLException {
+    public boolean isValid(String name, String email, String accountNumber, String password, LocalDate dob,String acountyType) throws SQLException {
         boolean isValid = true;
-        if (name.isBlank() || name.length() < 10) {
+        if (name.isBlank() ) {
             isValid = false;
         }
         if (email.isBlank() || emailAlreadyExists(email)) {
@@ -54,11 +54,26 @@ public class LoginService {
         if (dob.toString().isBlank()) {
             isValid = false;
         }
+        if (acountyType.isBlank()){
+        isValid = false;
+        }
         return isValid;
     }
 
     public void addUser(String name, String email, String accountNumber, LocalDate dob, String password) throws SQLException {
-        String sql = "INSERT INTO users (name, email, account_number, balance, dob, password) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (name, email, acc_num, balance, dob, password,) VALUES (?, ?, ?, ?, ?, ?)";
+        User newUser = new User(name, email, dob, Integer.parseInt(accountNumber));
+        pst = conn.prepareStatement(sql);
+        pst.setString(1, newUser.getName());
+        pst.setString(2, newUser.getEmail());
+        pst.setInt(3, newUser.getAcc_num());
+        pst.setDouble(4, newUser.getBalance());
+        pst.setDate(5, Date.valueOf(newUser.getDob()));
+        pst.setString(6, password);
+        pst.execute();
+    }
+    public void addUser2(String name, String email, String accountNumber, LocalDate dob, String password) throws SQLException {
+        String sql = "INSERT INTO charitycampaignmodel (name, email, acc_num, balance, dob, password) VALUES (?, ?, ?, ?, ?, ?)";
         User newUser = new User(name, email, dob, Integer.parseInt(accountNumber));
         pst = conn.prepareStatement(sql);
         pst.setString(1, newUser.getName());

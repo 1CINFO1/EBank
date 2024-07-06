@@ -90,4 +90,9 @@ public class MessageService implements InterfaceCRUD<Message> {
         }
         return messages;
     }
+
+    @Override
+    public List<Message> getByid(int i) {
+        return List.of();
+    }
 }
