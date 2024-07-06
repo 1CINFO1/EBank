@@ -16,23 +16,11 @@ import java.util.List;
 
 public class IpublicationImple implements InterfaceCRUD<Publication> {
     Connection cnx = MaConnexion.getInstance().getCnx();
+
+
     @Override
     public String add(Publication publication) {
-
-         String sql = "Insert Into Publication ( CompagnieDeDon_Patente ,title, CampaignName, Description, picture, publicationDate) " +
-                 "values ('"+publication.getCompagnieDeDon_Patente()+ "','"+ publication.getTitle()+ "','" + publication.getCampaignName()
-                 +"','"+ publication.getDescription()+ "','"+ publication.getPicture() + "','"+ publication.getPublicationDate() + "')";
-        try {
-            Statement st = cnx.createStatement();
-            int rowsAffected = st.executeUpdate(sql);
-            if (rowsAffected > 0) {
-                return "Publication added successfully with id "+ publication.getId();
-            } else {
-                return "Failed to add publication.";
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return "";
     }
 
     @Override
@@ -72,4 +60,10 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
 
         return publications;
     }
+
+    @Override
+    public List<Publication> getByid(int i) {
+        return List.of();
+    }
+
 }

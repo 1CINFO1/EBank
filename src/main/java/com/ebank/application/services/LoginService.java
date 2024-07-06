@@ -30,7 +30,7 @@ public class LoginService {
     }
 
     public boolean accountNumberAlreadyExists(String accountNumber) throws SQLException {
-        String sql = "SELECT * FROM users WHERE account_number = ?";
+        String sql = "SELECT * FROM users WHERE acc_num = ?";
         pst = conn.prepareStatement(sql);
         pst.setString(1, accountNumber);
         rs = pst.executeQuery();
@@ -40,7 +40,7 @@ public class LoginService {
     public boolean isValid(String name, String email, String accountNumber, String password, LocalDate dob)
             throws SQLException {
         boolean isValid = true;
-        if (name.isBlank() || name.length() < 10) {
+        if (name.isBlank()) {
             isValid = false;
         }
         if (email.isBlank() || emailAlreadyExists(email)) {
@@ -55,6 +55,7 @@ public class LoginService {
         if (dob.toString().isBlank()) {
             isValid = false;
         }
+
         return isValid;
     }
 

@@ -17,7 +17,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.loginController">
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0"
+   xmlns="http://javafx.com/javafx/19"
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.loginController">
    <children>
       <Pane prefHeight="500.0" prefWidth="350.0" styleClass="login-backgroundColor" stylesheets="@style.css">
          <children>
@@ -149,6 +154,17 @@
                </font>
             </Label>
             <DatePicker fx:id="signupDOB" editable="false" layoutX="36.0" layoutY="296.0" prefHeight="26.0" prefWidth="291.0" promptText="Choose Your Birthdate" style="-fx-background-color: white;" />
+
+            <ComboBox fx:id="roleComboBox" layoutX="35.0" layoutY="400.0" prefHeight="26.0" prefWidth="291.0" promptText="Pick account type" stylesheets="@combo-box.css">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="User" />
+                     <String fx:value="Charity" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+
+
             <PasswordField fx:id="signupPassword" layoutX="36.0" layoutY="359.0" prefHeight="34.0" prefWidth="291.0" promptText="Password" />
             <TextField fx:id="shownPassword" layoutX="36.0" layoutY="359.0" prefHeight="34.0" prefWidth="291.0" promptText="Password" visible="false" />
             <ToggleButton fx:id="toggleButton" blendMode="SRC_ATOP" layoutX="284.0" layoutY="361.0" minHeight="20.0" minWidth="39.0" mnemonicParsing="false" onAction="#showPassword" prefHeight="30.0" prefWidth="35.0" style="-fx-background-color: transparent;" textAlignment="CENTER" wrapText="true">
@@ -169,7 +185,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ToggleButton>
-            <Button alignment="CENTER" layoutX="37.0" layoutY="428.0" mnemonicParsing="false" onAction="#signUp" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Signup" textAlignment="CENTER" textFill="WHITE">
+            <Button alignment="CENTER" layoutX="37.0" layoutY="450.0" mnemonicParsing="false" onAction="#signUp" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Signup" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -184,7 +200,7 @@
                   </DropShadow>
                </effect>
             </Button>
-            <Button alignment="CENTER" layoutX="182.0" layoutY="428.0" mnemonicParsing="false" onAction="#showLoginPane" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Back" textAlignment="CENTER" textFill="WHITE">
+            <Button alignment="CENTER" layoutX="182.0" layoutY="450" mnemonicParsing="false" onAction="#showLoginPane" prefHeight="37.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Back" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
