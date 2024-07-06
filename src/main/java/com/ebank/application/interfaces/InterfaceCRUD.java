@@ -1,5 +1,8 @@
 package com.ebank.application.interfaces;
 
+import com.ebank.application.models.CharityCampaignModel;
+import com.ebank.application.models.Publication;
+
 import java.util.List;
 
 public interface InterfaceCRUD<T> {
@@ -11,5 +14,7 @@ public interface InterfaceCRUD<T> {
     public void update(T t, int id);
 
     public List<T> getAll();
-    public List<T> getByid(int i);
+    public Publication getById(int id);
+
+    public CharityCampaignModel getCharityBy(int id);
 }

@@ -20,10 +20,27 @@ public class CharityCampaignModel extends User {
         CompagnieDeDon_Patente = compagnieDeDon_Patente;
     }
 
+    public CharityCampaignModel(String name, String email, LocalDate dob, int acc_num, double balance) {
+
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+    }
+
     public String getCompagnieDeDon_Patente() {
         return CompagnieDeDon_Patente;
     }
 
+    public int getAcc_num() {
+        return acc_num;
+    }
+
+    public void setAcc_num(int acc_num) {
+
+        this.acc_num = acc_num;
+    }
     public void setCompagnieDeDon_Patente(String compagnieDeDon_Patente) {
         CompagnieDeDon_Patente = compagnieDeDon_Patente;
     }

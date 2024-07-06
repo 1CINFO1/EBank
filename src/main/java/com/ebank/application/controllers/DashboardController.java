@@ -11,13 +11,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
+import com.ebank.application.services.ICharityService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -111,7 +114,8 @@ public class DashboardController implements Initializable {
 
     @FXML
     private TextField transferAmountTextField;
-
+    @FXML
+    private TextField transferAmountTextField2;
     @FXML
     private Button transferButton;
 
@@ -128,6 +132,9 @@ public class DashboardController implements Initializable {
     private Pane transferPane;
 
     @FXML
+    private Pane transferCharityPane;
+
+    @FXML
     private TextField withdrawAmountTextField;
 
     @FXML
@@ -142,15 +149,43 @@ public class DashboardController implements Initializable {
     @FXML
     private Button messagesButton;
 
+
+    @FXML
+    private Button backButton2;
+    @FXML
+    private Pane publicationPane;
     @FXML
     private Pane charityPane;
 
     @FXML
     private VBox publicationListVBox;
 
-    private final TransfertService transfertService = new TransfertService();
-    private final IpublicationImple ipublicationImple = new IpublicationImple();
 
+    @FXML
+    private Label title;
+    @FXML
+    private Label campaignName;
+    @FXML
+    private Label pubDescription;
+    @FXML
+    private Label pubPicture;
+
+    private int selectedPublicationId;
+
+
+    private IpublicationImple publicationService;
+
+
+    public DashboardController() {
+        // Initialize the service
+        this.publicationService = new IpublicationImple();
+
+    }
+
+
+    private final TransfertService transfertService = new TransfertService();
+
+    private ICharityService charityService = new ICharityService();
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
@@ -166,14 +201,25 @@ public class DashboardController implements Initializable {
         emailLabel.setText(currentUser.getEmail());
     }
 
+
+    public void publicationById(int id) {
+        Publication publication = publicationService.getById(id);
+
+            title.setText(publication.getTitle());
+            campaignName.setText(publication.getCampaignName());
+            pubDescription.setText(publication.getDescription());
+            pubPicture.setText(publication.getPicture());
+
+
+    }
+
     public void getAllPublication() {
         try {
-            List<Publication> publications = ipublicationImple.getAll();
+            List<Publication> publications = publicationService.getAll();
             if (publications != null && !publications.isEmpty()) {
                 publicationListVBox.getChildren().clear(); // Clear previous items
                 for (Publication pub : publications) {
                     Label publicationLabel = new Label(
-
                             "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
@@ -191,8 +237,9 @@ public class DashboardController implements Initializable {
                             "-fx-background-radius: 5px;");
 
                     donateButton.setOnAction(event -> {
-                        // Handle donation action, e.g., open donation form or process donation
-                        System.out.println("Clicked Donate for publication ID: " + pub.getId());
+                        selectedPublicationId = pub.getId();
+                        showcharityByIdPane(selectedPublicationId);
+                        System.out.println("publication ID: " + selectedPublicationId);
                     });
 
                     // Create a VBox to hold the label and donate button
@@ -222,7 +269,31 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(true);
         messagerPane.setVisible(false);
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
         getAllPublication();
+    }
+
+    @FXML
+    void goBackToPublicationDetails() {
+        showcharityByIdPane(selectedPublicationId);
+    }
+
+
+    @FXML
+    void showcharityByIdPane(int id){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        messagerPane.setVisible(false);
+        publicationPane.setVisible(true);
+        transferCharityPane.setVisible(false);
+        publicationById(id);
+
+
     }
 
     @FXML
@@ -234,7 +305,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         messagerPane.setVisible(false);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
     }
 
     @FXML
@@ -246,9 +318,24 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         messagerPane.setVisible(false);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
         setLabels();
     }
+
+    @FXML
+    void showCharityTransferPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(true);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        messagerPane.setVisible(false);
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(true);
+    }
+
 
     @FXML
     void showTransferPane() {
@@ -259,7 +346,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         messagerPane.setVisible(false);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
     }
 
     @FXML
@@ -271,7 +359,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         messagerPane.setVisible(false);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
     }
 
     @FXML
@@ -283,7 +372,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(true);
         charityPane.setVisible(false);
         messagerPane.setVisible(false);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
     }
 
     @FXML
@@ -295,7 +385,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         messagerPane.setVisible(true);
-
+        publicationPane.setVisible(false);
+        transferCharityPane.setVisible(false);
     }
 
     @FXML
@@ -341,6 +432,40 @@ public class DashboardController implements Initializable {
             withdrawConfirmationText.setText(e.getMessage());
             withdrawConfirmationText.setStyle(errorStyle);
             withdrawAmountTextField.setText("");
+        }
+    }
+
+    @FXML
+    public void confirmTransfer2() {
+        try {
+            double amount = Double.parseDouble(transferAmountTextField2.getText());
+
+            Publication publication = publicationService.getById(selectedPublicationId);
+            int charityId = publication.getCompagnieDeDon_Patente();
+            CharityCampaignModel campaignModel = charityService.getCharityBy(charityId);
+
+            String receiverAccNumber = Integer.toString(campaignModel.getAcc_num());
+
+
+            transfertService.transfer(amount, receiverAccNumber, currentUser);
+            transferConfirmationText.setText("Transfer Succeeded");
+            transferConfirmationText.setStyle(successStyle);
+            recieverTextField.setText("");
+            transferAmountTextField2.setText("");
+        } catch (NumberFormatException e) {
+            transferConfirmationText.setText("Please Enter a Numeric Value");
+            transferConfirmationText.setStyle(errorStyle);
+            transferAmountTextField2.setText("");
+        } catch (SQLException e) {
+            transferConfirmationText.setText("Transfer Failed");
+            transferConfirmationText.setStyle(errorStyle);
+            recieverTextField.setText("");
+            transferAmountTextField2.setText("");
+        } catch (IllegalArgumentException e) {
+            transferConfirmationText.setText(e.getMessage());
+            transferConfirmationText.setStyle(errorStyle);
+            recieverTextField.setText("");
+            transferAmountTextField2.setText("");
         }
     }
 
@@ -476,4 +601,7 @@ public class DashboardController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
+
 }

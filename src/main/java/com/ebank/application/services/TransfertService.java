@@ -1,6 +1,7 @@
 package com.ebank.application.services;
 
 import com.ebank.application.interfaces.transfertInterface;
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.User;
 import com.ebank.application.utils.MaConnexion;
 
@@ -51,13 +52,13 @@ public class TransfertService implements transfertInterface {
         }
 
         int receiverAccNum = Integer.parseInt(receiverAccNumber);
-        String sql = "SELECT * FROM users WHERE acc_num = ?";
+        String sql = "SELECT * FROM charitycampaignmodel WHERE acc_num = ?";
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setInt(1, receiverAccNum);
         ResultSet rs = pst.executeQuery();
 
         if(rs.next()) {
-            User receiver = new User(
+            CharityCampaignModel receiver = new CharityCampaignModel(
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getDate("dob").toLocalDate(),
@@ -74,7 +75,7 @@ public class TransfertService implements transfertInterface {
 
             // Deposit amount to the receiver's account
             receiver.setBalance(receiver.getBalance() + amount);
-            String updateReceiverSql = "UPDATE users SET balance = ? WHERE acc_num = ?";
+            String updateReceiverSql = "UPDATE charitycampaignmodel SET balance = ? WHERE acc_num = ?";
             PreparedStatement updateReceiverPst = conn.prepareStatement(updateReceiverSql);
             updateReceiverPst.setDouble(1, receiver.getBalance());
             updateReceiverPst.setInt(2, receiver.getAcc_num());

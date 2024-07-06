@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Discution;
+import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
 public class DiscutionService implements InterfaceCRUD<Discution> {
@@ -83,7 +85,14 @@ public class DiscutionService implements InterfaceCRUD<Discution> {
     }
 
     @Override
-    public List<Discution> getByid(int i) {
-        return List.of();
+    public Publication getById(int id) {
+        return null;
     }
+
+    @Override
+    public CharityCampaignModel getCharityBy(int id) {
+        return null;
+    }
+
+
 }
