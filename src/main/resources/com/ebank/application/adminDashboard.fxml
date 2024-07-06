@@ -214,6 +214,8 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
+                         <Button layoutX="181.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleJobsButtonAction" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Jobs" textFill="WHITE" />
+
                     </children>
                 </Pane>
                 <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
