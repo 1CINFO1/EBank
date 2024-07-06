@@ -16,15 +16,13 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
     @Override
 public String add(Reclamation r) {
     validateReclamation(r); // Validate before adding
-    String req = "INSERT INTO `reclamation`(`contenu`, `date_envoi`, `id_discution`, `id_emetteur`, `id_recepteur`, `id_transaction`) VALUES (?, ?, ?, ?, ?, ?)";
+    String req = "INSERT INTO `reclamation`(`contenu`, `date_envoi`, `id_emetteur`,  `id_transaction`) VALUES (?, ?, ?, ?)";
     try {
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, r.getContenu());
         ps.setTimestamp(2, java.sql.Timestamp.valueOf(r.getDateEnvoi()));
-        ps.setInt(3, r.getIdDiscution());
-        ps.setInt(4, r.getIdEmetteur());
-        ps.setInt(5, r.getIdRecepteur());
-        ps.setInt(6, r.getIdTrans());
+        ps.setInt(3, r.getIdEmetteur());
+        ps.setInt(4, r.getIdTrans());
         ps.executeUpdate();
 
         ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -60,16 +58,14 @@ public String add(Reclamation r) {
     @Override
     public void update(Reclamation r, int id) {
         validateReclamation(r); // Validate before updating
-        String req = "UPDATE `reclamation` SET `contenu` = ?, `date_envoi` = ?, `id_discution` = ?, `id_emetteur` = ?, `id_recepteur` = ?, `id_transaction` = ? WHERE `id` = ?";
+        String req = "UPDATE `reclamation` SET `contenu` = ?, `date_envoi` = ?, `id_emetteur` = ?, `id_transaction` = ? WHERE `id` = ?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setString(1, r.getContenu());
             ps.setTimestamp(2, java.sql.Timestamp.valueOf(r.getDateEnvoi()));
-            ps.setInt(3, r.getIdDiscution());
-            ps.setInt(4, r.getIdEmetteur());
-            ps.setInt(5, r.getIdRecepteur());
-            ps.setInt(6, r.getIdTrans());
-            ps.setInt(7, id);
+            ps.setInt(3, r.getIdEmetteur());
+            ps.setInt(4, r.getIdTrans());
+            ps.setInt(5, id);
             ps.executeUpdate();
             System.out.println("Réclamation mise à jour avec succès!");
         } catch (SQLException e) {
@@ -89,9 +85,7 @@ public String add(Reclamation r) {
                 r.setId(res.getInt("id"));
                 r.setContenu(res.getString("contenu"));
                 r.setDateEnvoi(res.getTimestamp("date_envoi").toLocalDateTime()); // Convert SQL Timestamp to LocalDateTime
-                r.setIdDiscution(res.getInt("id_discution"));
                 r.setIdEmetteur(res.getInt("id_emetteur"));
-                r.setIdRecepteur(res.getInt("id_recepteur"));
                 r.setIdTrans(res.getInt("id_transaction")); // Assuming this column exists
 
                 reclamations.add(r);
@@ -109,15 +103,11 @@ public String add(Reclamation r) {
         if (r.getDateEnvoi() == null) {
             throw new IllegalArgumentException("La date de la réclamation ne peut pas être nulle");
         }
-        if (r.getIdDiscution() <= 0) {
-            throw new IllegalArgumentException("ID de discussion invalide");
-        }
+        
         if (r.getIdEmetteur() <= 0) {
             throw new IllegalArgumentException("ID d'émetteur invalide");
         }
-        if (r.getIdRecepteur() <= 0) {
-            throw new IllegalArgumentException("ID de récepteur invalide");
-        }
+        
         if (r.getIdTrans() <= 0) {
             throw new IllegalArgumentException("ID de transaction invalide");
         }
@@ -143,9 +133,7 @@ public String add(Reclamation r) {
                 r.setId(res.getInt("id"));
                 r.setContenu(res.getString("contenu"));
                 r.setDateEnvoi(res.getTimestamp("date_envoi").toLocalDateTime());
-                r.setIdDiscution(res.getInt("id_discution"));
                 r.setIdEmetteur(res.getInt("id_emetteur"));
-                r.setIdRecepteur(res.getInt("id_recepteur"));
                 r.setIdTrans(res.getInt("id_transaction")); // Assuming this column exists
                 return r;
             }

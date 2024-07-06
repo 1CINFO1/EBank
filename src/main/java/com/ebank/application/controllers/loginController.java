@@ -287,8 +287,9 @@ public class loginController implements Initializable {
                 LocalDate dob = rs.getDate("dob").toLocalDate();
                 int accNum = rs.getInt("acc_num");
                 double balance = rs.getDouble("balance");
+                int id = rs.getInt("id");
 
-                User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                User loggedInUser = new User(id,name, userEmail, dob, accNum, balance, loginPassword.getText());
                 launchDashboard(loggedInUser); // Launch regular user dashboard
                 return;
             }

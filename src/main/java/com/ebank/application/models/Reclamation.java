@@ -6,31 +6,26 @@ public class Reclamation {
     private int id;
     private String contenu;
     private LocalDateTime dateEnvoi;
-    private int idDiscution;
     private int idEmetteur;
-    private int idRecepteur;
-    private int idTrans;
-    private String state;
+    private int id_transaction;
 
     // Constructor with parameters
-    public Reclamation(int id, String contenu, LocalDateTime dateEnvoi, int idDiscution, int idEmetteur,
-            int idRecepteur, int idTrans) {
+    public Reclamation(int id, String contenu, LocalDateTime dateEnvoi, int idEmetteur, int id_transaction) {
         this.id = id;
         this.contenu = contenu;
         this.dateEnvoi = dateEnvoi;
-        this.idDiscution = idDiscution;
         this.idEmetteur = idEmetteur;
-        this.idRecepteur = idRecepteur;
-        this.idTrans = idTrans;
+
+        this.id_transaction = id_transaction;
     }
     // Constructor without id
 
-    public Reclamation(String contenu, LocalDateTime dateEnvoi2, int idDiscution, int idEmetteur, int idRecepteur) {
+    public Reclamation(String contenu, LocalDateTime dateEnvoi2,  int idEmetteur, int id_transaction) {
         this.contenu = contenu;
         this.dateEnvoi = dateEnvoi2;
-        this.idDiscution = idDiscution;
         this.idEmetteur = idEmetteur;
-        this.idRecepteur = idRecepteur;
+        this.id_transaction = id_transaction;
+
     }
 
     // Default constructor
@@ -42,23 +37,17 @@ public class Reclamation {
         return id;
     }
 
-public String getState() {
-        return state;
-    }
 
-    public void setState(String state) {
-        this.state = state;
-    }
     public void setId(int id) {
         this.id = id;
     }
 
     public int getIdTrans() {
-        return idTrans;
+        return id_transaction;
     }
 
-    public void setIdTrans(int idTrans) {
-        this.idTrans = idTrans;
+    public void setIdTrans(int id_transaction) {
+        this.id_transaction = id_transaction;
     }
 
     public String getContenu() {
@@ -77,13 +66,7 @@ public String getState() {
         this.dateEnvoi = dateEnvoi;
     }
 
-    public int getIdDiscution() {
-        return idDiscution;
-    }
 
-    public void setIdDiscution(int idDiscution) {
-        this.idDiscution = idDiscution;
-    }
 
     public int getIdEmetteur() {
         return idEmetteur;
@@ -93,13 +76,6 @@ public String getState() {
         this.idEmetteur = idEmetteur;
     }
 
-    public int getIdRecepteur() {
-        return idRecepteur;
-    }
-
-    public void setIdRecepteur(int idRecepteur) {
-        this.idRecepteur = idRecepteur;
-    }
 
     // toString method for displaying object information
     @Override
@@ -108,10 +84,10 @@ public String getState() {
                 "id=" + id +
                 ", contenu='" + contenu + '\'' +
                 ", dateEnvoi=" + dateEnvoi +
-                ", IDTransaction=" + idTrans +
-                ", idDiscution=" + idDiscution +
+                ", IDTransaction=" + id_transaction +
+                
                 ", idEmetteur=" + idEmetteur +
-                ", idRecepteur=" + idRecepteur +
+                
                 '}';
     }
 }

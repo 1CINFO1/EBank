@@ -5,6 +5,7 @@ import com.ebank.application.enumeration.Role;
 import java.time.LocalDate;
 
 public class User {
+    int id;
     String name;
     int acc_num;
     double balance;
@@ -24,7 +25,16 @@ public class User {
         this.acc_num = acc_num;
         this.balance = 0;
     }
-
+    public User(int id,String name, String email, LocalDate dob, int acc_num, double balance,String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+        this.password=password;
+    
+    }
     public User(String name, String email, LocalDate dob, int acc_num, double balance) {
 
         this.name = name;
@@ -32,6 +42,7 @@ public class User {
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = balance;
+    
     }
     public User(String name, String email, LocalDate dob, int acc_num, double balance, String password) {
         this.name = name;
@@ -86,7 +97,10 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
+
+    public int getId() {
+        return id;
+    }    public void setEmail(String email) {
         this.email = email;
     }
 

@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -25,6 +26,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -142,6 +146,13 @@ public class DashboardController implements Initializable {
 
     @FXML
     private VBox publicationListVBox;
+    @FXML
+    private LineChart<String, Number> transferStatisticsChart;
+
+    @FXML
+    private NumberAxis yAxis;
+    @FXML
+    private Pane reclamationPane;
 
     private final ConverterService transfertService = new ConverterService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
@@ -437,7 +448,27 @@ public class DashboardController implements Initializable {
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
     }
+public void updateTransferStatisticsChart() {
+        try {
+            LocalDate startDate = LocalDate.now().minusMonths(1);
+            LocalDate endDate = LocalDate.now();
+            List<Double> statistics = TransferController.getTransferStatistics(currentUser.getAcc_num(), startDate, endDate);
 
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            series.setName("Transfer Statistics");
+
+            LocalDate currentDate = startDate;
+            for (Double total : statistics) {
+                series.getData().add(new XYChart.Data<>(currentDate.toString(), total));
+                currentDate = currentDate.plusDays(1);
+            }
+
+            transferStatisticsChart.getData().clear();
+            transferStatisticsChart.getData().add(series);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     // @FXML
     // private void openReclamationForm() {
     //     try {

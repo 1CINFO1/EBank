@@ -33,14 +33,11 @@ public class ReclamationController {
     private void handleSubmit(ActionEvent event) {
         try {
             Reclamation reclamation = new Reclamation(
-                contenuField.getText(),
+                0, contenuField.getText(),
                 LocalDateTime.now(),
-                Integer.parseInt(idDiscutionField.getText()),
-                Integer.parseInt(idEmetteurField.getText()),
-                Integer.parseInt(idRecepteurField.getText())
+                Integer.parseInt(idEmetteurField.getText()), 0
             );
             reclamation.setIdTrans(Integer.parseInt(idTransactionField.getText()));
-            reclamation.setState(stateComboBox.getValue());
 
             String result = reclamationService.add(reclamation);
             showAlert(Alert.AlertType.INFORMATION, "Success", result);
