@@ -14,22 +14,22 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        
+
         <Label text="Transaction ID:"/>
         <TextField fx:id="idTransactionField" editable="false"/>
-        
+
         <Label text="Content:"/>
         <TextArea fx:id="contenuField" prefHeight="100" wrapText="true"/>
-        
+
         <Label text="State:"/>
         <ComboBox fx:id="stateComboBox" prefWidth="200"/>
-        
+
         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit" 
-                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" 
+            <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit"
+                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor"
                     textFill="WHITE" prefWidth="100"/>
-            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" 
-                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" 
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                    style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor"
                     textFill="WHITE" prefWidth="100"/>
         </HBox>
     </VBox>

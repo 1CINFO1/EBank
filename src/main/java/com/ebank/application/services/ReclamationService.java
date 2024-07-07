@@ -14,7 +14,7 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
     Connection cnx = MaConnexion.getInstance().getCnx();
 
     @Override
-public String add(Reclamation r) {
+    public String add(Reclamation r) {
     validateReclamation(r); // Validate before adding
     String req = "INSERT INTO `reclamation`(`contenu`, `date_envoi`, `id_emetteur`,  `id_transaction`) VALUES (?, ?, ?, ?)";
     try {

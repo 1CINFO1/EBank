@@ -20,10 +20,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
-public class ConverterService implements transfertInterface {
+public class ConverterService implements transfertInterface<Transfer> {
     Connection conn = MaConnexion.getInstance().getCnx();
+
+
 
     @Override
     public void deposit(double amount, User currentUser) throws SQLException {
@@ -104,6 +107,11 @@ public class ConverterService implements transfertInterface {
         } else {
             showReclamationOption(currentUser, null, amount, "User not found");
         }
+    }
+
+    @Override
+    public void transfer2(double amount, String receiverAccNumber, User currentUser) throws SQLException {
+
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {
@@ -231,5 +239,25 @@ public class ConverterService implements transfertInterface {
             e.printStackTrace();
             showAlert("Error", "Failed to save reclamation: " + e.getMessage(), Alert.AlertType.ERROR);
         }
+    }
+
+    @Override
+    public String add(Transfer transfer) {
+        return "";
+    }
+
+    @Override
+    public void delete(int t) {
+
+    }
+
+    @Override
+    public void update(Transfer transfer, int id) {
+
+    }
+
+    @Override
+    public List<Transfer> getAll() {
+        return List.of();
     }
 }

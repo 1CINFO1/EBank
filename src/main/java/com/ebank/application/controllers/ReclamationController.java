@@ -5,20 +5,39 @@ import com.ebank.application.services.ReclamationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 public class ReclamationController {
 
-    @FXML private TextField contenuField;
-    @FXML private TextField idDiscutionField;
-    @FXML private TextField idEmetteurField;
-    @FXML private TextField idRecepteurField;
-    @FXML private TextField idTransactionField;
-    @FXML private ComboBox<String> stateComboBox;
-    @FXML private Button submitButton;
-    @FXML private Button cancelButton;
+    @FXML
+    private TextArea contenuField;
+
+    @FXML
+    private TextField idDiscutionField;
+
+    @FXML
+    private TextField idEmetteurField;
+
+    @FXML
+    private TextField idRecepteurField;
+
+    @FXML
+    private TextField idTransactionField;
+
+    @FXML
+    private ComboBox<String> stateComboBox;
+
+    @FXML
+    private Button submitButton;
+
+    @FXML
+    private Button cancelButton;
+
 
     private ReclamationService reclamationService;
+
 
     public ReclamationController() {
         reclamationService = new ReclamationService();

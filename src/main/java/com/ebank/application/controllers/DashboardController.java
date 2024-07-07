@@ -16,9 +16,11 @@ import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.ConverterService;
+import com.ebank.application.services.TransferService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.application.Platform;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -154,9 +156,9 @@ public class DashboardController implements Initializable {
     @FXML
     private Pane reclamationPane;
 
-    private final ConverterService transfertService = new ConverterService();
+    private final TransferService transferService  = new TransferService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
-
+    ReclamationController reclamationController= new ReclamationController();
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
@@ -290,7 +292,7 @@ public class DashboardController implements Initializable {
     public void confirmDeposit() {
         try {
             double amount = Double.parseDouble(depositAmountTextField.getText());
-            transfertService.deposit(amount, currentUser);
+            transferService.deposit(amount, currentUser);
             depositConfirmationText.setText("Deposit Succeeded");
             depositConfirmationText.setStyle(successStyle);
             depositAmountTextField.setText("");
@@ -313,7 +315,7 @@ public class DashboardController implements Initializable {
     public void confirmWithdraw() {
         try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
-            transfertService.withdraw(amount, currentUser);
+            transferService.withdraw(amount, currentUser);
             withdrawConfirmationText.setText("Withdraw Succeeded");
             withdrawConfirmationText.setStyle(successStyle);
             withdrawAmountTextField.setText("");
@@ -337,16 +339,21 @@ public class DashboardController implements Initializable {
         try {
             double amount = Double.parseDouble(transferAmountTextField.getText());
             String receiverAccNumber = recieverTextField.getText();
-            transfertService.transfer(amount, receiverAccNumber, currentUser);
+            handleFailure();
+            transferService.transfer(amount, receiverAccNumber, currentUser);
+
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
             recieverTextField.setText("");
             transferAmountTextField.setText("");
         } catch (NumberFormatException e) {
+
             transferConfirmationText.setText("Please Enter a Numeric Value");
             transferConfirmationText.setStyle(errorStyle);
             transferAmountTextField.setText("");
         } catch (SQLException e) {
+
+            handleFailure();
             transferConfirmationText.setText("Transfer Failed");
             transferConfirmationText.setStyle(errorStyle);
             recieverTextField.setText("");
@@ -358,6 +365,30 @@ public class DashboardController implements Initializable {
             transferAmountTextField.setText("");
         }
     }
+
+
+
+    private void handleFailure() {
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/reclamation.fxml"));
+                Parent root = loader.load();
+
+                Stage stage = new Stage();
+                stage.setTitle("New Reclamation");
+                stage.initModality(Modality.APPLICATION_MODAL); // Block events to other windows
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+
+                // Optional: handle actions after the form is closed, if needed
+                ReclamationController controller = loader.getController();
+                // Use controller if needed
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 
 
     public void logout() throws IOException {
