@@ -1,7 +1,6 @@
 package com.ebank.application.services;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
-import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
@@ -29,16 +28,6 @@ public class adminController implements InterfaceCRUD<Publication> {
     @Override
     public void update(Publication publication, int id) {
 
-    }
-
-    @Override
-    public Publication getById(int id) {
-        return null;
-    }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
     }
 
     @Override
