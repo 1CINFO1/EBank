@@ -450,7 +450,7 @@ public class DashboardController implements Initializable {
 
             String receiverAccNumber = Integer.toString(campaignModel.getAcc_num());
 
-            transfertService.transfer(amount, receiverAccNumber, currentUser);
+            transfertService.transfer2(amount, receiverAccNumber, currentUser);
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
             recieverTextField.setText("");

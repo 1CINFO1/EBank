@@ -15,11 +15,12 @@ public interface transfertInterface<T> {
 
     public List<T> getAll();
 
-
-
     void deposit(double amount, User currentUser) throws SQLException;
+
     void withdraw(double amount, User currentUser) throws SQLException;
+
     void transfer(double amount, String receiverAccNumber, User currentUser) throws SQLException;
+
     void transfer2(double amount, String receiverAccNumber, User currentUser) throws SQLException;
 
 }
