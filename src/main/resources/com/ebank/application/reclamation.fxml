@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -6,7 +6,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ebank.application.controllers.ReclamationController"
+            fx:controller="com.ebank.application.controllers.DashboardController"
             prefHeight="400.0" prefWidth="600.0">
     <VBox spacing="10" padding="20">
         <Label text="New Reclamation" style="-fx-font-size: 24;">
@@ -21,8 +21,6 @@
         <Label text="Content:"/>
         <TextArea fx:id="contenuField" prefHeight="100" wrapText="true"/>
 
-        <Label text="State:"/>
-        <ComboBox fx:id="stateComboBox" prefWidth="200"/>
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <Button fx:id="submitButton" text="Submit" onAction="#handleSubmit"
@@ -33,4 +31,4 @@
                     textFill="WHITE" prefWidth="100"/>
         </HBox>
     </VBox>
-</AnchorPane>
+</AnchorPane> -->

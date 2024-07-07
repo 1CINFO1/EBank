@@ -8,19 +8,23 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 import com.ebank.application.models.Publication;
+import com.ebank.application.models.Reclamation;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
-import com.ebank.application.services.ConverterService;
+import com.ebank.application.services.ReclamationService;
+// import com.ebank.application.services.ConverterService;
 import com.ebank.application.services.TransferService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -31,9 +35,11 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -155,10 +161,30 @@ public class DashboardController implements Initializable {
     private NumberAxis yAxis;
     @FXML
     private Pane reclamationPane;
+    @FXML
+    private TextArea reclamationContent;
+
+    @FXML
+    private Label reclamationConfirmationText;
+
+
+    @FXML
+    private TextField recieverTextField1;
+
+    @FXML
+    private TextField recieverTextField2;
+
+
+
+
+
+    private int currentUserId;
+
 
     private final TransferService transferService  = new TransferService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
-    ReclamationController reclamationController= new ReclamationController();
+    private final ReclamationService reclamationService = new ReclamationService();
+    // ReclamationController reclamationController= new ReclamationController();
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
@@ -381,7 +407,7 @@ public class DashboardController implements Initializable {
                 stage.showAndWait();
 
                 // Optional: handle actions after the form is closed, if needed
-                ReclamationController controller = loader.getController();
+                // ReclamationController controller = loader.getController();
                 // Use controller if needed
             } catch (IOException e) {
                 e.printStackTrace();
@@ -516,5 +542,75 @@ public void updateTransferStatisticsChart() {
     //         e.printStackTrace();
     //     }
     // }
+    // @FXML
+    // private TextArea contenuField;
+
+
+    // @FXML
+    // private TextField idSenderField;
+
+    // @FXML
+    // private TextField idTransactionField;
+
+    @FXML
+    private ComboBox<String> stateComboBox;
+
+    // @FXML
+    // private Button submitButton;
+
+    // @FXML
+    // private Button cancelButton;
+
+
+    // private ReclamationService reclamationService;
+
+
+    // public ReclamationController() {
+    //     reclamationService = new ReclamationService();
+    // }
+
+    @FXML
+    private void initialize() {
+        stateComboBox.getItems().addAll("New", "In Progress", "Resolved");
+    }
+
+    @FXML
+    private void showReclamationPane() {
+        // Hide all other panes
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        reclamationPane.setVisible(true);
+
+
+    }
+    
+    @FXML
+    private void sendReclamation() {
+        String title = recieverTextField1.getText();
+        String description = recieverTextField2.getText();
+        if (title.trim().isEmpty()) {
+            recieverTextField2.setText("Please enter your reclamation before submitting.");
+            return;
+        }
+        
+        try {
+            String result = reclamationService.submitReclamation(title,description, currentUser);
+            System.out.println(result);
+            recieverTextField2.setText(result);
+            recieverTextField1.clear();
+        } catch (RuntimeException e) {
+            recieverTextField2.setText("Failed to submit reclamation. Please try again.");
+        }
+    }
+
+    @FXML
+    private void cancelReclamation() {
+        recieverTextField1.clear();
+        recieverTextField2.clear();
+    }
 }
 

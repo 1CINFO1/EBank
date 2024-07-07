@@ -4,7 +4,7 @@ import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
-import com.ebank.application.services.ConverterService;
+import com.ebank.application.services.TransferService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -145,7 +145,9 @@ public class CharityController implements Initializable {
     @FXML
     private VBox publicationListVBox;
 
-    private final ConverterService transfertService = new ConverterService();
+    // private final ConverterService transfertService = new ConverterService();
+    private final TransferService transferService = new TransferService();
+
     private final IpublicationImple ipublicationImple = new IpublicationImple();
 
     protected String errorStyle = "-fx-text-fill: RED;";
@@ -269,7 +271,7 @@ public class CharityController implements Initializable {
     public void confirmDeposit() {
         try {
             double amount = Double.parseDouble(depositAmountTextField.getText());
-            transfertService.deposit(amount, currentUser);
+            transferService.deposit(amount, currentUser);
             depositConfirmationText.setText("Deposit Succeeded");
             depositConfirmationText.setStyle(successStyle);
             depositAmountTextField.setText("");
@@ -292,7 +294,7 @@ public class CharityController implements Initializable {
     public void confirmWithdraw() {
         try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
-            transfertService.withdraw(amount, currentUser);
+            transferService.withdraw(amount, currentUser);
             withdrawConfirmationText.setText("Withdraw Succeeded");
             withdrawConfirmationText.setStyle(successStyle);
             withdrawAmountTextField.setText("");
@@ -316,7 +318,7 @@ public class CharityController implements Initializable {
         try {
             double amount = Double.parseDouble(transferAmountTextField.getText());
             String receiverAccNumber = recieverTextField.getText();
-            transfertService.transfer(amount, receiverAccNumber, currentUser);
+            transferService.transfer(amount, receiverAccNumber, currentUser);
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
             recieverTextField.setText("");

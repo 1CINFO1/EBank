@@ -4,27 +4,27 @@ import java.time.LocalDateTime;
 
 public class Reclamation {
     private int id;
-    private String contenu;
+    private String title;
+    private String description;
     private LocalDateTime dateEnvoi;
-    private int idEmetteur;
-    private int id_transaction;
+    private int idSender;
 
     // Constructor with parameters
-    public Reclamation(int id, String contenu, LocalDateTime dateEnvoi, int idEmetteur, int id_transaction) {
+    public Reclamation(int id, String title, String description, LocalDateTime dateEnvoi, int idSender) {
         this.id = id;
-        this.contenu = contenu;
+        this.title=title;
+        this.description = description;
         this.dateEnvoi = dateEnvoi;
-        this.idEmetteur = idEmetteur;
+        this.idSender = idSender;
 
-        this.id_transaction = id_transaction;
     }
     // Constructor without id
 
-    public Reclamation(String contenu, LocalDateTime dateEnvoi2,  int idEmetteur, int id_transaction) {
-        this.contenu = contenu;
-        this.dateEnvoi = dateEnvoi2;
-        this.idEmetteur = idEmetteur;
-        this.id_transaction = id_transaction;
+    public Reclamation(String titlte,String description, LocalDateTime dateEnvoi,  int idSender, int id_transaction) {
+        this.title=title;
+        this.description = description;
+        this.dateEnvoi = dateEnvoi;
+        this.idSender = idSender;
 
     }
 
@@ -42,20 +42,20 @@ public class Reclamation {
         this.id = id;
     }
 
-    public int getIdTrans() {
-        return id_transaction;
-    }
-
-    public void setIdTrans(int id_transaction) {
-        this.id_transaction = id_transaction;
-    }
 
     public String getContenu() {
-        return contenu;
+        return description;
+    }
+
+    public void setTitle(String title) {
+        this.description = title;
+    }
+    public String getTitle() {
+        return title;
     }
 
     public void setContenu(String contenu) {
-        this.contenu = contenu;
+        this.description = contenu;
     }
 
     public LocalDateTime getDateEnvoi() {
@@ -68,12 +68,12 @@ public class Reclamation {
 
 
 
-    public int getIdEmetteur() {
-        return idEmetteur;
+    public int getIdSender() {
+        return idSender;
     }
 
-    public void setIdEmetteur(int idEmetteur) {
-        this.idEmetteur = idEmetteur;
+    public void setIdSender(int idSender) {
+        this.idSender = idSender;
     }
 
 
@@ -82,11 +82,11 @@ public class Reclamation {
     public String toString() {
         return "Reclamation{" +
                 "id=" + id +
-                ", contenu='" + contenu + '\'' +
+                ", title='" + title + '\'' +
+                ", contenu='" + description + '\'' +
                 ", dateEnvoi=" + dateEnvoi +
-                ", IDTransaction=" + id_transaction +
                 
-                ", idEmetteur=" + idEmetteur +
+                ", idSender=" + idSender +
                 
                 '}';
     }

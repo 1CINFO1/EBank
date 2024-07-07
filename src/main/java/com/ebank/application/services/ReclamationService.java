@@ -3,9 +3,11 @@ package  com.ebank.application.services;
 import com.ebank.application.EmailUtil;
 import com.ebank.application.interfaces.InterfaceCRUD;
 import com.ebank.application.models.Reclamation;
+import com.ebank.application.models.User;
 import com.ebank.application.utils.MaConnexion;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +18,13 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
     @Override
     public String add(Reclamation r) {
     validateReclamation(r); // Validate before adding
-    String req = "INSERT INTO `reclamation`(`contenu`, `date_envoi`, `id_emetteur`,  `id_transaction`) VALUES (?, ?, ?, ?)";
+    String req = "INSERT INTO `reclamation`(`title`,`description`, `date_envoi`, `idSender`) VALUES (?,?,?, ? )";
     try {
         PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, r.getContenu());
-        ps.setTimestamp(2, java.sql.Timestamp.valueOf(r.getDateEnvoi()));
-        ps.setInt(3, r.getIdEmetteur());
-        ps.setInt(4, r.getIdTrans());
+        ps.setString(1, r.getTitle());
+        ps.setString(2, r.getContenu());
+        ps.setTimestamp(3, java.sql.Timestamp.valueOf(r.getDateEnvoi()));
+        ps.setInt(4, r.getIdSender());
         ps.executeUpdate();
 
         ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -58,14 +60,12 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
     @Override
     public void update(Reclamation r, int id) {
         validateReclamation(r); // Validate before updating
-        String req = "UPDATE `reclamation` SET `contenu` = ?, `date_envoi` = ?, `id_emetteur` = ?, `id_transaction` = ? WHERE `id` = ?";
+        String req = "UPDATE `reclamation` SET `contenu` = ?, `date_envoi` = ?, `idSender` = ? WHERE `id` = ?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setString(1, r.getContenu());
             ps.setTimestamp(2, java.sql.Timestamp.valueOf(r.getDateEnvoi()));
-            ps.setInt(3, r.getIdEmetteur());
-            ps.setInt(4, r.getIdTrans());
-            ps.setInt(5, id);
+            ps.setInt(3, r.getIdSender());
             ps.executeUpdate();
             System.out.println("Réclamation mise à jour avec succès!");
         } catch (SQLException e) {
@@ -83,10 +83,9 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
             while (res.next()) {
                 Reclamation r = new Reclamation();
                 r.setId(res.getInt("id"));
-                r.setContenu(res.getString("contenu"));
+                r.setContenu(res.getString("description"));
                 r.setDateEnvoi(res.getTimestamp("date_envoi").toLocalDateTime()); // Convert SQL Timestamp to LocalDateTime
-                r.setIdEmetteur(res.getInt("id_emetteur"));
-                r.setIdTrans(res.getInt("id_transaction")); // Assuming this column exists
+                r.setIdSender(res.getInt("idSender"));
 
                 reclamations.add(r);
             }
@@ -104,13 +103,10 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
             throw new IllegalArgumentException("La date de la réclamation ne peut pas être nulle");
         }
         
-        if (r.getIdEmetteur() <= 0) {
+        if (r.getIdSender() <= 0) {
             throw new IllegalArgumentException("ID d'émetteur invalide");
         }
         
-        if (r.getIdTrans() <= 0) {
-            throw new IllegalArgumentException("ID de transaction invalide");
-        }
     }
 
     private boolean canDeleteReclamation(int id) {
@@ -131,15 +127,57 @@ public class ReclamationService implements InterfaceCRUD<Reclamation> {
             if (res.next()) {
                 Reclamation r = new Reclamation();
                 r.setId(res.getInt("id"));
-                r.setContenu(res.getString("contenu"));
+                r.setTitle(res.getString("title"));
+                r.setContenu(res.getString("description"));
                 r.setDateEnvoi(res.getTimestamp("date_envoi").toLocalDateTime());
-                r.setIdEmetteur(res.getInt("id_emetteur"));
-                r.setIdTrans(res.getInt("id_transaction")); // Assuming this column exists
+                r.setIdSender(res.getInt("id_emetteur"));
                 return r;
             }
             return null;
         } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de la récupération de la réclamation par ID", e);
+        }
+    }
+     public User currentUser = new User();
+    public String submitReclamation(String tiltle,String description, User  currentUser) {
+        String req = "INSERT INTO `reclamation`(`title`,`description`, `dateEnvoi`, `idSender`) VALUES (?, ?, ?, ?)";
+        int userId= currentUser.getId();
+        try {
+            PreparedStatement ps = cnx.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, tiltle);
+            ps.setString(2, description);
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setInt(4, userId);
+            ps.executeUpdate();
+
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return "Reclamation submitted successfully with ID: " + generatedKeys.getInt(1);
+            }
+            return "Reclamation submitted successfully!";
+        } catch (SQLException e) {
+            throw new RuntimeException("Error submitting reclamation", e);
+        }
+    }
+
+    public Reclamation getReclamationById(int id) {
+        String req = "SELECT * FROM `reclamation` WHERE `id` = ?";
+        try {
+            PreparedStatement ps = cnx.prepareStatement(req);
+            ps.setInt(1, id);
+            ResultSet res = ps.executeQuery();
+            if (res.next()) {
+                Reclamation r = new Reclamation();
+                r.setId(res.getInt("id"));
+                r.setTitle(res.getString("title"));
+                r.setContenu(res.getString("description"));
+                r.setDateEnvoi(res.getTimestamp("date_envoi").toLocalDateTime());
+                r.setIdSender(res.getInt("idSender"));
+                return r;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving reclamation by ID", e);
         }
     }
 }
