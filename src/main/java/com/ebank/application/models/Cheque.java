@@ -4,17 +4,20 @@ import java.util.Date;
 
 public class Cheque {
     private int id;
-    private float montant;
     private Date dateEmission;
     private String titulaire;
-    private String banque;
 
-    public Cheque(int id, float montant, Date dateEmission, String titulaire, String banque) {
+    public Cheque(){
+
+    }
+    public Cheque(int id,  Date dateEmission, String titulaire) {
         this.id = id;
-        this.montant = montant;
         this.dateEmission = dateEmission;
         this.titulaire = titulaire;
-        this.banque = banque;
+    }
+    public Cheque( float montant, Date dateEmission, String titulaire) {
+        this.dateEmission = dateEmission;
+        this.titulaire = titulaire;
     }
 
     // Getters and Setters
@@ -26,13 +29,6 @@ public class Cheque {
         this.id = id;
     }
 
-    public float getMontant() {
-        return montant;
-    }
-
-    public void setMontant(float montant) {
-        this.montant = montant;
-    }
 
     public Date getDateEmission() {
         return dateEmission;
@@ -50,35 +46,15 @@ public class Cheque {
         this.titulaire = titulaire;
     }
 
-    public String getBanque() {
-        return banque;
-    }
 
-    public void setBanque(String banque) {
-        this.banque = banque;
-    }
 
-    // Méthodes
-    public void ajouter() {
-        // Code pour ajouter un chèque
-    }
-
-    public void modifier() {
-        // Code pour modifier un chèque
-    }
-
-    public void supprimer() {
-        // Code pour supprimer un chèque
-    }
 
     @Override
     public String toString() {
         return "Cheque{" +
                 "id=" + id +
-                ", montant=" + montant +
                 ", dateEmission=" + dateEmission +
                 ", titulaire='" + titulaire + '\'' +
-                ", banque='" + banque + '\'' +
                 '}';
     }
 }

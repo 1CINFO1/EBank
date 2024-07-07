@@ -1,13 +1,16 @@
 package com.ebank.application.models;
 
 import java.util.Date;
-    
+
 public class CarteBancaire {
     private int id;
     private String numero;
     private Date dateExpiration;
     private String titulaire;
     private String type;
+
+    public CarteBancaire() {
+    }
 
     public CarteBancaire(int id, String numero, Date dateExpiration, String titulaire, String type) {
         this.id = id;
@@ -17,7 +20,13 @@ public class CarteBancaire {
         this.type = type;
     }
 
-    // Getters and Setters
+    public CarteBancaire(String numero, Date dateExpiration, String titulaire, String type) {
+        this.numero = numero;
+        this.dateExpiration = dateExpiration;
+        this.titulaire = titulaire;
+        this.type = type;
+    }
+
     public int getId() {
         return id;
     }
@@ -58,19 +67,6 @@ public class CarteBancaire {
         this.type = type;
     }
 
-    // Méthodes
-    public void ajouter() {
-        // Code pour ajouter une carte bancaire
-    }
-
-    public void modifier() {
-        // Code pour modifier une carte bancaire
-    }
-
-    public void supprimer() {
-        // Code pour supprimer une carte bancaire
-    }
-
     @Override
     public String toString() {
         return "CarteBancaire{" +
@@ -82,5 +78,3 @@ public class CarteBancaire {
                 '}';
     }
 }
-
-
