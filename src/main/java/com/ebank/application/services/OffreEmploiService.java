@@ -1,7 +1,9 @@
 package com.ebank.application.services;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.OffreEmploi;
+import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
 import java.sql.Connection;
@@ -16,7 +18,8 @@ import java.util.List;
 
 public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
 
-    // Assuming MaConnexion manages a single connection throughout application lifecycle
+    // Assuming MaConnexion manages a single connection throughout application
+    // lifecycle
     private Connection cnx = MaConnexion.getInstance().getCnx();
 
     @Override
@@ -35,8 +38,8 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
             // Retrieve the generated id
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
-                int id = generatedKeys.getInt(1);  // Assuming id is an INT
-                o.setId(id);  // Set the generated id back to your object if needed
+                int id = generatedKeys.getInt(1); // Assuming id is an INT
+                o.setId(id); // Set the generated id back to your object if needed
             }
 
             System.out.println("Offre d'emploi ajoutée avec succès!");
@@ -88,7 +91,7 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
         List<OffreEmploi> offres = new ArrayList<>();
         String req = "SELECT * FROM `offreemploi`";
         try (PreparedStatement ps = cnx.prepareStatement(req);
-             ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 OffreEmploi o = new OffreEmploi(
@@ -98,8 +101,7 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
                         rs.getString("type"),
                         rs.getString("emplacement"),
                         rs.getDate("date_expiration").toLocalDate(),
-                        rs.getTimestamp("date_offre").toLocalDateTime()
-                );
+                        rs.getTimestamp("date_offre").toLocalDateTime());
                 offres.add(o);
             }
         } catch (SQLException e) {
@@ -122,5 +124,17 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
             throw new RuntimeException("Error fetching candidate count for job id: " + jobId, e);
         }
         return 0;
+    }
+
+    @Override
+    public Publication getById(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public CharityCampaignModel getCharityBy(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCharityBy'");
     }
 }

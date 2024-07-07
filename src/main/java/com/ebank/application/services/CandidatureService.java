@@ -2,6 +2,8 @@ package com.ebank.application.services;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
 import com.ebank.application.models.Candidature;
+import com.ebank.application.models.CharityCampaignModel;
+import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
 import java.sql.Connection;
@@ -103,11 +105,12 @@ public class CandidatureService implements InterfaceCRUD<Candidature> {
             }
             System.out.println("Liste des candidats pour l'offre d'emploi " + jobId + " récupérée avec succès!");
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la récupération des candidats pour l'offre d'emploi " + jobId, e);
+            throw new RuntimeException("Erreur lors de la récupération des candidats pour l'offre d'emploi " + jobId,
+                    e);
         }
         return candidates;
     }
-    
+
     // Method to upload CV (PDF) to the server
     public void uploadCv(Candidature candidature, String filePath) {
         // Implement the logic to upload the CV to the server and set the cvPath
@@ -117,6 +120,19 @@ public class CandidatureService implements InterfaceCRUD<Candidature> {
 
     // Method to download CV (PDF) from the server
     public void downloadCv(String cvPath, String destinationPath) {
-        // Implement the logic to download the CV from the server to the specified destination path
+        // Implement the logic to download the CV from the server to the specified
+        // destination path
+    }
+
+    @Override
+    public Publication getById(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public CharityCampaignModel getCharityBy(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCharityBy'");
     }
 }
