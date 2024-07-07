@@ -1,29 +1,33 @@
 package com.ebank.application.models;
-public class Candidature {
-    // attributs
-    private int id, job_id;
-    private String nom, prenom, CV;
 
-    // Contructeurs
+public class Candidature {
+    // Attributes
+    private int id;
+    private int job_id;
+    private String nom;
+    private String prenom;
+    private String cvPath; // Path to the CV PDF file
+
+    // Constructors
     public Candidature() {
     }
 
-    public Candidature(int job_id, String nom, String prenom, String CV) {
+    public Candidature(int job_id, String nom, String prenom, String cvPath) {
         this.job_id = job_id;
         this.nom = nom;
         this.prenom = prenom;
-        this.CV = CV;
+        this.cvPath = cvPath;
     }
 
-    public Candidature(int job_id, int id, String nom, String prenom, String CV) {
+    public Candidature(int job_id, int id, String nom, String prenom, String cvPath) {
         this.id = id;
         this.job_id = job_id;
         this.nom = nom;
         this.prenom = prenom;
-        this.CV = CV;
+        this.cvPath = cvPath;
     }
-// Getters and setters
 
+    // Getters and setters
     public int getId() {
         return this.id;
     }
@@ -56,19 +60,15 @@ public class Candidature {
         this.prenom = prenom;
     }
 
-    public String getCV() {
-        return this.CV;
+    public String getCvPath() {
+        return this.cvPath;
     }
 
-    public void setCV(String CV) {
-        this.CV = CV;
+    public void setCvPath(String cvPath) {
+        this.cvPath = cvPath;
     }
-
-
-
 
     // Display
-
     @Override
     public String toString() {
         return "{" +
@@ -76,14 +76,7 @@ public class Candidature {
             ", job_id='" + getJob_id() + "'" +
             ", nom='" + getNom() + "'" +
             ", prenom='" + getPrenom() + "'" +
-            ", CV='" + getCV() + "'" +
+            ", cvPath='" + getCvPath() + "'" +
             "}";
     }
-
-
-
 }
-
-
-
-
