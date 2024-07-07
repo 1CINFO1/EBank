@@ -1,24 +1,18 @@
 package com.ebank.application.services;
 
-import com.ebank.application.EmailUtil;
 import com.ebank.application.interfaces.transfertInterface;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Transfer;
 import com.ebank.application.models.User;
 import com.ebank.application.utils.MaConnexion;
 
-
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class TransferService implements transfertInterface<Transfer> {
     Connection conn = MaConnexion.getInstance().getCnx();
-
 
     // Method to fetch transactions by reclamation ID
     public List<Transfer> getByReclamationId(int reclamationId) {
@@ -59,12 +53,9 @@ public class TransferService implements transfertInterface<Transfer> {
 
     // Method to deposit money into a user's account
 
-
-
-
     @Override
     public void deposit(double amount, User currentUser) throws SQLException {
-        if(amount <= 0) {
+        if (amount <= 0) {
             throw new IllegalArgumentException("Please enter a positive value");
         }
 
@@ -80,7 +71,7 @@ public class TransferService implements transfertInterface<Transfer> {
 
     @Override
     public void withdraw(double amount, User currentUser) throws SQLException {
-        if((currentUser.getBalance() - amount) < 0 || amount <= 0) {
+        if ((currentUser.getBalance() - amount) < 0 || amount <= 0) {
             throw new IllegalArgumentException("Insufficient balance or invalid amount");
         }
 
@@ -93,8 +84,9 @@ public class TransferService implements transfertInterface<Transfer> {
         pst.setString(2, currentUser.getEmail());
         pst.executeUpdate();
     }
+
     public void transfer(double amount, String receiverAccNumber, User currentUser) throws SQLException {
-        if(receiverAccNumber.isBlank() || receiverAccNumber.equals(String.valueOf(currentUser.getAcc_num()))) {
+        if (receiverAccNumber.isBlank() || receiverAccNumber.equals(String.valueOf(currentUser.getAcc_num()))) {
             throw new IllegalArgumentException("Invalid receiver account number");
         }
 
@@ -104,7 +96,7 @@ public class TransferService implements transfertInterface<Transfer> {
         pst.setInt(1, receiverAccNum);
         ResultSet rs = pst.executeQuery();
 
-        if(rs.next()) {
+        if (rs.next()) {
             User receiver = new User(
 
                     rs.getString("name"),
@@ -112,12 +104,11 @@ public class TransferService implements transfertInterface<Transfer> {
                     rs.getDate("dob").toLocalDate(),
                     rs.getInt("acc_num"),
                     rs.getDouble("balance"),
-                    rs.getString("id")
-            );
+                    rs.getString("id"));
 
             int receiverId = rs.getInt("id");
             System.out.println(receiverId);
-            if(amount <= 0 || amount > currentUser.getBalance()) {
+            if (amount <= 0 || amount > currentUser.getBalance()) {
                 throw new IllegalArgumentException("Invalid amount or insufficient balance");
             }
 
@@ -135,7 +126,7 @@ public class TransferService implements transfertInterface<Transfer> {
             // Insert transaction log
             String insertTransactionSql = "INSERT INTO transactions(idReceiver, idSender, montant, Date, type) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement insertTransactionPst = conn.prepareStatement(insertTransactionSql);
-            insertTransactionPst.setInt(1,receiverId);
+            insertTransactionPst.setInt(1, receiverId);
             insertTransactionPst.setInt(2, currentUser.getId());
             insertTransactionPst.setDouble(3, amount);
             insertTransactionPst.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Current date
@@ -147,30 +138,6 @@ public class TransferService implements transfertInterface<Transfer> {
             throw new IllegalArgumentException("User not found");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public String add(Transfer transfer) {
@@ -231,6 +198,7 @@ public class TransferService implements transfertInterface<Transfer> {
         }
         return transactions;
     }
+
     public List<Double> getTransferStatistics(int userId, LocalDate startDate, LocalDate endDate) throws SQLException {
         String sql = "SELECT date, SUM(montant) as total FROM transaction WHERE idSender = ? AND date BETWEEN ? AND ? GROUP BY date ORDER BY date";
         PreparedStatement pst = conn.prepareStatement(sql);
@@ -249,7 +217,7 @@ public class TransferService implements transfertInterface<Transfer> {
 
     @Override
     public void transfer2(double amount, String receiverAccNumber, User currentUser) throws SQLException {
-        if(receiverAccNumber.isBlank() || receiverAccNumber.equals(String.valueOf(currentUser.getAcc_num()))) {
+        if (receiverAccNumber.isBlank() || receiverAccNumber.equals(String.valueOf(currentUser.getAcc_num()))) {
             throw new IllegalArgumentException("Invalid receiver account number");
         }
 
@@ -259,16 +227,15 @@ public class TransferService implements transfertInterface<Transfer> {
         pst.setInt(1, receiverAccNum);
         ResultSet rs = pst.executeQuery();
 
-        if(rs.next()) {
+        if (rs.next()) {
             CharityCampaignModel receiver = new CharityCampaignModel(
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getDate("dob").toLocalDate(),
                     rs.getInt("acc_num"),
-                    rs.getDouble("balance")
-            );
+                    rs.getDouble("balance"));
 
-            if(amount <= 0 || amount > currentUser.getBalance()) {
+            if (amount <= 0 || amount > currentUser.getBalance()) {
                 throw new IllegalArgumentException("Invalid amount or insufficient balance");
             }
 
@@ -286,6 +253,5 @@ public class TransferService implements transfertInterface<Transfer> {
             throw new IllegalArgumentException("User not found");
         }
     }
-
 
 }

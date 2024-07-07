@@ -207,8 +207,6 @@ public class DashboardController implements Initializable {
 
     }
 
-    private final TransfertService transfertService = new TransfertService();
-
     private ICharityService charityService = new ICharityService();
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -223,6 +221,7 @@ public class DashboardController implements Initializable {
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
+
     }
 
     public void publicationById(int id) {
@@ -290,6 +289,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(true);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -310,6 +310,8 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         publicationPane.setVisible(true);
+        reclamationPane.setVisible(false);
+
         transferCharityPane.setVisible(false);
         publicationById(id);
 
@@ -323,6 +325,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -336,6 +339,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -352,6 +356,8 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(true);
+        reclamationPane.setVisible(false);
+
     }
 
     @FXML
@@ -362,6 +368,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(true);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -375,6 +382,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -388,6 +396,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(true);
         charityPane.setVisible(false);
+        reclamationPane.setVisible(false);
 
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
@@ -450,7 +459,7 @@ public class DashboardController implements Initializable {
 
             String receiverAccNumber = Integer.toString(campaignModel.getAcc_num());
 
-            transfertService.transfer2(amount, receiverAccNumber, currentUser);
+            transferService.transfer2(amount, receiverAccNumber, currentUser);
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
             recieverTextField.setText("");
@@ -646,46 +655,9 @@ public class DashboardController implements Initializable {
             e.printStackTrace();
         }
     }
-    // @FXML
-    // private void openReclamationForm() {
-    // try {
-    // FXMLLoader loader = new
-    // FXMLLoader(getClass().getResource("/com/ebank/application/reclamation.fxml"));
-    // Parent root = loader.load();
-    // Stage stage = new Stage();
-    // stage.getIcons().add(new Image(
-    // Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
-    // stage.setScene(new Scene(root));
-    // stage.setTitle("New Reclamation");
-    // stage.initModality(Modality.APPLICATION_MODAL);
-    // stage.showAndWait();
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // @FXML
-    // private TextArea contenuField;
-
-    // @FXML
-    // private TextField idSenderField;
-
-    // @FXML
-    // private TextField idTransactionField;
 
     @FXML
     private ComboBox<String> stateComboBox;
-
-    // @FXML
-    // private Button submitButton;
-
-    // @FXML
-    // private Button cancelButton;
-
-    // private ReclamationService reclamationService;
-
-    // public ReclamationController() {
-    // reclamationService = new ReclamationService();
-    // }
 
     @FXML
     private void initialize() {

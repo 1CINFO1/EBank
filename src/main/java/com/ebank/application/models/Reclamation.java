@@ -1,4 +1,4 @@
-package  com.ebank.application.models;
+package com.ebank.application.models;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ public class Reclamation {
     // Constructor with parameters
     public Reclamation(int id, String title, String description, LocalDateTime dateEnvoi, int idSender) {
         this.id = id;
-        this.title=title;
+        this.title = title;
         this.description = description;
         this.dateEnvoi = dateEnvoi;
         this.idSender = idSender;
@@ -20,8 +20,8 @@ public class Reclamation {
     }
     // Constructor without id
 
-    public Reclamation(String titlte,String description, LocalDateTime dateEnvoi,  int idSender, int id_transaction) {
-        this.title=title;
+    public Reclamation(String title, String description, LocalDateTime dateEnvoi, int idSender, int id_transaction) {
+        this.title = title;
         this.description = description;
         this.dateEnvoi = dateEnvoi;
         this.idSender = idSender;
@@ -37,11 +37,9 @@ public class Reclamation {
         return id;
     }
 
-
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getContenu() {
         return description;
@@ -50,6 +48,7 @@ public class Reclamation {
     public void setTitle(String title) {
         this.description = title;
     }
+
     public String getTitle() {
         return title;
     }
@@ -66,8 +65,6 @@ public class Reclamation {
         this.dateEnvoi = dateEnvoi;
     }
 
-
-
     public int getIdSender() {
         return idSender;
     }
@@ -75,7 +72,6 @@ public class Reclamation {
     public void setIdSender(int idSender) {
         this.idSender = idSender;
     }
-
 
     // toString method for displaying object information
     @Override
@@ -85,9 +81,9 @@ public class Reclamation {
                 ", title='" + title + '\'' +
                 ", contenu='" + description + '\'' +
                 ", dateEnvoi=" + dateEnvoi +
-                
+
                 ", idSender=" + idSender +
-                
+
                 '}';
     }
 }

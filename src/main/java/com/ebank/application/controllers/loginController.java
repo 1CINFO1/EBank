@@ -225,22 +225,10 @@ public class loginController implements Initializable {
         String accountNumber = signupAccountNumber.getText();
         LocalDate dob = signupDOB.getValue();
         String password = signupPassword.getText();
-        String accountype = roleComboBox.getValue();
 
-        System.out.println(accountype);
-
-        if (!loginService.isValid(name, email, accountNumber, password, dob, accountype)) {
+        if (!loginService.isValid(name, email, accountNumber, password, dob)) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields correctly.");
             return;
-        }
-        if (accountype == "User") {
-            loginService.addUser(name, email, accountNumber, dob, password);
-            JOptionPane.showMessageDialog(null, "User added successfully!");
-            switchToLoginPane();
-        } else {
-            loginService.addUser2(name, email, accountNumber, dob, password);
-            JOptionPane.showMessageDialog(null, "User added successfully!");
-            switchToLoginPane();
         }
 
     }
@@ -260,11 +248,12 @@ public class loginController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        shownPassword.visibleProperty()
-                .bind(Bindings.createBooleanBinding(() -> toggleButton.isSelected(), toggleButton.selectedProperty()));
-        shownLoginPassword.visibleProperty().bind(Bindings.createBooleanBinding(() -> loginToggleButton.isSelected(),
-                loginToggleButton.selectedProperty()));
+    public void initialize(URL url, ResourceBundle rb) {
+        limitTextField(signupAccountNumber);
+        signupDOB.setValue(LocalDate.of(2000, 1, 1));
+        Bindings.bindBidirectional(signupPassword.textProperty(), shownPassword.textProperty());
+        Bindings.bindBidirectional(loginPassword.textProperty(), shownLoginPassword.textProperty());
+        showLoginPane();
     }
 
     @FXML

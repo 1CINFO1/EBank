@@ -148,7 +148,7 @@ public class AdminController implements Initializable {
     @FXML
     private Pane messagerPane;
 
-    private final TransfertService transfertService = new TransfertService();
+    private final TransferService transferService = new TransferService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
 
     protected String errorStyle = "-fx-text-fill: RED;";

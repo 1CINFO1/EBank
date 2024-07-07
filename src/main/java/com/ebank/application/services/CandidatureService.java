@@ -124,15 +124,4 @@ public class CandidatureService implements InterfaceCRUD<Candidature> {
         // destination path
     }
 
-    @Override
-    public Publication getById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
-    }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCharityBy'");
-    }
 }

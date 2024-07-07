@@ -113,6 +113,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="reclamationid" onAction="#showReclamationPane" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Charity" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/reclamation.jpeg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             <Button fx:id="charityButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showCharityPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Charity" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
                   <Insets bottom="10.0" top="10.0" />
@@ -131,21 +146,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="charityButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showCharityPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="charityButton" textAlignment="CENTER" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons/message.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+
          </children>
          <BorderPane.margin>
             <Insets />

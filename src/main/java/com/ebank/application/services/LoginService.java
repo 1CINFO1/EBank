@@ -98,13 +98,15 @@ public class LoginService {
         rs = pst.executeQuery();
 
         if (rs.next()) {
+            int id = rs.getInt("id");
+
             String name = rs.getString("name");
             String userEmail = rs.getString("email");
             LocalDate dob = rs.getDate("dob").toLocalDate();
             int accNum = rs.getInt("acc_num");
             double balance = rs.getDouble("balance");
 
-            return new User(name, userEmail, dob, accNum, balance, password);
+            return new User(id, name, userEmail, dob, accNum, balance, password);
         }
         return null;
     }
@@ -128,4 +130,5 @@ public class LoginService {
         }
         return null;
     }
+
 }

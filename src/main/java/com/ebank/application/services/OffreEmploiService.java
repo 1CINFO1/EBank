@@ -1,9 +1,7 @@
 package com.ebank.application.services;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
-import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.OffreEmploi;
-import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
 import java.sql.Connection;
@@ -126,15 +124,4 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
         return 0;
     }
 
-    @Override
-    public Publication getById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
-    }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCharityBy'");
-    }
 }

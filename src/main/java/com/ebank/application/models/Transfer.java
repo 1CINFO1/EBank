@@ -1,10 +1,6 @@
-package  com.ebank.application.models;
-
-
+package com.ebank.application.models;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Transfer {
     private int id;
@@ -12,9 +8,7 @@ public class Transfer {
     private int idSender;
     private double montant;
     private Date date;
-    private LocalDateTime date2;
     private String type;
-
 
     public Transfer() {
     }
@@ -28,7 +22,7 @@ public class Transfer {
     }
 
     public Transfer(int id, int idReceiver, int idSender, double montant, Date date, String type) {
-        this.id=id;
+        this.id = id;
         this.idReceiver = idReceiver;
         this.idSender = idSender;
         this.montant = montant;
@@ -82,10 +76,10 @@ public class Transfer {
         this.montant = montant;
     }
 
-
     @Override
     public String toString() {
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy
+        // HH:mm:ss");
         return "Transaction{" +
                 "id=" + id +
                 ", idReceiver=" + idReceiver +
@@ -97,4 +91,3 @@ public class Transfer {
     }
 
 }
-

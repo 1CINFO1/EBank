@@ -1,9 +1,6 @@
 package com.ebank.application.services;
 
-
-
 import com.ebank.application.interfaces.InterfaceCRUD;
-import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
@@ -11,10 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class IpublicationImple implements InterfaceCRUD<Publication> {
     Connection cnx = MaConnexion.getInstance().getCnx();
-
 
     @Override
     public String add(Publication publication) {
@@ -38,8 +33,8 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
         String sql = "select * from publication";
         try {
             Statement st = cnx.createStatement();
-            ResultSet rs=st.executeQuery(sql);
-            while(rs.next()){
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
                 Publication publication = new Publication();
 
                 publication.setId(rs.getInt("id"));
@@ -55,10 +50,8 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
             throw new RuntimeException(e);
         }
 
-
         return publications;
     }
-
 
     public Publication getById(int id) {
         Publication publication = null;
@@ -85,11 +78,5 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
 
         return publication;
     }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
-    }
-
 
 }
