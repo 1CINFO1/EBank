@@ -14,6 +14,7 @@ public class MessageService implements InterfaceCRUD<Message> {
 
     @Override
     public String add(Message m) {
+        System.out.println("-------------------msg service" + m.toString() + "--------------------");
         String req = "INSERT INTO `message`(`contenu`, `date_envoi`, `id_discution`, `id_emetteur`, `id_recepteur`) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);

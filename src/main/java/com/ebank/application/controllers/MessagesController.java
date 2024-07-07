@@ -2,6 +2,7 @@ package com.ebank.application.controllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -18,13 +19,17 @@ import javafx.animation.Timeline;
 import javafx.util.Duration;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.net.URI;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import com.ebank.application.models.Discution;
-import com.ebank.application.models.Message;
-import com.ebank.application.services.DiscutionService;
-import com.ebank.application.services.MessageService;
+import com.ebank.application.models.*;
+import com.ebank.application.services.*;
+
 import com.ebank.application.websocket.ChatWebSocketClient;
 import org.json.JSONObject;
 
@@ -32,9 +37,6 @@ public class MessagesController {
 
     @FXML
     private TextField roomName;
-
-    @FXML
-    private ListView<Discution> roomList;
 
     @FXML
     private TextField messageContent;
@@ -47,27 +49,40 @@ public class MessagesController {
 
     private Discution currentRoom;
 
-    private static final int USER_ID_1 = 2;
-    private static final int USER_ID_2 = 1;
-
     private Image avatarUser1;
     private Image avatarUser2;
 
     private ChatWebSocketClient webSocketClient;
+    @FXML
+    private ListView<AdminUser> userList;
+
+    private AdminUserService adminUserService = new AdminUserService();
+
+    private Discution currentDiscussion;
+    private AdminUser selectedUser;
+
+    public AdminUser currentUser;
+    private Set<Message> receivedMessages = ConcurrentHashMap.newKeySet();
+
+    public void setCurrentUser(AdminUser currentUser) {
+        this.currentUser = currentUser;
+        System.out.println("Setting current user in msg controller: " + currentUser.getId());
+        refreshUserList();
+    }
+
+    private Timeline timeline;
 
     @FXML
     public void initialize() {
         avatarUser1 = new Image(getClass().getResource("/com/ebank/application/icons/avatar1.jpeg").toString());
         avatarUser2 = new Image(getClass().getResource("/com/ebank/application/icons/avatar2.jpg").toString());
 
-        refreshRooms();
         setupMessageListCellFactory();
-        setupRoomListCellFactory();
-
-        roomList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        setupUserListCellFactory();
+        userList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                currentRoom = newSelection;
-                refreshMessages();
+                selectedUser = newSelection;
+                loadOrCreateDiscussion();
             }
         });
 
@@ -102,14 +117,64 @@ public class MessagesController {
         // Add your reconnection logic here
     }
 
+    private void refreshUserList() {
+        List<AdminUser> allAdminUsers = new ArrayList<>(); // Initialize with an empty list
+        try {
+            allAdminUsers = adminUserService.getAllExcept(currentUser.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Log the error or show an alert to the user
+            System.err.println("Error fetching admin users: " + e.getMessage());
+            // Optionally, show an alert to the user
+            // Platform.runLater(() -> showAlert("Error", "Failed to fetch user list. Please
+            // try again later."));
+        }
+        userList.getItems().setAll(allAdminUsers);
+    }
+
+    private void loadOrCreateDiscussion() {
+        if (currentUser == null || selectedUser == null) {
+            System.err.println("Error: currentUser or selectedUser is null");
+            return;
+        }
+
+        try {
+            currentDiscussion = discutionService.getDiscussionBetweenUsers(currentUser.getId(), selectedUser.getId());
+            if (currentDiscussion == null) {
+                String discussionName = "Chat between " + currentUser.getName() + " and " + selectedUser.getName();
+                currentDiscussion = new Discution(discussionName, LocalDateTime.now());
+                int discussionId = discutionService.add(currentDiscussion);
+                if (discussionId == -1) {
+                    throw new Exception("Failed to create new discussion.");
+                }
+                currentDiscussion.setId(discussionId); // Set the generated ID
+                // Link the users to this discussion
+                discutionService.linkUsersToDiscussion(discussionId, currentUser.getId(), selectedUser.getId());
+            }
+            System.out.println("Current discussion loaded: " + currentDiscussion.getId());
+            currentRoom = currentDiscussion; // Ensure currentRoom is set
+            refreshMessages();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error loading or creating discussion: " + e.getMessage());
+            Platform.runLater(() -> showAlert("Error", "Failed to load or create discussion. Please try again."));
+        }
+    }
+
+    private boolean isMessageAlreadyAdded(Message newMessage) {
+        return receivedMessages.contains(newMessage) || !receivedMessages.add(newMessage);
+    }
+
     private void handleIncomingMessage(String message) {
         System.out.println("Received raw message: " + message);
         Platform.runLater(() -> {
             Message newMessage = parseMessage(message);
             if (newMessage != null) {
                 System.out.println("Parsed message: " + newMessage);
-                updateMessageList(newMessage);
-                messageService.add(newMessage);
+                if (!isMessageAlreadyAdded(newMessage)) {
+                    updateMessageList(newMessage);
+                    messageService.add(newMessage);
+                }
             } else {
                 System.out.println("Failed to parse message");
             }
@@ -118,19 +183,49 @@ public class MessagesController {
 
     private void updateMessageList(Message newMessage) {
         if (currentRoom != null && newMessage.getIdDiscution() == currentRoom.getId()) {
-            messageList.getItems().add(newMessage);
-            messageList.scrollTo(messageList.getItems().size() - 1);
+            Platform.runLater(() -> {
+                messageList.getItems().add(newMessage);
+                messageList.scrollTo(messageList.getItems().size() - 1);
+                System.out.println("Added new message to list: " + newMessage.getContenu());
+            });
+        } else {
+            System.out.println(
+                    "Message not added to list. Current room: " + (currentRoom != null ? currentRoom.getId() : "null") +
+                            ", Message discussion ID: " + newMessage.getIdDiscution());
         }
     }
 
     @FXML
     public void sendMessage() {
         String content = messageContent.getText();
-        if (content != null && !content.isEmpty() && currentRoom != null) {
-            Message message = new Message(content, LocalDateTime.now(), currentRoom.getId(), USER_ID_1, USER_ID_2);
-            sendMessageToServer(message);
-            messageContent.clear();
+        if (content != null && !content.isEmpty() && currentDiscussion != null) {
+            Message message = new Message(content, LocalDateTime.now(), currentDiscussion.getId(), currentUser.getId(),
+                    selectedUser.getId());
+            System.out.println("Attempting to send message: " + message);
+
+            if (!isMessageAlreadyAdded(message)) {
+                sendMessageToServer(message);
+                messageContent.clear();
+            } else {
+                System.out.println("Message already sent.");
+            }
+        } else {
+            System.out.println("Message content is empty or current discussion is null.");
         }
+    }
+
+    private void setupUserListCellFactory() {
+        userList.setCellFactory(param -> new ListCell<AdminUser>() {
+            @Override
+            protected void updateItem(AdminUser item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
     }
 
     private void sendMessageToServer(Message message) {
@@ -169,9 +264,9 @@ public class MessagesController {
                 return new Message(
                         messageString,
                         LocalDateTime.now(),
-                        currentRoom != null ? currentRoom.getId() : 0,
-                        USER_ID_2,
-                        USER_ID_1);
+                        currentDiscussion != null ? currentDiscussion.getId() : 0,
+                        currentUser.getId(),
+                        selectedUser.getId());
             }
         } catch (Exception e) {
             System.out.println("Error parsing message: " + messageString);
@@ -181,25 +276,25 @@ public class MessagesController {
     }
 
     private void startPeriodicRefresh() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshMessages()));
+        if (timeline != null) {
+            timeline.stop();
+        }
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshMessages()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
-    private void refreshRooms() {
-        roomList.getItems().setAll(discutionService.getAll());
-        if (!roomList.getItems().isEmpty()) {
-            roomList.getSelectionModel().select(0);
-            currentRoom = roomList.getItems().get(0);
-            refreshMessages();
-        }
-    }
-
     private void refreshMessages() {
         if (currentRoom != null) {
-            messageList.getItems().setAll(messageService.getAll().stream()
+            List<Message> messages = messageService.getAll().stream()
                     .filter(m -> m.getIdDiscution() == currentRoom.getId())
-                    .toList());
+                    .toList();
+            Platform.runLater(() -> {
+                messageList.getItems().setAll(messages);
+                if (!messages.isEmpty()) {
+                    messageList.scrollTo(messages.size() - 1);
+                }
+            });
         }
     }
 
@@ -228,13 +323,13 @@ public class MessagesController {
                     avatarImageView.setFitWidth(40);
                     avatarImageView.setFitHeight(40);
 
-                    if (item.getIdEmetteur() == USER_ID_1) {
+                    if (item.getIdEmetteur() == currentUser.getId()) {
                         avatarImageView.setImage(avatarUser1);
                         messageBox.getChildren().addAll(messageText, timeText);
                         hbox.getChildren().addAll(avatarImageView, messageBox, spacer);
                         messageBox.getStyleClass().addAll("message-bubble", "message-left");
                         messageBox.setAlignment(Pos.CENTER_LEFT);
-                    } else if (item.getIdEmetteur() == USER_ID_2) {
+                    } else {
                         avatarImageView.setImage(avatarUser2);
                         messageBox.getChildren().addAll(messageText, timeText);
                         hbox.getChildren().addAll(spacer, messageBox, avatarImageView);
@@ -248,17 +343,11 @@ public class MessagesController {
         });
     }
 
-    private void setupRoomListCellFactory() {
-        roomList.setCellFactory(param -> new ListCell<Discution>() {
-            @Override
-            protected void updateItem(Discution item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getNom());
-                }
-            }
-        });
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
