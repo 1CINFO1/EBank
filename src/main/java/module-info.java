@@ -11,6 +11,7 @@ module com.ebank.application {
     requires Java.WebSocket;
     requires org.json;
     requires javafx.base;
+    requires java.net.http;
 
     opens com.ebank.application to javafx.fxml;
 

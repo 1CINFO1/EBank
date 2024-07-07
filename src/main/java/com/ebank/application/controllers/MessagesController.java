@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
@@ -91,6 +96,26 @@ public class MessagesController {
         });
         initializeWebSocket();
         startPeriodicRefresh();
+    }
+
+    private String moderateContent(String message) {
+        String apiKey = "01907ecbbfc312de522ffcfa1603ecd5"; // Replace with your actual API key
+        String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
+        String url = "https://api.moderatecontent.com/text/?key=" + apiKey + "&msg=" + encodedMessage;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            JSONObject jsonResponse = new JSONObject(response.body());
+            return jsonResponse.getString("clean");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return message; // Return original message if moderation fails
+        }
     }
 
     private void showInputFields() {
@@ -184,6 +209,10 @@ public class MessagesController {
         Platform.runLater(() -> {
             Message newMessage = parseMessage(message);
             if (newMessage != null) {
+                // Moderate the incoming message
+                String moderatedContent = moderateContent(newMessage.getContenu());
+                newMessage.setContenu(moderatedContent);
+
                 System.out.println("Parsed message: " + newMessage);
                 try {
                     String saved = messageService.add(newMessage);
@@ -207,7 +236,11 @@ public class MessagesController {
     public void sendMessage() {
         String content = messageContent.getText();
         if (content != null && !content.isEmpty() && currentDiscussion != null) {
-            Message message = new Message(content, LocalDateTime.now(), currentDiscussion.getId(), currentUser.getId(),
+            // Moderate the content
+            String moderatedContent = moderateContent(content);
+
+            Message message = new Message(moderatedContent, LocalDateTime.now(), currentDiscussion.getId(),
+                    currentUser.getId(),
                     selectedUser.getId());
             System.out.println("Attempting to send message: " + message);
 
