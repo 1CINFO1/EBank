@@ -443,26 +443,35 @@ public class DashboardController implements Initializable {
         convertAmount.setText("");
     }
 
-    public double convert(String from, String to, double amount) throws IOException {
+
+public double convert(String from, String to, double amount) throws IOException {
+
         double result;
-        String url_str = "https://v6.exchangerate-api.com/v6/e46d7d25fb4e41bae9710eef/latest/USDg" + from + "&to=" + to;
+        String url_str = "https://v6.exchangerate-api.com/v6/e46d7d25fb4e41bae9710eef/latest/" + from;
         URL url = new URL(url_str);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
         request.connect();
+        
         int responseCode = request.getResponseCode();
-
         if (responseCode == HttpURLConnection.HTTP_OK) {
             JsonParser jp = new JsonParser();
             JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
             JsonObject jsonobj = root.getAsJsonObject();
+            
             String req_result = jsonobj.get("result").getAsString();
-            result = Double.parseDouble(req_result);
-            return amount * result;
+            
+            if (req_result.equals("success")) {
+                JsonObject conversionRates = jsonobj.getAsJsonObject("conversion_rates");
+                double rate = conversionRates.get(to).getAsDouble();
+                result = amount * rate;
+                return result;
+            } else {
+                throw new IOException("API request was not successful");
+            }
         } else {
-            converterLabel.setText("Connection Failed!");
+            throw new IOException("HTTP connection failed with response code: " + responseCode);
         }
-        return 0;
     }
 
     @FXML
@@ -501,7 +510,7 @@ public class DashboardController implements Initializable {
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
         String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY","TND", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
     }
