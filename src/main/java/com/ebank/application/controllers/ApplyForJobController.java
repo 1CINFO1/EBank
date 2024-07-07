@@ -5,6 +5,9 @@ import com.ebank.application.models.OffreEmploi;
 import com.ebank.application.services.CandidatureService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class ApplyForJobController {
 
@@ -44,4 +47,28 @@ public class ApplyForJobController {
         Candidature candidature = new Candidature(selectedOffre.getId(), nom, prenom, cv);
         candidatureService.add(candidature);
     }
+
+    @FXML
+    private void importCV() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            cvField.setText(selectedFile.getAbsolutePath());
+        }
+    }
+    @FXML
+private void browseCV() {
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+    );
+    File selectedFile = fileChooser.showOpenDialog(null);
+    if (selectedFile != null) {
+        cvField.setText(selectedFile.getAbsolutePath());
+    }
+}
+
 }

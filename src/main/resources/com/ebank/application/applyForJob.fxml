@@ -8,7 +8,10 @@
         <TextField fx:id="jobIdField" layoutX="14.0" layoutY="14.0" />
         <TextField fx:id="nomField" layoutX="14.0" layoutY="54.0" />
         <TextField fx:id="prenomField" layoutX="14.0" layoutY="94.0" />
-        <TextField fx:id="cvField" layoutX="14.0" layoutY="134.0" />
+        <HBox layoutX="14.0" layoutY="134.0" spacing="10.0">
+            <TextField fx:id="cvField" prefWidth="200.0" promptText="Select a CV file" />
+            <Button text="Browse..." onAction="#browseCV" />
+        </HBox>
         <Button layoutX="14.0" layoutY="174.0" text="Submit" onAction="#submitApplication"/>
     </children>
 </AnchorPane>

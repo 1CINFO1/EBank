@@ -9,5 +9,6 @@
         <ListView fx:id="condidatListView" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="572.0" />
         <Button layoutX="14.0" layoutY="430.0" mnemonicParsing="false" onAction="#refreshCandidateList" text="Refresh" />
         <Button layoutX="120.0" layoutY="430.0" mnemonicParsing="false" onAction="#backToJobList" text="Back to Jobs" />
+        <Button layoutX="220.0" layoutY="430.0" mnemonicParsing="false" onAction="#downloadCandidateCV" text="Download CV" />
     </children>
 </AnchorPane>

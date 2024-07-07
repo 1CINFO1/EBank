@@ -2,12 +2,13 @@ package com.ebank.application.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import com.ebank.application.models.OffreEmploi;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.ebank.application.models.OffreEmploi;
 
 public class JobAddController {
 
@@ -23,8 +24,13 @@ public class JobAddController {
     @FXML
     private TextField emplacementField;
 
+    @FXML
+    private TextField cvField;
+
     private Stage dialogStage;
     private JobListControllerAdmin jobListController;
+
+    private File selectedCvFile;
 
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
@@ -32,6 +38,17 @@ public class JobAddController {
 
     public void setJobListController(JobListControllerAdmin jobListController) {
         this.jobListController = jobListController;
+    }
+
+    @FXML
+    private void handleChooseCv() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        Stage stage = (Stage) cvField.getScene().getWindow();
+        selectedCvFile = fileChooser.showOpenDialog(stage);
+        if (selectedCvFile != null) {
+            cvField.setText(selectedCvFile.getAbsolutePath());
+        }
     }
 
     @FXML
