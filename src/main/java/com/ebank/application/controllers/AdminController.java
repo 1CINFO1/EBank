@@ -381,6 +381,7 @@ public class AdminController implements Initializable {
         convertAmount.setText("");
     }
 
+    @SuppressWarnings("deprecation")
     public double convert(String from, String to, double amount) throws IOException {
         double result;
         String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
@@ -447,13 +448,13 @@ public class AdminController implements Initializable {
 
     }
 
-    public void updatePublication(ActionEvent actionEvent) {
+    public void updatePublication(@SuppressWarnings("exports") ActionEvent actionEvent) {
     }
 
-    public void addPublication(ActionEvent actionEvent) {
+    public void addPublication(@SuppressWarnings("exports") ActionEvent actionEvent) {
     }
 
-    public void deletePublication(ActionEvent actionEvent) {
+    public void deletePublication(@SuppressWarnings("exports") ActionEvent actionEvent) {
     }
 
     @FXML

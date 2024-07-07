@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import com.ebank.application.models.Candidature;
 import com.ebank.application.services.CandidatureService;
@@ -38,7 +37,8 @@ public class CondidatListController {
 
     @FXML
     public void initialize() {
-        // Optional: You can initialize anything else needed when the controller is loaded
+        // Optional: You can initialize anything else needed when the controller is
+        // loaded
     }
 
     @FXML

@@ -3,7 +3,6 @@ package com.ebank.application.services;
 import com.ebank.application.interfaces.InterfaceCRUD;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
-import com.ebank.application.models.PubDemande;
 import com.ebank.application.utils.MaConnexion;
 
 import java.sql.Connection;
@@ -16,7 +15,6 @@ import java.util.List;
 public class adminController implements InterfaceCRUD<Publication> {
 
     Connection cnx = MaConnexion.getInstance().getCnx();
-
 
     @Override
     public String add(Publication publication) {
@@ -33,10 +31,6 @@ public class adminController implements InterfaceCRUD<Publication> {
 
     }
 
-
-
-
-
     @Override
     public Publication getById(int id) {
         return null;
@@ -46,16 +40,16 @@ public class adminController implements InterfaceCRUD<Publication> {
     public CharityCampaignModel getCharityBy(int id) {
         return null;
     }
+
     @Override
     public List<Publication> getAll() {
         List<Publication> publications = new ArrayList<>();
 
         String sql = "SELECT * FROM publication WHERE status = 'pending'";
         try (PreparedStatement stmt = cnx.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                int id = rs.getInt("ID");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 String campaignName = rs.getString("campaignName");
@@ -71,11 +65,10 @@ public class adminController implements InterfaceCRUD<Publication> {
         return publications;
     }
 
-
-    public void approvePublication(int publicationId){
+    public void approvePublication(int publicationId) {
         String sql = "UPDATE publication SET status = 'approved' WHERE ID = ?";
         try {
-            PreparedStatement stmt = cnx.prepareStatement(sql) ;
+            PreparedStatement stmt = cnx.prepareStatement(sql);
             stmt.setInt(1, publicationId);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -84,11 +77,10 @@ public class adminController implements InterfaceCRUD<Publication> {
 
     }
 
-
-    public void declinePublication(int publicationId)  {
+    public void declinePublication(int publicationId) {
         String sql = "UPDATE publication SET status = 'declined' WHERE ID = ?";
-        try{
-            PreparedStatement stmt = cnx.prepareStatement(sql) ;
+        try {
+            PreparedStatement stmt = cnx.prepareStatement(sql);
             stmt.setInt(1, publicationId);
             stmt.executeUpdate();
         } catch (SQLException e) {

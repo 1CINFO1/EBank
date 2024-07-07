@@ -2,7 +2,6 @@ package com.ebank.application.controllers;
 
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
-import com.ebank.application.models.User;
 import com.ebank.application.services.ICharityService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransferService;
@@ -24,8 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -501,6 +498,7 @@ public class CharityController implements Initializable {
         convertAmount.setText("");
     }
 
+    @SuppressWarnings("deprecation")
     public double convert(String from, String to, double amount) throws IOException {
         double result;
         String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
@@ -565,12 +563,15 @@ public class CharityController implements Initializable {
         secondCurrency.getItems().addAll(currencies);
     }
 
+    @SuppressWarnings("exports")
     public void updatePublication(ActionEvent actionEvent) {
     }
 
+    @SuppressWarnings("exports")
     public void addPublication(ActionEvent actionEvent) {
     }
 
+    @SuppressWarnings("exports")
     public void deletePublication(ActionEvent actionEvent) {
     }
 }

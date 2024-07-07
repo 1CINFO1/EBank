@@ -28,6 +28,7 @@ public class UpdateJobDialogController {
     private OffreEmploi offreEmploi;
     private JobListControllerAdmin jobListController;
 
+    @SuppressWarnings("exports")
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }

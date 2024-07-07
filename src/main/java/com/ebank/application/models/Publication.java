@@ -18,7 +18,10 @@ public class Publication {
     private String picture;
     private Date publicationDate;
     private int CompagnieDeDon_Patente;
-    public Publication(int id, int CompagnieDeDon_Patente, String campaignName, String title, String description, String picture, Date publicationDate) {
+
+    @SuppressWarnings("exports")
+    public Publication(int id, int CompagnieDeDon_Patente, String campaignName, String title, String description,
+            String picture, Date publicationDate) {
         this.id = id;
         this.campaignName = campaignName;
         this.title = title;
@@ -80,10 +83,12 @@ public class Publication {
         this.picture = picture;
     }
 
+    @SuppressWarnings("exports")
     public Date getPublicationDate() {
         return publicationDate;
     }
 
+    @SuppressWarnings("exports")
     public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
     }

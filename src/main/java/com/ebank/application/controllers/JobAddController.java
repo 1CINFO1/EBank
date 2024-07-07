@@ -32,6 +32,7 @@ public class JobAddController {
 
     private File selectedCvFile;
 
+    @SuppressWarnings("exports")
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
