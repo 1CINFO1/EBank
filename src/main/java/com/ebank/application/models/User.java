@@ -1,7 +1,5 @@
 package com.ebank.application.models;
 
-import com.ebank.application.enumeration.Role;
-
 import java.time.LocalDate;
 
 public class User {

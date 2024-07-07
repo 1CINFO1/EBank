@@ -2,7 +2,6 @@ package com.ebank.application.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class OffreEmploi {
     // attributs
@@ -16,8 +15,8 @@ public class OffreEmploi {
     public OffreEmploi() {
     }
 
-
-    public OffreEmploi(String poste, String sujet, String type, String emplacement, LocalDate date_expiration, LocalDateTime date_offre) {
+    public OffreEmploi(String poste, String sujet, String type, String emplacement, LocalDate date_expiration,
+            LocalDateTime date_offre) {
         this.poste = poste;
         this.sujet = sujet;
         this.type = type;
@@ -26,7 +25,8 @@ public class OffreEmploi {
         this.date_offre = date_offre;
     }
 
-    public OffreEmploi(int id, String poste, String sujet, String type, String emplacement, LocalDate date_expiration, LocalDateTime date_offre) {
+    public OffreEmploi(int id, String poste, String sujet, String type, String emplacement, LocalDate date_expiration,
+            LocalDateTime date_offre) {
         this.id = id;
         this.poste = poste;
         this.sujet = sujet;
@@ -36,9 +36,7 @@ public class OffreEmploi {
         this.date_offre = date_offre;
     }
 
-
     // Getters and setters
-
 
     public int getId() {
         return this.id;
@@ -101,18 +99,14 @@ public class OffreEmploi {
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", poste='" + getPoste() + "'" +
-            ", sujet='" + getSujet() + "'" +
-            ", type='" + getType() + "'" +
-            ", emplacement='" + getEmplacement() + "'" +
-            ", date_expiration='" + getDate_expiration() + "'" +
-            ", date_offre='" + getDate_offre() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", poste='" + getPoste() + "'" +
+                ", sujet='" + getSujet() + "'" +
+                ", type='" + getType() + "'" +
+                ", emplacement='" + getEmplacement() + "'" +
+                ", date_expiration='" + getDate_expiration() + "'" +
+                ", date_offre='" + getDate_offre() + "'" +
+                "}";
     }
 
 }
-
-
-
-

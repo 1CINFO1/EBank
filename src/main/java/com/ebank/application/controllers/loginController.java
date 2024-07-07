@@ -225,18 +225,19 @@ public class loginController implements Initializable {
         String accountNumber = signupAccountNumber.getText();
         LocalDate dob = signupDOB.getValue();
         String password = signupPassword.getText();
-        String accountype= roleComboBox.getValue();
+        String accountype = roleComboBox.getValue();
 
         System.out.println(accountype);
 
-        if (!loginService.isValid(name, email, accountNumber, password, dob,accountype)) {
+        if (!loginService.isValid(name, email, accountNumber, password, dob, accountype)) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields correctly.");
             return;
         }
-        if(accountype=="User"){loginService.addUser(name, email, accountNumber, dob, password);
+        if (accountype == "User") {
+            loginService.addUser(name, email, accountNumber, dob, password);
             JOptionPane.showMessageDialog(null, "User added successfully!");
             switchToLoginPane();
-        }else {
+        } else {
             loginService.addUser2(name, email, accountNumber, dob, password);
             JOptionPane.showMessageDialog(null, "User added successfully!");
             switchToLoginPane();
@@ -244,6 +245,7 @@ public class loginController implements Initializable {
 
     }
 
+    @SuppressWarnings("exports")
     public static void limitTextField(TextField tf) {
         final int max = 8;
         tf.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -271,7 +273,7 @@ public class loginController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobList.fxml"));
             Parent root = loader.load();
-            JobListController jobListController = loader.getController();
+            loader.getController();
             // Optionally, pass any necessary data to the controller
             Stage stage = new Stage();
             stage.setScene(new Scene(root));

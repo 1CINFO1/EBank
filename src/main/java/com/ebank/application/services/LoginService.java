@@ -18,9 +18,6 @@ public class LoginService {
     private PreparedStatement pst;
     private ResultSet rs;
 
-    private final String errorStyle = "-fx-border-color: RED;";
-    private final String successStyle = "-fx-border-color: #A9A9A9;";
-
     public boolean emailAlreadyExists(String email) throws SQLException {
         String sql = "SELECT * FROM users WHERE email = ?";
         pst = conn.prepareStatement(sql);
