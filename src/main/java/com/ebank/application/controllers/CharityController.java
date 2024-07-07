@@ -3,6 +3,7 @@ package com.ebank.application.controllers;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
+import com.ebank.application.services.ICharityService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
@@ -19,9 +20,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -145,8 +148,36 @@ public class CharityController implements Initializable {
     @FXML
     private VBox publicationListVBox;
 
+    @FXML
+    private Pane createPublicationPane;
+
+    @FXML
+    private Pane publicationListPane;
+
+    @FXML
+    private TableView<Publication> publicationTableView;
+    @FXML
+    private TableColumn<Publication, Integer> idColumn;
+    @FXML
+    private TableColumn<Publication, String> patenteColumn;
+    @FXML
+    private TableColumn<Publication, String> titleColumnid;
+    @FXML
+    private TableColumn<Publication, String> campaignNameColumn;
+    @FXML
+    private TableColumn<Publication, String> descriptionColumn;
+    @FXML
+    private TableColumn<Publication, String> pictureColumn;
+    @FXML
+    private TableColumn<Publication, Date> publicationDateColumn;
+
+
+    @FXML
+    private ListView<VBox> publicationListView;
+
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
+    private final ICharityService iCharityService= new ICharityService();
 
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -162,6 +193,92 @@ public class CharityController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+
+
+
+
+
+    @FXML
+    void showDepositPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(true);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+    }
+
+
+    @FXML
+    public void showHomePane() {
+        homePane.setVisible(true);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+        setLabels();
+    }
+
+    @FXML
+    void showTransferPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(true);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+
+    }
+
+    @FXML
+    void showWithdrawPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(true);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+    }
+
+    @FXML
+    void showConverterPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(true);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+
+    }
+    @FXML
+    public void showPublicationForm(){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(true);
+        publicationListPane.setVisible(false);
+    }
+@FXML
+public  void showListPublication(){
+    homePane.setVisible(false);
+    depositPane.setVisible(false);
+    withdrawPane.setVisible(false);
+    transferPane.setVisible(false);
+    converterPane.setVisible(false);
+    createPublicationPane.setVisible(false);
+    publicationListPane.setVisible(true);
+
+    showUserPublications();
+
+}
 
     public void getAllPublication() {
         try {
@@ -210,60 +327,6 @@ public class CharityController implements Initializable {
         }
     }
 
-
-
-    @FXML
-    void showDepositPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(true);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-
-    }
-
-
-    @FXML
-    public void showHomePane() {
-        homePane.setVisible(true);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-
-        setLabels();
-    }
-
-    @FXML
-    void showTransferPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(true);
-        converterPane.setVisible(false);
-
-
-    }
-
-    @FXML
-    void showWithdrawPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(true);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-
-    }
-
-    @FXML
-    void showConverterPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(true);
-
-    }
 
 
     @FXML
@@ -338,6 +401,87 @@ public class CharityController implements Initializable {
             transferAmountTextField.setText("");
         }
     }
+
+
+    public void showUserPublications() {
+        try {
+            // Parse the compagnieDeDonPatente from string to int
+            int compagnieDeDonPatente = Integer.parseInt(currentUser.getCompagnieDeDon_Patente());
+
+            // Get the publications for the user
+            List<Publication> publications = iCharityService.getByCharityId(compagnieDeDonPatente);
+
+            // Initialize the TableView columns
+
+
+            titleColumnid.setCellValueFactory(new PropertyValueFactory<>("title"));
+            campaignNameColumn.setCellValueFactory(new PropertyValueFactory<>("campaignName"));
+            descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+            pictureColumn.setCellValueFactory(new PropertyValueFactory<>("picture"));
+            publicationDateColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
+
+            // Create the actions column
+            TableColumn<Publication, Void> actionsColumn = new TableColumn<>("Actions");
+            actionsColumn.setPrefWidth(200); // Adjust width as needed
+            actionsColumn.setStyle("-fx-alignment: CENTER;");
+
+            actionsColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button editButton = new Button("Edit");
+                private final Button deleteButton = new Button("Delete");
+
+                {
+                    editButton.setOnAction(event -> {
+                        Publication publication = getTableView().getItems().get(getIndex());
+                        // Handle edit action here
+                        System.out.println("Editing publication: " + publication.getId());
+                    });
+                    editButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+
+                    deleteButton.setOnAction(event -> {
+                        Publication publication = getTableView().getItems().get(getIndex());
+                        // Handle delete action here
+                        System.out.println("Deleting publication: " + publication.getId());
+                    });
+                    deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;");
+
+
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        HBox buttons = new HBox(10); // Adjust spacing between buttons if needed
+                        buttons.getChildren().addAll(editButton, deleteButton);
+                        setGraphic(buttons);
+                    }
+
+                }
+            });
+
+            // Add the actions column to the TableView if it's not already added
+            if (!publicationTableView.getColumns().contains(actionsColumn)) {
+                publicationTableView.getColumns().add(actionsColumn);
+            }
+
+            // Clear any existing items in the TableView
+            publicationTableView.getItems().clear();
+
+
+            if (publications != null && !publications.isEmpty()) {
+                // Add the publications to the TableView
+                ObservableList<Publication> publicationObservableList = FXCollections.observableArrayList(publications);
+                publicationTableView.setItems(publicationObservableList);
+            } else {
+                System.out.println("No publications found.");
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace(); // Handle the exception properly
+        }
+    }
+
 
 
     public void logout() throws IOException {

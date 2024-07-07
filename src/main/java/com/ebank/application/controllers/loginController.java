@@ -134,6 +134,7 @@ public class loginController implements Initializable {
         stage.getIcons().add(new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
         stage.setScene(new Scene(root1));
+        stage.setFullScreen(true);
         stage.show();
     }
 

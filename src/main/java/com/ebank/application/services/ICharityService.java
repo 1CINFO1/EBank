@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
@@ -38,6 +39,36 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
     public Publication getById(int id) {
         return null;
     }
+
+
+    public List<Publication> getByCharityId(int id) {
+        List<Publication> publications = new ArrayList<>();
+        String sql = "SELECT * FROM publication WHERE CompagnieDeDon_Patente = ?";
+
+        try {
+            PreparedStatement pst = cnx.prepareStatement(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Publication publication = new Publication();
+                publication.setId(rs.getInt("ID"));
+                publication.setCompagnieDeDon_Patente(rs.getInt("CompagnieDeDon_Patente"));
+                publication.setTitle(rs.getString("title"));
+                publication.setCampaignName(rs.getString("CampaignName"));
+                publication.setDescription(rs.getString("Description"));
+                publication.setPicture(rs.getString("picture"));
+                publication.setPublicationDate(rs.getDate("publicationDate"));
+
+                publications.add(publication);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return publications;
+    }
+
 
     @Override
     public CharityCampaignModel getCharityBy(int id) {

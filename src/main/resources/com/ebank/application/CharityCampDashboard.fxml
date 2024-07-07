@@ -19,6 +19,12 @@
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ListView?>
+<?import java.net.URL?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.util.Callback?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.CharityController" stylesheets="@styleCharity.css">
     <left>
         <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
@@ -102,6 +108,37 @@
                 <Button fx:id="converterButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" layoutX="10.0" layoutY="320.0" mnemonicParsing="false" onAction="#showConverterPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Converter" textAlignment="CENTER" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/convert.gif" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+                <Button fx:id="createPublicationButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showPublicationForm" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Create Publication" textAlignment="CENTER" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/convert.gif" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <Button fx:id="publicationList" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showListPublication" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Create Publication" textAlignment="CENTER" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@icons/convert.gif" />
                             </image>
@@ -454,6 +491,42 @@
                         <ComboBox fx:id="statusComboBox" layoutX="400.0" layoutY="425.0" prefHeight="38.0" prefWidth="125.0" promptText="Status" />
                     </children>
                 </Pane>
+
+                <Pane fx:id="createPublicationPane" layoutX="200.0" layoutY="100.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" visible="false">
+                    <children>
+                        <!-- Form fields for adding a new publication -->
+                        <Label layoutX="14.0" layoutY="20.0" text="Publication Title:" />
+                        <TextField fx:id="publicationTitleField" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Title" />
+
+                        <Label layoutX="14.0" layoutY="80.0" text="Campaign Name:" />
+                        <TextField fx:id="campaignNameField" layoutX="14.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Campaign Name" />
+
+                        <Label layoutX="14.0" layoutY="140.0" text="Description:" />
+                        <TextArea fx:id="descriptionArea" layoutX="14.0" layoutY="160.0" prefHeight="100.0" prefWidth="350.0" promptText="Enter Description" />
+
+                        <Label layoutX="14.0" layoutY="280.0" text="Publication Date:" />
+                        <DatePicker fx:id="publicationDatePicker" layoutX="14.0" layoutY="300.0" prefHeight="25.0" prefWidth="200.0" />
+
+                        <!-- Add more fields as needed -->
+
+                        <Button fx:id="confirmPublicationButton" layoutX="260.0" layoutY="350.0" text="Confirm" />
+                    </children>
+                </Pane>
+                <Pane fx:id="publicationListPane" layoutX="50.0" layoutY="150.0" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: #f0f0f0; -fx-padding: 10;" visible="false" stylesheets="@style.css">
+                    <children>
+                        <TableView fx:id="publicationTableView" layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="980.0" styleClass="publication-table-view">
+                            <columns>
+
+                                <TableColumn fx:id="titleColumnid" text="Title" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                                <TableColumn fx:id="campaignNameColumn" text="Campaign Name" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                                <TableColumn fx:id="pictureColumn" text="Picture" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                                <TableColumn fx:id="publicationDateColumn" text="Publication Date" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </Pane>
+
 
             </children>
         </AnchorPane>
