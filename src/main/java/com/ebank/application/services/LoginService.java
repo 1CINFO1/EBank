@@ -37,7 +37,8 @@ public class LoginService {
         return rs.next();
     }
 
-    public boolean isValid(String name, String email, String accountNumber, String password, LocalDate dob) throws SQLException {
+    public boolean isValid(String name, String email, String accountNumber, String password, LocalDate dob)
+            throws SQLException {
         boolean isValid = true;
         if (name.isBlank() || name.length() < 10) {
             isValid = false;
@@ -57,7 +58,8 @@ public class LoginService {
         return isValid;
     }
 
-    public void addUser(String name, String email, String accountNumber, LocalDate dob, String password) throws SQLException {
+    public void addUser(String name, String email, String accountNumber, LocalDate dob, String password)
+            throws SQLException {
         String sql = "INSERT INTO users (name, email, account_number, balance, dob, password) VALUES (?, ?, ?, ?, ?, ?)";
         User newUser = new User(name, email, dob, Integer.parseInt(accountNumber));
         pst = conn.prepareStatement(sql);
@@ -117,13 +119,14 @@ public class LoginService {
         rs = pst.executeQuery();
 
         if (rs.next()) {
+            int id = rs.getInt("id");
             String name = rs.getString("name");
             String userEmail = rs.getString("email");
             LocalDate dob = rs.getDate("dob").toLocalDate();
             int accNum = rs.getInt("acc_num");
             double balance = rs.getDouble("balance");
 
-            return new AdminUser(name, userEmail, dob, accNum, balance, password);
+            return new AdminUser(id, name, userEmail, dob, accNum, balance, password);
         }
         return null;
     }

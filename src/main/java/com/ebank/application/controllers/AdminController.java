@@ -155,9 +155,18 @@ public class AdminController implements Initializable {
     String successStyle = "-fx-text-fill: GREEN;";
 
     public AdminUser currentUser = new AdminUser();
+
     ResultSet rs = null;
 
+    public void setCurrentUser(AdminUser user) {
+        this.currentUser = user;
+        System.out.println("AdminController setCurrentUser: " + (currentUser != null ? currentUser.getId() : "null"));
+        // Call this after setting the user
+        loadMessagesView();
+    }
+
     public void setLabels() {
+        setCurrentUser(currentUser);
         name.setText(currentUser.getName());
         dob.setText(currentUser.getDob().toString());
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
@@ -278,6 +287,7 @@ public class AdminController implements Initializable {
         converterPane.setVisible(false);
         // charityPane.setVisible(false);
         messagerPane.setVisible(true);
+        setLabels();
 
     }
 
@@ -434,6 +444,7 @@ public class AdminController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         loginController.limitTextField(recieverTextField);
         loginController.limitTextField(depositAmountTextField);
         loginController.limitTextField(withdrawAmountTextField);
@@ -475,6 +486,10 @@ public class AdminController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
             Pane messagesView = loader.load();
+            MessagesController mController = loader.getController();
+
+            mController.setCurrentUser(this.currentUser);
+
             messagerPane.getChildren().add(messagesView);
 
             // Bind the size of the loaded view to the messagerPane
