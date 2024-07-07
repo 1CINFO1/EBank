@@ -158,15 +158,7 @@ public class AdminController implements Initializable {
 
     ResultSet rs = null;
 
-    public void setCurrentUser(AdminUser user) {
-        this.currentUser = user;
-        System.out.println("AdminController setCurrentUser: " + (currentUser != null ? currentUser.getId() : "null"));
-        // Call this after setting the user
-        loadMessagesView();
-    }
-
     public void setLabels() {
-        setCurrentUser(currentUser);
         name.setText(currentUser.getName());
         dob.setText(currentUser.getDob().toString());
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
@@ -287,7 +279,6 @@ public class AdminController implements Initializable {
         converterPane.setVisible(false);
         // charityPane.setVisible(false);
         messagerPane.setVisible(true);
-        setLabels();
 
     }
 
@@ -453,7 +444,6 @@ public class AdminController implements Initializable {
                 "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
-        loadMessagesView();
 
     }
 
@@ -482,13 +472,13 @@ public class AdminController implements Initializable {
         }
     }
 
-    private void loadMessagesView() {
+    public void loadMessagesView(AdminUser u) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/messages_view.fxml"));
             Pane messagesView = loader.load();
             MessagesController mController = loader.getController();
 
-            mController.setCurrentUser(this.currentUser);
+            mController.setCurrentUser(u);
 
             messagerPane.getChildren().add(messagesView);
 
