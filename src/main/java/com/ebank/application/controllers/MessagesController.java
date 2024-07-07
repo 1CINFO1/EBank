@@ -21,8 +21,7 @@ import javafx.util.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+
 import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -62,7 +61,6 @@ public class MessagesController {
     private AdminUser selectedUser;
 
     public AdminUser currentUser;
-    private Set<Message> receivedMessages = ConcurrentHashMap.newKeySet();
 
     public void setCurrentUser(AdminUser currentUser) {
         this.currentUser = currentUser;
@@ -71,23 +69,38 @@ public class MessagesController {
     }
 
     private Timeline timeline;
+    @FXML
+    private HBox inputContainer;
 
     @FXML
     public void initialize() {
         avatarUser1 = new Image(getClass().getResource("/com/ebank/application/icons/avatar1.jpeg").toString());
         avatarUser2 = new Image(getClass().getResource("/com/ebank/application/icons/avatar2.jpg").toString());
-
+        inputContainer.setVisible(false);
+        inputContainer.setManaged(false);
         setupMessageListCellFactory();
         setupUserListCellFactory();
         userList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedUser = newSelection;
                 loadOrCreateDiscussion();
+                showInputFields();
+            } else {
+                hideInputFields();
             }
         });
-
         initializeWebSocket();
         startPeriodicRefresh();
+    }
+
+    private void showInputFields() {
+        inputContainer.setVisible(true);
+        inputContainer.setManaged(true);
+    }
+
+    private void hideInputFields() {
+        inputContainer.setVisible(false);
+        inputContainer.setManaged(false);
     }
 
     private void initializeWebSocket() {
@@ -141,6 +154,8 @@ public class MessagesController {
         try {
             currentDiscussion = discutionService.getDiscussionBetweenUsers(currentUser.getId(), selectedUser.getId());
             if (currentDiscussion == null) {
+                hideInputFields();
+
                 String discussionName = "Chat between " + currentUser.getName() + " and " + selectedUser.getName();
                 currentDiscussion = new Discution(discussionName, LocalDateTime.now());
                 int discussionId = discutionService.add(currentDiscussion);
@@ -150,6 +165,9 @@ public class MessagesController {
                 currentDiscussion.setId(discussionId); // Set the generated ID
                 // Link the users to this discussion
                 discutionService.linkUsersToDiscussion(discussionId, currentUser.getId(), selectedUser.getId());
+            } else {
+                showInputFields();
+
             }
             System.out.println("Current discussion loaded: " + currentDiscussion.getId());
             currentRoom = currentDiscussion; // Ensure currentRoom is set
@@ -161,38 +179,28 @@ public class MessagesController {
         }
     }
 
-    private boolean isMessageAlreadyAdded(Message newMessage) {
-        return receivedMessages.contains(newMessage) || !receivedMessages.add(newMessage);
-    }
-
     private void handleIncomingMessage(String message) {
         System.out.println("Received raw message: " + message);
         Platform.runLater(() -> {
             Message newMessage = parseMessage(message);
             if (newMessage != null) {
                 System.out.println("Parsed message: " + newMessage);
-                if (!isMessageAlreadyAdded(newMessage)) {
-                    updateMessageList(newMessage);
-                    messageService.add(newMessage);
+                try {
+                    String saved = messageService.add(newMessage);
+                    if (saved == "added") {
+                        System.out.println("Message saved successfully");
+                        refreshMessages(); // Refresh the message list
+                    } else {
+                        System.out.println("Failed to save message");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error saving message: " + e.getMessage());
+                    e.printStackTrace();
                 }
             } else {
                 System.out.println("Failed to parse message");
             }
         });
-    }
-
-    private void updateMessageList(Message newMessage) {
-        if (currentRoom != null && newMessage.getIdDiscution() == currentRoom.getId()) {
-            Platform.runLater(() -> {
-                messageList.getItems().add(newMessage);
-                messageList.scrollTo(messageList.getItems().size() - 1);
-                System.out.println("Added new message to list: " + newMessage.getContenu());
-            });
-        } else {
-            System.out.println(
-                    "Message not added to list. Current room: " + (currentRoom != null ? currentRoom.getId() : "null") +
-                            ", Message discussion ID: " + newMessage.getIdDiscution());
-        }
     }
 
     @FXML
@@ -203,11 +211,19 @@ public class MessagesController {
                     selectedUser.getId());
             System.out.println("Attempting to send message: " + message);
 
-            if (!isMessageAlreadyAdded(message)) {
-                sendMessageToServer(message);
-                messageContent.clear();
-            } else {
-                System.out.println("Message already sent.");
+            try {
+                String saved = messageService.add(message);
+                if (saved == "added") {
+                    System.out.println("Message saved locally");
+                    sendMessageToServer(message);
+                    messageContent.clear();
+                    refreshMessages(); // Refresh the message list
+                } else {
+                    System.out.println("Failed to save message locally");
+                }
+            } catch (Exception e) {
+                System.err.println("Error saving message: " + e.getMessage());
+                e.printStackTrace();
             }
         } else {
             System.out.println("Message content is empty or current discussion is null.");

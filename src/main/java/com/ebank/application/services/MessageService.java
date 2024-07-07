@@ -28,9 +28,9 @@ public class MessageService implements InterfaceCRUD<Message> {
             if (rowsAffected > 0) {
                 System.out.println("Message ajouté avec succès!");
 
-                return "Publication added successfully  ";
+                return "added";
             } else {
-                return "Failed to add publication.";
+                return "failed";
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
