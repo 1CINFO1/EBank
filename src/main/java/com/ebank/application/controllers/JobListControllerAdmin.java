@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ebank.application.models.OffreEmploi;
@@ -49,7 +50,8 @@ public class JobListControllerAdmin {
         showAddJobDialog();
     }
 
-    @FXML void updateJob(OffreEmploi offreEmploi) {
+    @FXML
+    private void updateJob(ActionEvent event) {
         OffreEmploi selectedOffre = jobListView.getSelectionModel().getSelectedItem();
         if (selectedOffre != null) {
             showUpdateJobDialog(selectedOffre);
@@ -65,6 +67,19 @@ public class JobListControllerAdmin {
         }
     }
 
+    @FXML
+    private void viewCondidates(ActionEvent event) {
+        OffreEmploi selectedOffre = jobListView.getSelectionModel().getSelectedItem();
+        if (selectedOffre != null) {
+            showCandidateList(selectedOffre.getId());
+        }
+    }
+
+    @FXML
+    private void showJobStatistics(ActionEvent event) {
+        showJobStatisticsDialog();
+    }
+
     private void showAddJobDialog() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobadd.fxml"));
@@ -72,26 +87,19 @@ public class JobListControllerAdmin {
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Add Job");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(jobListView.getScene().getWindow());
             Scene scene = new Scene(dialogPane);
             dialogStage.setScene(scene);
 
-            // Get controller and set necessary data or handlers
             JobAddController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setJobListController(this); // Pass the reference to this controller
+            controller.setJobListController(this);
 
             dialogStage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // Method to add a job offer to the list after successful addition
-    public void addJobToList(OffreEmploi newOffre) {
-        offreEmploiService.add(newOffre);
-        offres.add(newOffre);
     }
 
     private void showUpdateJobDialog(OffreEmploi offre) {
@@ -101,26 +109,82 @@ public class JobListControllerAdmin {
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Update Job");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(jobListView.getScene().getWindow());
             Scene scene = new Scene(dialogPane);
             dialogStage.setScene(scene);
 
-            // Get controller and set necessary data or handlers
             UpdateJobDialogController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setOffreEmploi(offre);
+            controller.setJobListController(this);
 
             dialogStage.showAndWait();
-            refreshJobList(null); // Refresh job list after updating
+            refreshJobList(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public void updateJobInList(OffreEmploi updatedOffre) {
-        offreEmploiService.update(updatedOffre, 0);
-        // Optionally, update the list in the UI
+        offreEmploiService.update(updatedOffre, updatedOffre.getId());
         loadJobOffers();
     }
-    
+
+    public void addJobToList(OffreEmploi newOffre) {
+        offreEmploiService.add(newOffre);
+        offres.add(newOffre);
+    }
+
+    private void showCandidateList(int jobId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/condidatlist.fxml"));
+            AnchorPane dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("View Candidates");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(jobListView.getScene().getWindow());
+            Scene scene = new Scene(dialogPane);
+            dialogStage.setScene(scene);
+
+            CondidatListController controller = loader.getController();
+            controller.setJobId(jobId);
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showJobStatisticsDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobStatistics.fxml"));
+            AnchorPane dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Job Statistics");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(jobListView.getScene().getWindow());
+            Scene scene = new Scene(dialogPane);
+            dialogStage.setScene(scene);
+
+            JobStatisticsController controller = loader.getController();
+            controller.setStatistics(getJobStatistics());
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getJobStatistics() {
+        List<String> statistics = new ArrayList<>();
+        List<OffreEmploi> allOffres = offreEmploiService.getAll();
+        for (OffreEmploi offre : allOffres) {
+            int candidateCount = offreEmploiService.getCandidateCountByJobId(offre.getId());
+            statistics.add("Job: " + offre.getPoste() + ", Candidates: " + candidateCount);
+        }
+        return statistics;
+    }
 }
