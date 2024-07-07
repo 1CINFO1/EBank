@@ -84,15 +84,5 @@ public class DiscutionService implements InterfaceCRUD<Discution> {
         return discussions;
     }
 
-    @Override
-    public Publication getById(int id) {
-        return null;
-    }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
-    }
-
 
 }

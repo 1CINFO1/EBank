@@ -15,7 +15,7 @@ public interface InterfaceCRUD<T> {
 
     public List<T> getAll();
 
-    public Publication getById(int id);
 
-    public CharityCampaignModel getCharityBy(int id);
+
+
 }

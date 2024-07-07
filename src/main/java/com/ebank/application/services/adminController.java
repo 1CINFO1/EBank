@@ -37,15 +37,7 @@ public class adminController implements InterfaceCRUD<Publication> {
 
 
 
-    @Override
-    public Publication getById(int id) {
-        return null;
-    }
 
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
-    }
     @Override
     public List<Publication> getAll() {
         List<Publication> publications = new ArrayList<>();

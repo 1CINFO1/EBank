@@ -35,10 +35,7 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
         return List.of();
     }
 
-    @Override
-    public Publication getById(int id) {
-        return null;
-    }
+
 
 
     public List<Publication> getByCharityId(int id) {
@@ -70,7 +67,7 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
     }
 
 
-    @Override
+
     public CharityCampaignModel getCharityBy(int id) {
         CharityCampaignModel charityCampaign = null;
         String sql = "SELECT * FROM charitycampaignmodel WHERE compagnieDeDon_Patente = ?";

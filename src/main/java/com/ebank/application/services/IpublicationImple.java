@@ -59,7 +59,7 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
         return publications;
     }
 
-    @Override
+
     public Publication getById(int id) {
         Publication publication = null;
         String sql = "SELECT * FROM publication WHERE id = ?";

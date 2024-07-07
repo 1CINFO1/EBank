@@ -93,36 +93,10 @@ public class MessageService implements InterfaceCRUD<Message> {
         return messages;
     }
 
-    @Override
-    public Publication getById(int id) {
-        Publication publication = null;
-        String sql = "SELECT * FROM publication WHERE id = ?";
 
-        try {
-            PreparedStatement pst = cnx.prepareStatement(sql);
-            pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
 
-            if (rs.next()) {
-                publication = new Publication();
-                publication.setId(rs.getInt("id"));
-                publication.setTitle(rs.getString("title"));
-                publication.setCampaignName(rs.getString("campaignName"));
-                publication.setDescription(rs.getString("description"));
-                publication.setPublicationDate(rs.getDate("publicationDate"));
-                publication.setPicture(rs.getString("picture"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
-        return publication;
-    }
 
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
-    }
 
 
 }
