@@ -107,4 +107,20 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
         }
         return offres;
     }
+
+    // Method to get the number of candidates for a specific job
+    public int getCandidateCountByJobId(int jobId) {
+        String req = "SELECT COUNT(*) FROM `candidature` WHERE `job_id` = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(req)) {
+            ps.setInt(1, jobId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching candidate count for job id: " + jobId, e);
+        }
+        return 0;
+    }
 }

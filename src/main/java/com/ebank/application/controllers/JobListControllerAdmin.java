@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ebank.application.models.OffreEmploi;
@@ -72,6 +73,11 @@ public class JobListControllerAdmin {
         if (selectedOffre != null) {
             showCandidateList(selectedOffre.getId());
         }
+    }
+
+    @FXML
+    private void showJobStatistics(ActionEvent event) {
+        showJobStatisticsDialog();
     }
 
     private void showAddJobDialog() {
@@ -149,5 +155,36 @@ public class JobListControllerAdmin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showJobStatisticsDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobStatistics.fxml"));
+            AnchorPane dialogPane = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Job Statistics");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initOwner(jobListView.getScene().getWindow());
+            Scene scene = new Scene(dialogPane);
+            dialogStage.setScene(scene);
+
+            JobStatisticsController controller = loader.getController();
+            controller.setStatistics(getJobStatistics());
+
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getJobStatistics() {
+        List<String> statistics = new ArrayList<>();
+        List<OffreEmploi> allOffres = offreEmploiService.getAll();
+        for (OffreEmploi offre : allOffres) {
+            int candidateCount = offreEmploiService.getCandidateCountByJobId(offre.getId());
+            statistics.add("Job: " + offre.getPoste() + ", Candidates: " + candidateCount);
+        }
+        return statistics;
     }
 }

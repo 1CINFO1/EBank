@@ -12,5 +12,6 @@
         <Button layoutX="220.0" layoutY="430.0" mnemonicParsing="false" onAction="#updateJob" text="Update Job" />
         <Button layoutX="320.0" layoutY="430.0" mnemonicParsing="false" onAction="#deleteJob" text="Delete Job" />
         <Button layoutX="420.0" layoutY="430.0" mnemonicParsing="false" onAction="#viewCondidates" text="View Candidates" />
+        <Button layoutX="520.0" layoutY="430.0" mnemonicParsing="false" onAction="#showJobStatistics" text="Show Statistics" />
     </children>
 </AnchorPane>
