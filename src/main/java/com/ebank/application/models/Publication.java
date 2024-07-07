@@ -7,6 +7,14 @@ public class Publication {
     private String title;
     private String campaignName;
     private String description;
+
+    public Publication(String title, String campaignName, String description, String picture) {
+        this.title = title;
+        this.campaignName = campaignName;
+        this.description = description;
+        this.picture = picture;
+    }
+
     private String picture;
     private Date publicationDate;
     private int CompagnieDeDon_Patente;
