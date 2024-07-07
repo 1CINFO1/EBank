@@ -14,6 +14,7 @@ public interface InterfaceCRUD<T> {
     public void update(T t, int id);
 
     public List<T> getAll();
+
     public Publication getById(int id);
 
     public CharityCampaignModel getCharityBy(int id);
