@@ -82,6 +82,9 @@ public class loginController implements Initializable {
     @FXML
     private ToggleButton toggleButton;
 
+    @FXML
+    private ComboBox<String> roleComboBox;
+
     private final LoginService loginService = new LoginService();
 
     public void showLoginPane() {
@@ -221,15 +224,23 @@ public class loginController implements Initializable {
         String accountNumber = signupAccountNumber.getText();
         LocalDate dob = signupDOB.getValue();
         String password = signupPassword.getText();
+        String accountype= roleComboBox.getValue();
 
-        if (!loginService.isValid(name, email, accountNumber, password, dob)) {
+        System.out.println(accountype);
+
+        if (!loginService.isValid(name, email, accountNumber, password, dob,accountype)) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields correctly.");
             return;
         }
+        if(accountype=="User"){loginService.addUser(name, email, accountNumber, dob, password);
+            JOptionPane.showMessageDialog(null, "User added successfully!");
+            switchToLoginPane();
+        }else {
+            loginService.addUser2(name, email, accountNumber, dob, password);
+            JOptionPane.showMessageDialog(null, "User added successfully!");
+            switchToLoginPane();
+        }
 
-        loginService.addUser(name, email, accountNumber, dob, password);
-        JOptionPane.showMessageDialog(null, "User added successfully!");
-        switchToLoginPane();
     }
 
     public static void limitTextField(TextField tf) {

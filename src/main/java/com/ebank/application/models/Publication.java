@@ -9,8 +9,8 @@ public class Publication {
     private String description;
     private String picture;
     private Date publicationDate;
-    private String CompagnieDeDon_Patente;
-    public Publication(int id, String CompagnieDeDon_Patente, String campaignName, String title, String description, String picture, Date publicationDate) {
+    private int CompagnieDeDon_Patente;
+    public Publication(int id, int CompagnieDeDon_Patente, String campaignName, String title, String description, String picture, Date publicationDate) {
         this.id = id;
         this.campaignName = campaignName;
         this.title = title;
@@ -20,11 +20,11 @@ public class Publication {
         this.CompagnieDeDon_Patente = CompagnieDeDon_Patente;
     }
 
-    public String getCompagnieDeDon_Patente() {
+    public int getCompagnieDeDon_Patente() {
         return CompagnieDeDon_Patente;
     }
 
-    public void setCompagnieDeDon_Patente(String compagnieDeDon_Patente) {
+    public void setCompagnieDeDon_Patente(int compagnieDeDon_Patente) {
         CompagnieDeDon_Patente = compagnieDeDon_Patente;
     }
 
