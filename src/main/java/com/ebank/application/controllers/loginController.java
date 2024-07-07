@@ -167,6 +167,8 @@ public class loginController implements Initializable {
         Parent root1 = fxmlLoader.load();
         AdminController dController = fxmlLoader.getController();
         dController.currentUser = c;
+        dController.loadMessagesView(c);
+
         dController.setLabels();
         dController.showHomePane();
         Stage stage = new Stage();
