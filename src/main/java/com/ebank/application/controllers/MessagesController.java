@@ -79,8 +79,8 @@ public class MessagesController {
 
     @FXML
     public void initialize() {
-        avatarUser1 = new Image(getClass().getResource("/com/ebank/application/icons/avatar1.jpeg").toString());
-        avatarUser2 = new Image(getClass().getResource("/com/ebank/application/icons/avatar2.jpg").toString());
+        avatarUser1 = new Image(getClass().getResource("/com/ebank/application/icons/avatar1.png").toString());
+        avatarUser2 = new Image(getClass().getResource("/com/ebank/application/icons/avatar2.png").toString());
         inputContainer.setVisible(false);
         inputContainer.setManaged(false);
         setupMessageListCellFactory();
