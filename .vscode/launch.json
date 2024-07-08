@@ -6,22 +6,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
             "name": "App",
             "request": "launch",
             "mainClass": "com.ebank.application/com.ebank.application.App",
-            "projectName": "Application"
-        },
-        {
-            "type": "java",
-            "name": "Login",
-            "request": "launch",
-            "mainClass": "com.ebank.application/com.ebank.application.Login",
             "projectName": "Application"
         }
     ]

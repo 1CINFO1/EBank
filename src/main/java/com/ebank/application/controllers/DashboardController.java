@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.ebank.application.models.AdminUser;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
 import com.ebank.application.services.IpublicationImple;
@@ -142,6 +143,9 @@ public class DashboardController implements Initializable {
     @FXML
     private VBox publicationListVBox;
 
+    @FXML
+    private Pane cartePane;
+
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
 
@@ -159,6 +163,7 @@ public class DashboardController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+
     public void getAllPublication() {
         try {
             List<Publication> publications = ipublicationImple.getAll();
@@ -167,12 +172,11 @@ public class DashboardController implements Initializable {
                 for (Publication pub : publications) {
                     Label publicationLabel = new Label(
 
-                                    "Title: " + pub.getTitle() + "\n" +
+                            "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
-                                    "Picture: " + pub.getPicture() + "\n"
-                    );
+                                    "Picture: " + pub.getPicture() + "\n");
 
                     // Create a button for donation
                     Button donateButton = new Button("Donate");
@@ -192,7 +196,8 @@ public class DashboardController implements Initializable {
                     // Create a VBox to hold the label and donate button
                     VBox publicationBox = new VBox();
                     publicationBox.getChildren().addAll(publicationLabel, donateButton);
-                    publicationBox.setStyle("-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
+                    publicationBox.setStyle(
+                            "-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
 
                     // Add the VBox to the publicationListVBox
                     publicationListVBox.getChildren().add(publicationBox);
@@ -215,6 +220,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(true);
         getAllPublication();
+        cartePane.setVisible(false);
     }
 
     @FXML
@@ -225,6 +231,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        cartePane.setVisible(false);
 
     }
 
@@ -236,6 +243,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        cartePane.setVisible(false);
 
         setLabels();
     }
@@ -248,6 +256,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(true);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        cartePane.setVisible(false);
 
     }
 
@@ -259,6 +268,7 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         charityPane.setVisible(false);
+        cartePane.setVisible(false);
 
     }
 
@@ -270,9 +280,21 @@ public class DashboardController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(true);
         charityPane.setVisible(false);
+        cartePane.setVisible(false);
 
     }
 
+    @FXML
+    void showCartePane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        cartePane.setVisible(true);
+
+    }
 
     @FXML
     public void confirmDeposit() {
@@ -347,7 +369,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-
     public void logout() throws IOException {
         URL location = getClass().getResource("/com/ebank/application/login.fxml");
         if (location == null) {
@@ -376,7 +397,8 @@ public class DashboardController implements Initializable {
 
     public double convert(String from, String to, double amount) throws IOException {
         double result;
-        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to=" + to;
+        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
+                + to;
         URL url = new URL(url_str);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
@@ -435,5 +457,22 @@ public class DashboardController implements Initializable {
                 "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+
+        loadCarteView();
+    }
+
+    public void loadCarteView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/cartebancaire.fxml"));
+            Pane messagesView = loader.load();
+
+            cartePane.getChildren().add(messagesView);
+
+            // Bind the size of the loaded view to the messagerPane
+            messagesView.prefWidthProperty().bind(cartePane.widthProperty());
+            messagesView.prefHeightProperty().bind(cartePane.heightProperty());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
