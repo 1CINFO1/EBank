@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="convertButton" layoutX="429.0" layoutY="333.0" mnemonicParsing="false" onAction="#convertButtonAction" prefHeight="37.0" prefWidth="141.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@../../../../../../../aaa/EBank-main/EBank-main/src/main/resources/com/ebank/application/style.css" text="Annuler " textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="convertButton1" layoutX="32.0" layoutY="335.0" mnemonicParsing="false" onAction="#convertButtonAction" prefHeight="40.0" prefWidth="183.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@../../../../../../../aaa/EBank-main/EBank-main/src/main/resources/com/ebank/application/style.css" text="Comfirmer " textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label maxWidth="10000.0" prefHeight="78.0" prefWidth="600.0" style="-fx-background-color: black;" />
+      <ImageView fitHeight="53.0" fitWidth="141.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../aaa/EBank-main/EBank-main/src/main/resources/com/ebank/application/icons/logo_white.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="68.0" fitWidth="120.0" layoutX="467.0" layoutY="82.0">
+         <image>
+            <Image url="@../../../../../../../../Downloads/credit-cards.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="-3.0" layoutY="78.0" maxWidth="10000.0" prefHeight="321.0" prefWidth="120.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="145.0" layoutY="14.0" prefHeight="40.0" prefWidth="370.0" text="Ajouter une carte bancaire " textFill="#fcecec">
+         <font>
+            <Font name="Constantia Italic" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="convertButton2" layoutX="255.0" layoutY="335.0" mnemonicParsing="false" onAction="#convertButtonAction" prefHeight="37.0" prefWidth="141.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@../../../../../../../aaa/EBank-main/EBank-main/src/main/resources/com/ebank/application/style.css" text="Autre option " textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label layoutX="155.0" layoutY="87.0" text="veuillez remplir les champs  ">
+         <font>
+            <Font name="Constantia Italic" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="257.0" text="Date d'expiration ">
+         <font>
+            <Font name="Constantia Italic" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="31.0" layoutY="203.0" text="Identifiant du titulaire du compte ">
+         <font>
+            <Font name="Constantia Italic" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="19.0" layoutY="152.0" text="Nom Titulaire du carnet du carnet ">
+         <font>
+            <Font name="Constantia Italic" size="19.0" />
+         </font>
+      </Label>
+      <DatePicker layoutX="269.0" layoutY="254.0" />
+      <TextField layoutX="329.0" layoutY="202.0" prefHeight="30.0" prefWidth="194.0" />
+      <TextField layoutX="305.0" layoutY="152.0" prefHeight="30.0" prefWidth="194.0" />
+   </children>
+</AnchorPane>
