@@ -17,9 +17,10 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0"
+<?import javafx.scene.control.DatePicker?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="809.0" stylesheets="@styleCharity.css"
    xmlns="http://javafx.com/javafx/22"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController" stylesheets="@styleCharity.css">
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
    <left>
       <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
@@ -149,6 +150,21 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="ajoutCheckButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showAjoutCheckPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Ajout Check" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/logo_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -185,6 +201,8 @@
                   <Insets right="15.0" />
                </HBox.margin>
             </Button>
+
+
          </children>
       </HBox>
    </top>
@@ -440,14 +458,47 @@
                   </Button>
                </children>
             </Pane>
-            <Pane fx:id="charityPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="@styleCharity.css">
+            <Pane fx:id="charityPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" stylesheets="@styleCharity.css" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
                <VBox fx:id="publicationListVBox" layoutX="50" layoutY="10" spacing="15">
                   <!-- Items will be added here dynamically -->
                </VBox>
 
             </Pane>
+            <<<<<<< HEAD
             <Pane fx:id="cartePane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+=======
+            <Pane fx:id="ajoutCheckPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="titleField" alignment="CENTER" prefHeight="76.0" prefWidth="617.0" style="-fx-background-color: #FFD700;" text="Ajouter un carnet cheque ">
+                     <font>
+                        <Font name="Arial Black" size="29.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="nameField" layoutX="248.0" layoutY="211.0" prefHeight="30.0" prefWidth="194.0" />
+                  <Button fx:id="addButton" onAction="#handleAddButtonAction" layoutX="26.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Ajouter " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="cancelButton" onAction="#handleCancelButtonAction" layoutX="425.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Annuler " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+
+                  <Label layoutX="71.0" layoutY="133.0" text="Date d'emission " />
+                  <Label layoutX="14.0" layoutY="216.0" text="Nom Titulaire du carnet du carnet " />
+                  <DatePicker fx:id="dateField" layoutX="210.0" layoutY="128.0" />
+               </children>
+            </Pane>
+>>>>>>> c989c54c441391f0bfb44d794d6e978a77c601af
 
          </children>
       </AnchorPane>

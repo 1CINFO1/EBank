@@ -6,18 +6,22 @@ public class Cheque {
     private int id;
     private Date dateEmission;
     private String titulaire;
+    private int userId; // Reference to User ID
 
-    public Cheque(){
-
+    public Cheque() {
     }
-    public Cheque(int id,  Date dateEmission, String titulaire) {
+
+    public Cheque(int id, Date dateEmission, String titulaire, int userId) {
         this.id = id;
         this.dateEmission = dateEmission;
         this.titulaire = titulaire;
+        this.userId = userId;
     }
-    public Cheque( float montant, Date dateEmission, String titulaire) {
+
+    public Cheque(float montant, Date dateEmission, String titulaire, int userId) {
         this.dateEmission = dateEmission;
         this.titulaire = titulaire;
+        this.userId = userId;
     }
 
     // Getters and Setters
@@ -28,7 +32,6 @@ public class Cheque {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public Date getDateEmission() {
         return dateEmission;
@@ -46,8 +49,13 @@ public class Cheque {
         this.titulaire = titulaire;
     }
 
+    public int getUserId() {
+        return userId;
+    }
 
-
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     @Override
     public String toString() {
@@ -55,6 +63,7 @@ public class Cheque {
                 "id=" + id +
                 ", dateEmission=" + dateEmission +
                 ", titulaire='" + titulaire + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }

@@ -17,19 +17,30 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
         this.cnx = MaConnexion.getInstance().getCnx();
     }
 
-    @Override
-    public String add (Cheque c) {
-        String req = "INSERT INTO `Cheque`( `dateEmission`, `titulaire`) VALUES (?,?)";
+
+    public String add(Cheque c,String titulaire,int id) {
+
+        System.out.println(id);
+        System.out.println(titulaire);
+
+
+        String req = "INSERT INTO `Cheque`( `dateEmission`,`titulaire`,`user_id`) VALUES (?,?,?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
-            ps.setDate(2, new java.sql.Date(c.getDateEmission().getTime()));
-            ps.setString(3, c.getTitulaire());
+            ps.setDate(1, new java.sql.Date(c.getDateEmission().getTime()));
+            ps.setString(2, titulaire);
+            ps.setInt(3,id);
             ps.executeUpdate();
-            System.out.println("Cheque ajouté avec succès (prep)!");
-            return("saif rabii yehdik");
+
+            return("all set");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String add(Cheque cheque) {
+        return "";
     }
 
     @Override
