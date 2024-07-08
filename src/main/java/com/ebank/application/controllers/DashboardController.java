@@ -149,8 +149,9 @@ public class DashboardController implements Initializable {
     private VBox publicationListVBox;
 
     @FXML
+    private Pane cartePane;
 
-    private Pane cartePane
+    @FXML
     private TextField nameField;
 
     @FXML
@@ -271,6 +272,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         ajoutCheckPane.setVisible(true);
+        cartePane.setVisible(false);
     }
 
     @FXML
@@ -283,6 +285,8 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(true);
         getAllPublication();
         cartePane.setVisible(false);
+        ajoutCheckPane.setVisible(false);
+
     }
 
     @FXML
@@ -294,6 +298,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         cartePane.setVisible(false);
+        ajoutCheckPane.setVisible(false);
 
     }
 
@@ -306,6 +311,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         cartePane.setVisible(false);
+        ajoutCheckPane.setVisible(false);
 
         setLabels();
     }
@@ -331,6 +337,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         cartePane.setVisible(false);
+        ajoutCheckPane.setVisible(false);
 
     }
 
@@ -343,6 +350,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(true);
         charityPane.setVisible(false);
         cartePane.setVisible(false);
+        ajoutCheckPane.setVisible(false);
 
     }
 
@@ -355,6 +363,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         cartePane.setVisible(true);
+        ajoutCheckPane.setVisible(false);
 
     }
 

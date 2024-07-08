@@ -465,9 +465,7 @@
                </VBox>
 
             </Pane>
-            <<<<<<< HEAD
             <Pane fx:id="cartePane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-=======
             <Pane fx:id="ajoutCheckPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <TextField fx:id="titleField" alignment="CENTER" prefHeight="76.0" prefWidth="617.0" style="-fx-background-color: #FFD700;" text="Ajouter un carnet cheque ">
@@ -498,7 +496,6 @@
                   <DatePicker fx:id="dateField" layoutX="210.0" layoutY="128.0" />
                </children>
             </Pane>
->>>>>>> c989c54c441391f0bfb44d794d6e978a77c601af
 
          </children>
       </AnchorPane>
