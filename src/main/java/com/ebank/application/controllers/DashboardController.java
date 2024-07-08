@@ -7,17 +7,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import com.ebank.application.models.Cheque;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
+import com.ebank.application.services.ChequeService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -25,10 +32,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -140,10 +143,28 @@ public class DashboardController implements Initializable {
     private Pane charityPane;
 
     @FXML
+    private Pane ajoutCheckPane;
+    @FXML
     private VBox publicationListVBox;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private DatePicker dateField;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private Button cancelButton;
+
+
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
+
+    private final ChequeService chequeService = new ChequeService();
 
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -151,6 +172,7 @@ public class DashboardController implements Initializable {
     public User currentUser = new User();
 
     ResultSet rs = null;
+
 
     public void setLabels() {
         name.setText(currentUser.getName());
@@ -204,6 +226,50 @@ public class DashboardController implements Initializable {
         } catch (RuntimeException e) {
             e.printStackTrace(); // Handle or log the exception properly
         }
+    }
+    @FXML
+    private void handleAddButtonAction() {
+        String name = nameField.getText();
+        LocalDate localDate = dateField.getValue();
+
+        if (name != null && !name.isEmpty() && localDate != null) {
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Cheque cheque = new Cheque();
+            cheque.setDateEmission(date);
+            cheque.setTitulaire(name);
+            String result = addCheque(cheque);
+            System.out.println(result);
+            // Optionally, clear the fields or show a success message
+            nameField.clear();
+            dateField.setValue(null);
+        } else {
+            // Show an error message
+            System.out.println("Please fill all fields.");
+        }
+    }
+
+    @FXML
+    private void handleCancelButtonAction() {
+        // Optionally, clear the fields or close the window
+        nameField.clear();
+        dateField.setValue(null);
+    }
+
+    public String addCheque(Cheque c) {
+       int a = currentUser.getId();
+        return chequeService.add(c,currentUser.getName(),a);
+    }
+
+
+    @FXML
+    private void showAjoutCheckPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        charityPane.setVisible(false);
+        ajoutCheckPane.setVisible(true);
     }
 
     @FXML

@@ -260,6 +260,7 @@ public class loginController implements Initializable {
 
             if (rs.next()) {
                 closeWindow();
+
                 // User is a charity campaign member
                 String name = rs.getString("name");
                 String userEmail = rs.getString("email");
@@ -281,6 +282,7 @@ public class loginController implements Initializable {
 
             if (rs.next()) {
                 closeWindow();
+                int id= rs.getInt("id");
                 // User is a regular user
                 String name = rs.getString("name");
                 String userEmail = rs.getString("email");
@@ -288,7 +290,7 @@ public class loginController implements Initializable {
                 int accNum = rs.getInt("acc_num");
                 double balance = rs.getDouble("balance");
 
-                User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
+                User loggedInUser = new User(id,name, userEmail, dob, accNum, balance, loginPassword.getText());
                 launchDashboard(loggedInUser); // Launch regular user dashboard
                 return;
             }
