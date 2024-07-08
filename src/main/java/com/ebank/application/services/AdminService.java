@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class adminController implements InterfaceCRUD<Publication> {
+public class AdminService implements InterfaceCRUD<Publication> {
 
     Connection cnx = MaConnexion.getInstance().getCnx();
 
@@ -39,12 +39,14 @@ public class adminController implements InterfaceCRUD<Publication> {
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
                 String campaignName = rs.getString("campaignName");
                 String status = rs.getString("status");
 
-                Publication publication = new Publication(title, description, campaignName, status);
+                Publication publication = new Publication(id, title, description, campaignName, status);
+                System.out.println("Fetched Publication: " + publication);
                 publications.add(publication);
             }
         } catch (SQLException e) {

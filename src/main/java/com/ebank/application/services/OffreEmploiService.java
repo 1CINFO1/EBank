@@ -126,15 +126,4 @@ public class OffreEmploiService implements InterfaceCRUD<OffreEmploi> {
         return 0;
     }
 
-    @Override
-    public Publication getById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
-    }
-
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCharityBy'");
-    }
 }

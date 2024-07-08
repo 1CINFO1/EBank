@@ -512,18 +512,47 @@
                         <Button fx:id="confirmPublicationButton" layoutX="260.0" layoutY="350.0" text="Confirm" />
                     </children>
                 </Pane>
-                <Pane fx:id="publicationListPane" layoutX="50.0" layoutY="150.0" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: #f0f0f0; -fx-padding: 10;" visible="false" stylesheets="@style.css">
-                    <children>
-                        <TableView fx:id="publicationTableView" layoutX="10.0" layoutY="10.0" prefHeight="380.0" prefWidth="980.0" styleClass="publication-table-view">
-                            <columns>
 
-                                <TableColumn fx:id="titleColumnid" text="Title" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
-                                <TableColumn fx:id="campaignNameColumn" text="Campaign Name" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
-                                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                <Pane fx:id="publicationListPane" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <TableView fx:id="publicationTableView" layoutX="50.0" layoutY="100.0" prefHeight="400.0" prefWidth="900">
+                            <columns>
+                                <TableColumn fx:id="column1" text="Title" prefWidth="150"/>
+                                <TableColumn fx:id="column2" text="Campaign Name" prefWidth="350"/>
+                                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300"/>
                                 <TableColumn fx:id="pictureColumn" text="Picture" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
                                 <TableColumn fx:id="publicationDateColumn" text="Publication Date" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" />
+                                <TableColumn fx:id="column4" text="Actions" prefWidth="200"/>
                             </columns>
                         </TableView>
+                        <Label fx:id="headerLabel" layoutX="50.0" layoutY="20.0" prefHeight="61.0" prefWidth="700.0" text="Liste des demandes des publication" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                            <font>
+                                <Font name="Gill Sans MT Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                <Pane fx:id="editPublicationPane" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <Label layoutX="50.0" layoutY="20.0" text="Edit Publication"  />
+
+                        <Label layoutX="50.0" layoutY="80.0" text="Title:" />
+                        <TextField fx:id="titleTextField1" layoutX="150.0" layoutY="75.0" prefWidth="200.0" />
+
+                        <Label layoutX="50.0" layoutY="120.0" text="Campaign Name:" />
+                        <TextField fx:id="campaignNameTextField" layoutX="150.0" layoutY="115.0" prefWidth="200.0" />
+
+                        <Label layoutX="50.0" layoutY="160.0" text="Description:" />
+                        <TextArea fx:id="descriptionTextArea" layoutX="150.0" layoutY="155.0" prefWidth="200.0" prefHeight="100.0" />
+
+                        <Label layoutX="50.0" layoutY="280.0" text="Picture URL:" />
+                        <TextField fx:id="pictureTextField" layoutX="150.0" layoutY="275.0" prefWidth="200.0" />
+
+                        <Label layoutX="50.0" layoutY="320.0" text="Publication Date:" />
+                        <DatePicker fx:id="publicationDatePicker2" layoutX="150.0" layoutY="315.0" prefWidth="200.0" />
+
+                        <Button layoutX="150.0" layoutY="360.0" text="Save" onAction="#handleSavePublication" />
+                        <Button layoutX="260.0" layoutY="360.0" text="Cancel" onAction="#handleCancelEdit" />
                     </children>
                 </Pane>
 

@@ -2,22 +2,24 @@ package com.ebank.application.controllers;
 
 import com.ebank.application.models.AdminUser;
 import com.ebank.application.models.Publication;
+import com.ebank.application.services.AdminService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -34,6 +36,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AdminController implements Initializable {
+
 
     @FXML
     private Button charityButton;
@@ -144,12 +147,31 @@ public class AdminController implements Initializable {
 
     @FXML
     private Button messagesButton;
+    @FXML
+    private Pane publicationPane;
+
+    @FXML
+    private TableView<Publication> publicationTableList;
+
+    @FXML
+    private TableColumn<Publication, String> column1;
+
+    @FXML
+    private TableColumn<Publication, String> column2;
+
+    @FXML
+    private TableColumn<Publication, String> column3;
+
+    @FXML
+    private TableColumn<Publication, HBox> column4;
 
     @FXML
     private Pane messagerPane;
 
+
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
+    private final AdminService adminService = new AdminService();
 
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -157,6 +179,75 @@ public class AdminController implements Initializable {
     public AdminUser currentUser = new AdminUser();
 
     ResultSet rs = null;
+
+
+
+    @FXML
+    void showMessagerPane() {
+        homePane.setVisible(false);
+        messagerPane.setVisible(true);
+        publicationPane.setVisible(false);
+    }
+    @FXML
+    public void showHomePane() {
+        homePane.setVisible(true);
+        messagerPane.setVisible(false);
+        publicationPane.setVisible(false);
+        setLabels();
+    }
+
+    public void showPublicationPane() {
+        homePane.setVisible(false);
+        messagerPane.setVisible(false);
+        publicationPane.setVisible(true);
+        handleLoadPublications();
+    }
+
+    @FXML
+    private void handleLoadPublications() {
+        column1.setCellValueFactory(new PropertyValueFactory<>("title"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("description"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("campaignName"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("action"));
+
+        loadPublications();
+    }
+
+    private void loadPublications() {
+        ObservableList<Publication> publications = FXCollections.observableArrayList();
+        for (Publication publication : adminService.getAll()) {
+            HBox actionButtons = createActionButtons(publication);
+            publication.setAction(actionButtons);
+            publications.add(publication);
+        }
+        publicationTableList.setItems(publications);
+    }
+
+    private HBox createActionButtons(Publication publication) {
+        Button approveButton = new Button("Approve");
+        approveButton.getStyleClass().add("action-button");
+        approveButton.setOnAction(event -> {
+            int id = publication.getId();
+            System.out.println(id);
+            adminService.approvePublication(id);
+            loadPublications();
+        });
+
+        Button declineButton = new Button("Decline");
+        declineButton.getStyleClass().addAll("action-button", "decline");
+        declineButton.setOnAction(event -> {
+            int id = publication.getId();
+            System.out.println(id);
+            adminService.declinePublication(id);
+            loadPublications();
+        });
+
+        HBox hbox = new HBox(approveButton, declineButton);
+        hbox.getStyleClass().add("hbox-actions");
+        return hbox;
+    }
+
+
 
     public void setLabels() {
         name.setText(currentUser.getName());
@@ -166,6 +257,7 @@ public class AdminController implements Initializable {
         emailLabel.setText(currentUser.getEmail());
 
     }
+
 
     public void getAllPublication() {
         try {
@@ -214,239 +306,8 @@ public class AdminController implements Initializable {
         }
     }
 
-    @FXML
-    void showDepositPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(true);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        messagerPane.setVisible(false);
 
-    }
 
-    @FXML
-    public void showHomePane() {
-        homePane.setVisible(true);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        messagerPane.setVisible(false);
-
-        setLabels();
-    }
-
-    @FXML
-    void showTransferPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(true);
-        converterPane.setVisible(false);
-        messagerPane.setVisible(false);
-
-    }
-
-    @FXML
-    void showWithdrawPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(true);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        messagerPane.setVisible(false);
-
-    }
-
-    @FXML
-    void showConverterPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(true);
-        messagerPane.setVisible(false);
-
-    }
-
-    @FXML
-    void showMessagerPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        // charityPane.setVisible(false);
-        messagerPane.setVisible(true);
-
-    }
-
-    @FXML
-    public void confirmDeposit() {
-        try {
-            double amount = Double.parseDouble(depositAmountTextField.getText());
-            transfertService.deposit(amount, currentUser);
-            depositConfirmationText.setText("Deposit Succeeded");
-            depositConfirmationText.setStyle(successStyle);
-            depositAmountTextField.setText("");
-        } catch (NumberFormatException e) {
-            depositConfirmationText.setText("Please Enter a Numeric Value");
-            depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");
-        } catch (SQLException e) {
-            depositConfirmationText.setText("Deposit Failed");
-            depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");
-        } catch (IllegalArgumentException e) {
-            depositConfirmationText.setText(e.getMessage());
-            depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");
-        }
-    }
-
-    @FXML
-    public void confirmWithdraw() {
-        try {
-            double amount = Double.parseDouble(withdrawAmountTextField.getText());
-            transfertService.withdraw(amount, currentUser);
-            withdrawConfirmationText.setText("Withdraw Succeeded");
-            withdrawConfirmationText.setStyle(successStyle);
-            withdrawAmountTextField.setText("");
-        } catch (NumberFormatException e) {
-            withdrawConfirmationText.setText("Please Enter a Numeric Value");
-            withdrawConfirmationText.setStyle(errorStyle);
-            withdrawAmountTextField.setText("");
-        } catch (SQLException e) {
-            withdrawConfirmationText.setText("Withdraw Failed");
-            withdrawConfirmationText.setStyle(errorStyle);
-            withdrawAmountTextField.setText("");
-        } catch (IllegalArgumentException e) {
-            withdrawConfirmationText.setText(e.getMessage());
-            withdrawConfirmationText.setStyle(errorStyle);
-            withdrawAmountTextField.setText("");
-        }
-    }
-
-    @FXML
-    public void confirmTransfer() {
-        try {
-            double amount = Double.parseDouble(transferAmountTextField.getText());
-            String receiverAccNumber = recieverTextField.getText();
-            transfertService.transfer(amount, receiverAccNumber, currentUser);
-            transferConfirmationText.setText("Transfer Succeeded");
-            transferConfirmationText.setStyle(successStyle);
-            recieverTextField.setText("");
-            transferAmountTextField.setText("");
-        } catch (NumberFormatException e) {
-            transferConfirmationText.setText("Please Enter a Numeric Value");
-            transferConfirmationText.setStyle(errorStyle);
-            transferAmountTextField.setText("");
-        } catch (SQLException e) {
-            transferConfirmationText.setText("Transfer Failed");
-            transferConfirmationText.setStyle(errorStyle);
-            recieverTextField.setText("");
-            transferAmountTextField.setText("");
-        } catch (IllegalArgumentException e) {
-            transferConfirmationText.setText(e.getMessage());
-            transferConfirmationText.setStyle(errorStyle);
-            recieverTextField.setText("");
-            transferAmountTextField.setText("");
-        }
-    }
-
-    public void logout() throws IOException {
-        URL location = getClass().getResource("/com/ebank/application/login.fxml");
-        if (location == null) {
-            throw new IOException("Cannot find login.fxml");
-        }
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root1 = fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setTitle("ABC Bank");
-        stage.getIcons().add(new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
-        stage.setScene(new Scene(root1));
-        stage.setResizable(false);
-        stage.show();
-        Stage stage2 = (Stage) balance.getScene().getWindow();
-        stage2.close();
-    }
-
-    @FXML
-    public void resetConverter() {
-        firstCurrency.setValue("");
-        secondCurrency.setValue("");
-        resultAmount.setText("");
-        convertAmount.setText("");
-    }
-
-    @SuppressWarnings("deprecation")
-    public double convert(String from, String to, double amount) throws IOException {
-        double result;
-        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
-                + to;
-        URL url = new URL(url_str);
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        request.setRequestMethod("GET");
-        request.connect();
-        int responseCode = request.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            JsonParser jp = new JsonParser();
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-            JsonObject jsonobj = root.getAsJsonObject();
-            String req_result = jsonobj.get("result").getAsString();
-            result = Double.parseDouble(req_result);
-            return amount * result;
-        } else {
-            converterLabel.setText("Connection Failed!");
-        }
-        return 0;
-    }
-
-    @FXML
-    public void convertButtonAction() {
-        double amount;
-        String from = firstCurrency.getValue();
-        String to = secondCurrency.getValue();
-        String value = "";
-        if (Objects.equals(firstCurrency.getValue(), "") || Objects.equals(secondCurrency.getValue(), "")) {
-            converterLabel.setText("Please Select a Currency!");
-            return;
-        } else
-            converterLabel.setText("");
-        try {
-            amount = Double.parseDouble(convertAmount.getText());
-            value = String.format("%.2f", convert(from, to, amount));
-            resultAmount.setText(value + " " + secondCurrency.getValue());
-        } catch (NumberFormatException e) {
-            return;
-        } catch (IOException ex) {
-            converterLabel.setText("Connection Failed!");
-        }
-    }
-
-    public void swap() {
-        String val = firstCurrency.getValue();
-        firstCurrency.setValue(secondCurrency.getValue());
-        secondCurrency.setValue(val);
-        convertButtonAction();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-        loginController.limitTextField(recieverTextField);
-        loginController.limitTextField(depositAmountTextField);
-        loginController.limitTextField(withdrawAmountTextField);
-        loginController.limitTextField(transferAmountTextField);
-        String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
-        firstCurrency.getItems().addAll(currencies);
-        secondCurrency.getItems().addAll(currencies);
-
-    }
 
     public void updatePublication(@SuppressWarnings("exports") ActionEvent actionEvent) {
     }
@@ -490,4 +351,31 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void logout() throws IOException {
+        URL location = getClass().getResource("/com/ebank/application/login.fxml");
+        if (location == null) {
+            throw new IOException("Cannot find login.fxml");
+        }
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root1 = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setTitle("ABC Bank");
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+        stage.setScene(new Scene(root1));
+        stage.setResizable(false);
+        stage.show();
+        Stage stage2 = (Stage) balance.getScene().getWindow();
+        stage2.close();
+    }
+
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+
+    }
+
 }

@@ -86,10 +86,6 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
         return publication;
     }
 
-    @Override
-    public CharityCampaignModel getCharityBy(int id) {
-        return null;
-    }
 
 
 }

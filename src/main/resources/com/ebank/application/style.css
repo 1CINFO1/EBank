@@ -88,3 +88,92 @@
     -fx-background-color: #f44336; /* Red */
     -fx-text-fill: white;
 }
+
+
+/* Styling for the entire pane */
+#publicationPane {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 20px;
+}
+
+/* Styling for the header label */
+#headerLabel {
+    -fx-text-fill: #333;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 0;
+}
+
+/* Styling for the table */
+#publicationTable {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#publicationTable .column-header-background {
+    -fx-background-color: #f5f5f5;
+}
+
+#publicationTable .column-header,
+#publicationTable .column-header-background {
+    -fx-border-color: #ddd;
+}
+
+#publicationTable .table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+#publicationTable .table-row-cell:even {
+    -fx-background-color: #fff;
+}
+
+/* Styling for table columns */
+.table-column {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}
+
+/* Styling for the Load Publications button */
+#loadButton {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+}
+
+#loadButton:hover {
+    -fx-background-color: #0056b3;
+}
+
+/* Styling for action buttons inside the HBox */
+.action-button {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-font-size: 12px;
+}
+
+.action-button.decline {
+    -fx-background-color: #dc3545;
+}
+
+.action-button:hover {
+    -fx-background-color: #218838;
+}
+
+.action-button.decline:hover {
+    -fx-background-color: #c82333;
+}
+
+/* Styling for HBox containing action buttons */
+.hbox-actions {
+    -fx-spacing: 10px;
+}

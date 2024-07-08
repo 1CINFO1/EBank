@@ -23,14 +23,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -152,23 +154,47 @@ public class CharityController implements Initializable {
 
     @FXML
     private TableView<Publication> publicationTableView;
-    @FXML
-    private TableColumn<Publication, Integer> idColumn;
-    @FXML
-    private TableColumn<Publication, String> patenteColumn;
-    @FXML
-    private TableColumn<Publication, String> titleColumnid;
-    @FXML
-    private TableColumn<Publication, String> campaignNameColumn;
-    @FXML
-    private TableColumn<Publication, String> descriptionColumn;
-    @FXML
-    private TableColumn<Publication, String> pictureColumn;
-    @FXML
-    private TableColumn<Publication, Date> publicationDateColumn;
 
     @FXML
-    private ListView<VBox> publicationListView;
+    private TableColumn<Publication, String> column1;
+
+    @FXML
+    private TableColumn<Publication, String> column2;
+
+    @FXML
+    private TableColumn<Publication, String> descriptionColumn;
+
+    @FXML
+    private TableColumn<Publication, String> pictureColumn;
+
+    @FXML
+    private TableColumn<Publication, String> publicationDateColumn;
+
+    @FXML
+    private TableColumn<Publication, HBox> column4;
+
+    @FXML
+    private Label headerLabel;
+
+    @FXML
+    private TextArea descriptionTextArea;
+
+    @FXML
+    private DatePicker publicationDatePicker2;
+
+    @FXML
+    private TextField titleTextField1;
+
+    @FXML
+    private TextField campaignNameTextField;
+
+    @FXML
+    private TextField pictureTextField;
+
+    @FXML
+    private Pane editPublicationPane;
+
+    private Publication selectedPublication;
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
@@ -267,9 +293,19 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(true);
-
+        editPublicationPane.setVisible(false);
         showUserPublications();
-
+    }
+    @FXML
+    public void showEditPublicationForm(){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(true);
     }
 
     public void getAllPublication() {
@@ -391,82 +427,105 @@ public class CharityController implements Initializable {
             transferAmountTextField.setText("");
         }
     }
-
+    @FXML
     public void showUserPublications() {
         try {
-            // Parse the compagnieDeDonPatente from string to int
             int compagnieDeDonPatente = Integer.parseInt(currentUser.getCompagnieDeDon_Patente());
 
-            // Get the publications for the user
             List<Publication> publications = iCharityService.getByCharityId(compagnieDeDonPatente);
+            System.out.println(publications);
 
-            // Initialize the TableView columns
-
-            titleColumnid.setCellValueFactory(new PropertyValueFactory<>("title"));
-            campaignNameColumn.setCellValueFactory(new PropertyValueFactory<>("campaignName"));
+            column1.setCellValueFactory(new PropertyValueFactory<>("title"));
+            column2.setCellValueFactory(new PropertyValueFactory<>("campaignName"));
             descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
             pictureColumn.setCellValueFactory(new PropertyValueFactory<>("picture"));
             publicationDateColumn.setCellValueFactory(new PropertyValueFactory<>("publicationDate"));
+            column4.setCellValueFactory(new PropertyValueFactory<>("action"));
 
-            // Create the actions column
-            TableColumn<Publication, Void> actionsColumn = new TableColumn<>("Actions");
-            actionsColumn.setPrefWidth(200); // Adjust width as needed
-            actionsColumn.setStyle("-fx-alignment: CENTER;");
+            loadPublications();
 
-            actionsColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button editButton = new Button("Edit");
-                private final Button deleteButton = new Button("Delete");
 
-                {
-                    editButton.setOnAction(event -> {
-                        Publication publication = getTableView().getItems().get(getIndex());
-                        // Handle edit action here
-                        System.out.println("Editing publication: " + publication.getId());
-                    });
-                    editButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
 
-                    deleteButton.setOnAction(event -> {
-                        Publication publication = getTableView().getItems().get(getIndex());
-                        // Handle delete action here
-                        System.out.println("Deleting publication: " + publication.getId());
-                    });
-                    deleteButton
-                            .setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;");
+    @FXML
+    private void handleEditPublication(Publication publication) {
+        this.selectedPublication = publication;
 
-                }
+        // Populate form fields with publication data
+        titleTextField1.setText(publication.getTitle());
+        campaignNameTextField.setText(publication.getCampaignName());
+        descriptionTextArea.setText(publication.getDescription());
+        pictureTextField.setText(publication.getPicture());
+        publicationDatePicker2.setValue(publication.getPublicationDate().toLocalDate());
+        // Show the edit pane
+        showEditPublicationForm();
+    }
 
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setGraphic(null);
-                    } else {
-                        HBox buttons = new HBox(10); // Adjust spacing between buttons if needed
-                        buttons.getChildren().addAll(editButton, deleteButton);
-                        setGraphic(buttons);
-                    }
+    @FXML
+    private void handleSavePublication() {
+        // Update publication object with form data
+        selectedPublication.setTitle(titleTextField1.getText());
+        selectedPublication.setCampaignName(campaignNameTextField.getText());
+        selectedPublication.setDescription(descriptionTextArea.getText());
+        selectedPublication.setPicture(pictureTextField.getText());
+        selectedPublication.setPublicationDate(Date.valueOf(publicationDatePicker2.getValue()));
 
-                }
-            });
+        // Call the update method in the service
+        iCharityService.update(selectedPublication);
 
-            // Add the actions column to the TableView if it's not already added
-            if (!publicationTableView.getColumns().contains(actionsColumn)) {
-                publicationTableView.getColumns().add(actionsColumn);
-            }
+        // Hide the edit pane and show the publication list pane
 
-            // Clear any existing items in the TableView
-            publicationTableView.getItems().clear();
+        showListPublication();
+    }
 
-            if (publications != null && !publications.isEmpty()) {
-                // Add the publications to the TableView
-                ObservableList<Publication> publicationObservableList = FXCollections.observableArrayList(publications);
-                publicationTableView.setItems(publicationObservableList);
-            } else {
-                System.out.println("No publications found.");
+    @FXML
+    private void handleCancelEdit() {
+        // Hide the edit pane and show the publication list pane
+
+    }
+
+    private void loadPublications() {
+        ObservableList<Publication> publications = FXCollections.observableArrayList();
+        try {
+            int compagnieDeDonPatente = Integer.parseInt(currentUser.getCompagnieDeDon_Patente());
+            List<Publication> retrievedPublications = iCharityService.getByCharityId(compagnieDeDonPatente);
+
+            for (Publication publication : retrievedPublications) {
+                HBox actionButtons = createActionButtons(publication);
+                publication.setAction(actionButtons);
+                publications.add(publication);
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace(); // Handle the exception properly
+            e.printStackTrace();
         }
+
+        publicationTableView.setItems(publications);
+    }
+
+    private HBox createActionButtons(Publication publication) {
+        Button editButton = new Button("Edit");
+        editButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        editButton.setOnAction(event -> {
+            System.out.println("Editing publication: " + publication.getId());
+
+            iCharityService.update(publication);
+            loadPublications();
+        });
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;");
+        deleteButton.setOnAction(event -> {
+            System.out.println("Deleting publication: " + publication.getId());
+            iCharityService.delete(publication.getId());
+            loadPublications();
+        });
+
+        HBox hbox = new HBox(10, editButton, deleteButton); // Adjust spacing between buttons if needed
+        hbox.setStyle("-fx-alignment: CENTER;");
+        return hbox;
     }
 
     public void logout() throws IOException {
