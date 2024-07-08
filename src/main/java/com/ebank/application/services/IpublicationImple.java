@@ -1,6 +1,7 @@
 package com.ebank.application.services;
 
 import com.ebank.application.interfaces.InterfaceCRUD;
+import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 

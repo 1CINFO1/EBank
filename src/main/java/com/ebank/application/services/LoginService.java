@@ -52,7 +52,6 @@ public class LoginService {
         if (dob.toString().isBlank()) {
             isValid = false;
         }
-
         return isValid;
     }
 
@@ -130,5 +129,4 @@ public class LoginService {
         }
         return null;
     }
-
 }

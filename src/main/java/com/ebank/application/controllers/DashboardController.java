@@ -153,9 +153,6 @@ public class DashboardController implements Initializable {
     private Pane withdrawPane;
 
     @FXML
-    private Button messagesButton;
-
-    @FXML
     private Button backButton2;
     @FXML
     private Pane publicationPane;

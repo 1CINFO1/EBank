@@ -15,14 +15,22 @@ import java.util.List;
 public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
 
     Connection cnx = MaConnexion.getInstance().getCnx();
+
     @Override
     public String add(CharityCampaignModel charityCampaignModel) {
         return "";
     }
 
     @Override
-    public void delete(int t) {
-
+    public void delete(int id) {
+        String sql = "DELETE FROM publication WHERE ID = ?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(sql);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting publication with ID: " + id, e);
+        }
     }
 
     @Override
@@ -30,13 +38,27 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
 
     }
 
+    public void update(Publication publication) {
+        String sql = "UPDATE publication SET title = ?, CampaignName = ?, Description = ?, picture = ?, publicationDate = ? WHERE ID = ?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(sql);
+            pst.setString(1, publication.getTitle());
+            pst.setString(2, publication.getCampaignName());
+            pst.setString(3, publication.getDescription());
+            pst.setString(4, publication.getPicture());
+            pst.setDate(5, new java.sql.Date(publication.getPublicationDate().getTime())); // Assuming publicationDate
+                                                                                           // is a java.util.Date
+            pst.setInt(6, publication.getId());
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating publication with ID: " + publication.getId(), e);
+        }
+    }
+
     @Override
     public List<CharityCampaignModel> getAll() {
         return List.of();
     }
-
-
-
 
     public List<Publication> getByCharityId(int id) {
         List<Publication> publications = new ArrayList<>();
@@ -65,8 +87,6 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
 
         return publications;
     }
-
-
 
     public CharityCampaignModel getCharityBy(int id) {
         CharityCampaignModel charityCampaign = null;

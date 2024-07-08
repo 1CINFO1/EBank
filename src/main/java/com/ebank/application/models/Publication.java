@@ -1,5 +1,7 @@
 package com.ebank.application.models;
 
+import javafx.scene.layout.HBox;
+
 import java.sql.Date;
 
 public class Publication {
@@ -7,8 +9,23 @@ public class Publication {
     private String title;
     private String campaignName;
     private String description;
+    private HBox action;
 
-    public Publication(String title, String campaignName, String description, String picture) {
+    public Publication(String title, String description, String campaignName, String status) {
+        this.title = title;
+        this.description = description;
+        this.campaignName = campaignName;
+
+    }
+
+    public Publication(int id, String title, String campaignName, String description, String status) {
+        this.id = id;
+        this.title = title;
+        this.campaignName = campaignName;
+        this.description = description;
+    }
+
+    public Publication(String title, String campaignName, String description, String picture, String status) {
         this.title = title;
         this.campaignName = campaignName;
         this.description = description;
@@ -91,5 +108,13 @@ public class Publication {
     @SuppressWarnings("exports")
     public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public HBox getAction() {
+        return action;
+    }
+
+    public void setAction(HBox action) {
+        this.action = action;
     }
 }
