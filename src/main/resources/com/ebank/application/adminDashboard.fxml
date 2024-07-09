@@ -82,7 +82,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="statisticsButton" onAction="#showStatisticsPane" text="Statistics">
+                <Button fx:id="statisticsButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showStatisticsPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Stats" textAlignment="CENTER" textFill="WHITE">
                     <graphic>
                         <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                             <image>
