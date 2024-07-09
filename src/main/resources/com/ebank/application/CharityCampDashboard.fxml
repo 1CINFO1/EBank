@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.chart.XYChart?>
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
@@ -25,6 +26,10 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.util.Callback?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.StackPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.CharityController" stylesheets="@styleCharity.css">
     <left>
         <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
@@ -151,6 +156,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
+
 
             </children>
             <BorderPane.margin>
@@ -553,6 +559,8 @@
                         <Button layoutX="260.0" layoutY="360.0" text="Cancel" onAction="#handleCancelEdit" />
                     </children>
                 </Pane>
+
+
 
 
             </children>

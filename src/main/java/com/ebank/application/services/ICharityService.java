@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
 
@@ -36,7 +38,24 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
     public void update(CharityCampaignModel charityCampaignModel, int id) {
 
     }
+    public Map<String, Object> getPublicationStatistics() {
+        Map<String, Object> statistics = new HashMap<>();
+        String sql = "SELECT COUNT(*) AS totalPublications, AVG(publicationDate) AS avgPublicationDate FROM publication";
 
+        try {
+            PreparedStatement pst = cnx.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                statistics.put("totalPublications", rs.getInt("totalPublications"));
+                statistics.put("avgPublicationDate", rs.getDate("avgPublicationDate"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving publication statistics", e);
+        }
+
+        return statistics;
+    }
 
     public void update(Publication publication,int a) {
         String sql = "UPDATE publication SET title = ?, CampaignName = ?, Description = ?, picture = ?, publicationDate = ? WHERE ID = ?";

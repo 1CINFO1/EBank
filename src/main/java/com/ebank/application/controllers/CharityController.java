@@ -39,6 +39,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
+
+
 public class CharityController implements Initializable {
 
     @FXML
@@ -211,6 +215,11 @@ public class CharityController implements Initializable {
     @FXML
     private Pane updatePublicationPane;
 
+    @FXML
+    private Pane statisticsPane;
+    @FXML
+    private LineChart<String, Number> statisticsChart;
+
     private Publication selectedPublication;
 
     private final TransfertService transfertService = new TransfertService();
@@ -245,6 +254,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
     }
 
     @FXML
@@ -257,6 +267,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
         setLabels();
     }
 
@@ -270,6 +281,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
 
     }
 
@@ -283,6 +295,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
     }
 
     @FXML
@@ -295,6 +308,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
 
     }
 
@@ -308,6 +322,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(true);
         publicationListPane.setVisible(false);
         editPublicationPane.setVisible(false);
+        statisticsPane.setVisible(false);
     }
 
     @FXML
@@ -320,7 +335,7 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(true);
         editPublicationPane.setVisible(false);
-
+        statisticsPane.setVisible(false);
         showUserPublications();
     }
 
