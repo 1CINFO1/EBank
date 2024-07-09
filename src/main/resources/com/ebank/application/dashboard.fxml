@@ -118,7 +118,7 @@
                <graphic>
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/reclamation.jpeg" />
+                        <Image url="@icons/reclamation.gif" />
                      </image>
                   </ImageView>
                </graphic>

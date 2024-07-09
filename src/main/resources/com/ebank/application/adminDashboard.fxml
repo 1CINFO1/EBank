@@ -68,7 +68,7 @@
                     <graphic>
                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/message.png" />
+                                <Image url="@icons/message.gif" />
                             </image>
                         </ImageView>
                     </graphic>

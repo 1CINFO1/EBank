@@ -127,7 +127,7 @@
                     <graphic>
                         <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/convert.gif" />
+                                <Image url="@icons/donate.gif" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -142,7 +142,7 @@
                     <graphic>
                         <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/convert.gif" />
+                                <Image url="@icons/donate.gif" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -494,29 +494,41 @@
                     </children>
                 </Pane>
 
-                <Pane fx:id="createPublicationPane" layoutX="200.0" layoutY="100.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" visible="false">
+                <Pane fx:id="createPublicationPane" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <!-- Form fields for adding a new publication -->
-                        <Label layoutX="14.0" layoutY="20.0" text="Publication Title:" />
-                        <TextField fx:id="publicationTitleField" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Title" />
+                        <!-- Header Label -->
+                        <Label fx:id="headerLabel" layoutX="14.0" layoutY="10.0" prefHeight="30.0" prefWidth="772.0" text="Ajouter publication" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                            <font>
+                                <Font name="Gill Sans MT Bold" size="24.0" />
+                            </font>
+                        </Label>
 
-                        <Label layoutX="14.0" layoutY="80.0" text="Campaign Name:" />
-                        <TextField fx:id="campaignNameField" layoutX="14.0" layoutY="100.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Campaign Name" />
+                        <!-- Publication Title -->
+                        <Label layoutX="14.0" layoutY="50.0" text="Publication Title:" />
+                        <TextField fx:id="publicationTitleField" layoutX="14.0" layoutY="70.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Title" />
 
-                        <Label layoutX="14.0" layoutY="140.0" text="Description:" />
-                        <TextArea fx:id="descriptionArea" layoutX="14.0" layoutY="160.0" prefHeight="100.0" prefWidth="350.0" promptText="Enter Description" />
+                        <!-- Campaign Name -->
+                        <Label layoutX="14.0" layoutY="110.0" text="Campaign Name:" />
+                        <TextField fx:id="campaignNameField" layoutX="14.0" layoutY="130.0" prefHeight="25.0" prefWidth="350.0" promptText="Enter Campaign Name" />
 
-                        <Label layoutX="14.0" layoutY="280.0" text="Publication Date:" />
-                        <DatePicker fx:id="publicationDatePicker" layoutX="14.0" layoutY="300.0" prefHeight="25.0" prefWidth="200.0" />
+                        <!-- Description -->
+                        <Label layoutX="14.0" layoutY="170.0" text="Description:" />
+                        <TextArea fx:id="descriptionArea" layoutX="14.0" layoutY="190.0" prefHeight="100.0" prefWidth="350.0" promptText="Enter Description" />
 
+                        <!-- Publication Date -->
+                        <Label layoutX="14.0" layoutY="310.0" text="Publication Date:" />
+                        <DatePicker fx:id="publicationDatePicker" layoutX="14.0" layoutY="330.0" prefHeight="25.0" prefWidth="200.0" />
 
-                        <Label layoutX="14.0" layoutY="340.0" text="Image:" />
-                        <ImageView fx:id="publicationImageView" layoutX="14.0" layoutY="360.0" fitHeight="100.0" fitWidth="150.0" preserveRatio="true" />
-                        <Button fx:id="selectImageButton" onAction="#handleSelectImage" layoutX="180.0" layoutY="360.0" text="Select Image" />
+                        <!-- Image Selection -->
+                        <Label layoutX="14.0" layoutY="370.0" text="Image:" />
+                        <ImageView fx:id="publicationImageView" layoutX="14.0" layoutY="390.0" fitHeight="100.0" fitWidth="150.0" preserveRatio="true" />
+                        <Button fx:id="selectImageButton" onAction="#handleSelectImage" layoutX="180.0" layoutY="390.0" text="Select Image" />
 
-                        <Button fx:id="confirmPublicationButton" onAction="#handleAddPublication" layoutX="260.0" layoutY="460.0" text="Confirm" />
+                        <!-- Confirm Button -->
+                        <Button fx:id="confirmPublicationButton" onAction="#handleAddPublication" layoutX="14.0" layoutY="510.0" text="Confirm" />
                     </children>
                 </Pane>
+
 
                 <Pane fx:id="publicationListPane" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
@@ -539,7 +551,6 @@
                 </Pane>
                 <Pane fx:id="editPublicationPane" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label layoutX="50.0" layoutY="20.0" text="Edit Publication" />
 
                         <Label layoutX="50.0" layoutY="80.0" text="Title:" />
                         <TextField fx:id="titleTextField1" layoutX="150.0" layoutY="75.0" prefWidth="200.0" />
@@ -558,6 +569,11 @@
 
                         <Button layoutX="150.0" layoutY="360.0" text="Save" onAction="#handleSavePublication" />
                         <Button layoutX="260.0" layoutY="360.0" text="Cancel" onAction="#handleCancelEdit" />
+                        <Label fx:id="headerLabel" layoutX="50.0" layoutY="20.0" prefHeight="61.0" prefWidth="700.0" text="Edit publication" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                            <font>
+                                <Font name="Gill Sans MT Bold" size="24.0" />
+                            </font>
+                        </Label>
                     </children>
                 </Pane>
 
