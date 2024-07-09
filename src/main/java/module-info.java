@@ -10,6 +10,7 @@ module com.ebank.application {
     requires Java.WebSocket;
     requires org.json;
     requires javafx.base;
+    requires java.mail;
 
     opens com.ebank.application to javafx.fxml;
 

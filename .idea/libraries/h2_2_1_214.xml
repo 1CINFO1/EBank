@@ -2,6 +2,8 @@
   <library name="h2-2.1.214">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/src/main/resources/com/ebank/application/db/h2-2.1.214.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../activation-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../javax.mail.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
