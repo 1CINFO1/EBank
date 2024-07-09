@@ -130,7 +130,7 @@ public class LoginService {
         alert.showAndWait();
     }
 
-    public void addUser(String name, String email, String accountNumber, LocalDate dob, String password, String role)
+    public Boolean addUser(String name, String email, String accountNumber, LocalDate dob, String password, String role)
             throws SQLException {
         String sql = role.equals("USER")
                 ? "INSERT INTO users (name, email, acc_num, balance, dob, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -145,6 +145,8 @@ public class LoginService {
         pst.setString(6, password);
         pst.setString(7, role);
         pst.execute();
+        
+        return true;
     }
 
     public CharityCampaignModel getCharityUser(String email, String password) throws SQLException {

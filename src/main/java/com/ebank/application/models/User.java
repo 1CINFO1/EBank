@@ -10,7 +10,7 @@ public class User {
     LocalDate dob;
     String password;
     String email;
-    String role;
+    private final String role = "USER";
 
     public User() {
     }
@@ -48,7 +48,6 @@ public class User {
         this.acc_num = acc_num;
         this.balance = balance;
         this.password = password;
-        this.role = role;
 
     }
 
@@ -122,7 +121,4 @@ public class User {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

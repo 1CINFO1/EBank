@@ -261,8 +261,17 @@ public class loginController implements Initializable {
         if (!loginService.isValid(name, email, accountNumber, password, dob, role)) {
             return;
         }
-        loginService.addUser(name, email, accountNumber, dob, password, role);
 
+        Boolean isUserAdded = loginService.addUser(name, email, accountNumber, dob, password, role);
+        if (isUserAdded) {
+            switchToLoginPane();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("User Added");
+            alert.setHeaderText(null);
+            alert.setContentText("User has been successfully added.");
+        
+            alert.showAndWait();
+        }
     }
 
     @SuppressWarnings("exports")
