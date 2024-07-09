@@ -1,5 +1,6 @@
 package com.ebank.application.controllers;
 
+import com.ebank.application.SharedDataMModels.SharedDataModel;
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.services.ICharityService;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -194,6 +196,21 @@ public class CharityController implements Initializable {
     @FXML
     private Pane editPublicationPane;
 
+    @FXML
+    private TextField publicationTitleField;
+
+    @FXML
+    private TextField campaignNameField;
+
+    @FXML
+    private TextArea descriptionArea;
+
+    @FXML
+    private DatePicker publicationDatePicker;
+
+    @FXML
+    private Pane updatePublicationPane;
+
     private Publication selectedPublication;
 
     private final TransfertService transfertService = new TransfertService();
@@ -215,6 +232,9 @@ public class CharityController implements Initializable {
         emailLabel.setText(currentUser.getEmail());
     }
 
+
+
+
     @FXML
     void showDepositPane() {
         homePane.setVisible(false);
@@ -224,6 +244,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
     }
 
     @FXML
@@ -235,6 +256,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
         setLabels();
     }
 
@@ -247,6 +269,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
 
     }
 
@@ -259,6 +282,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
     }
 
     @FXML
@@ -270,6 +294,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(true);
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
 
     }
 
@@ -282,6 +307,7 @@ public class CharityController implements Initializable {
         converterPane.setVisible(false);
         createPublicationPane.setVisible(true);
         publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(false);
     }
 
     @FXML
@@ -294,19 +320,10 @@ public class CharityController implements Initializable {
         createPublicationPane.setVisible(false);
         publicationListPane.setVisible(true);
         editPublicationPane.setVisible(false);
+
         showUserPublications();
     }
-    @FXML
-    public void showEditPublicationForm(){
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(false);
-        converterPane.setVisible(false);
-        createPublicationPane.setVisible(false);
-        publicationListPane.setVisible(false);
-        editPublicationPane.setVisible(true);
-    }
+
 
     public void getAllPublication() {
         try {
@@ -353,6 +370,34 @@ public class CharityController implements Initializable {
         } catch (RuntimeException e) {
             e.printStackTrace(); // Handle or log the exception properly
         }
+    }
+
+
+    @FXML
+    private void handleAddPublication(ActionEvent event) {
+        // Retrieve data from form fields
+        String title = publicationTitleField.getText();
+        String campaignName = campaignNameField.getText();
+        String description = descriptionArea.getText();
+        Date publicationDate = Date.valueOf(publicationDatePicker.getValue());
+        int charityId= Integer.parseInt(currentUser.getCompagnieDeDon_Patente());
+
+        System.out.println();
+        // Create a new Publication object
+        Publication publication = new Publication();
+        publication.setCompagnieDeDon_Patente(charityId);
+        publication.setTitle(title);
+        publication.setCampaignName(campaignName);
+        publication.setDescription(description);
+        publication.setPublicationDate(publicationDate);
+
+        // Call the add method in the service
+        ipublicationImple.add(publication);
+
+        // Optionally, clear the form fields after adding
+        showHomePane();
+
+        // Optionally, show a success message or update the UI as needed
     }
 
     @FXML
@@ -427,6 +472,10 @@ public class CharityController implements Initializable {
             transferAmountTextField.setText("");
         }
     }
+
+
+
+
     @FXML
     public void showUserPublications() {
         try {
@@ -450,42 +499,34 @@ public class CharityController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleEditPublication(Publication publication) {
-        this.selectedPublication = publication;
 
-        // Populate form fields with publication data
-        titleTextField1.setText(publication.getTitle());
-        campaignNameTextField.setText(publication.getCampaignName());
-        descriptionTextArea.setText(publication.getDescription());
-        pictureTextField.setText(publication.getPicture());
-        publicationDatePicker2.setValue(publication.getPublicationDate().toLocalDate());
-        // Show the edit pane
-        showEditPublicationForm();
-    }
+
+
+
 
     @FXML
-    private void handleSavePublication() {
-        // Update publication object with form data
-        selectedPublication.setTitle(titleTextField1.getText());
-        selectedPublication.setCampaignName(campaignNameTextField.getText());
-        selectedPublication.setDescription(descriptionTextArea.getText());
-        selectedPublication.setPicture(pictureTextField.getText());
-        selectedPublication.setPublicationDate(Date.valueOf(publicationDatePicker2.getValue()));
+    public void showEditPublicationForm(){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        createPublicationPane.setVisible(false);
+        publicationListPane.setVisible(false);
+        editPublicationPane.setVisible(true);
 
-        // Call the update method in the service
-        iCharityService.update(selectedPublication);
-
-        // Hide the edit pane and show the publication list pane
-
-        showListPublication();
     }
+
 
     @FXML
     private void handleCancelEdit() {
         // Hide the edit pane and show the publication list pane
 
     }
+
+
+    // Example of saving changes to selectedPublication
+
 
     private void loadPublications() {
         ObservableList<Publication> publications = FXCollections.observableArrayList();
@@ -504,29 +545,57 @@ public class CharityController implements Initializable {
 
         publicationTableView.setItems(publications);
     }
-
     private HBox createActionButtons(Publication publication) {
+
+        int pubId = publication.getId();
         Button editButton = new Button("Edit");
         editButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
         editButton.setOnAction(event -> {
+
             System.out.println("Editing publication: " + publication.getId());
 
-            iCharityService.update(publication);
-            loadPublications();
+            SharedDataModel.getInstance().setPublicationId(pubId);
+            System.out.println("publication id that i want to pass to the next pane " + pubId);
+            showEditPublicationForm();
+
         });
 
         Button deleteButton = new Button("Delete");
         deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;");
         deleteButton.setOnAction(event -> {
             System.out.println("Deleting publication: " + publication.getId());
+
             iCharityService.delete(publication.getId());
             loadPublications();
+
+
         });
 
         HBox hbox = new HBox(10, editButton, deleteButton); // Adjust spacing between buttons if needed
         hbox.setStyle("-fx-alignment: CENTER;");
         return hbox;
     }
+
+    @FXML
+    private void handleSavePublication(ActionEvent event) {
+        int publicationId = SharedDataModel.getInstance().getPublicationId();
+        System.out.println(publicationId);
+        // Update publication object with form data
+        Publication publication = new Publication();
+        publication.setId(publicationId); // Set the ID obtained from the edit button action
+        publication.setTitle(titleTextField1.getText());
+        publication.setCampaignName(campaignNameTextField.getText());
+        publication.setDescription(descriptionTextArea.getText());
+        publication.setPicture(pictureTextField.getText());
+        publication.setPublicationDate(Date.valueOf(publicationDatePicker2.getValue()));
+
+        // Call the update method in the service
+        iCharityService.update(publication, publication.getId());
+
+        // Hide the edit pane and show the publication list pane
+        showListPublication();
+    }
+
 
     public void logout() throws IOException {
         URL location = getClass().getResource("/com/ebank/application/login.fxml");

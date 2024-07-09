@@ -3,7 +3,6 @@ package com.ebank.application.services;
 
 
 import com.ebank.application.interfaces.InterfaceCRUD;
-import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
@@ -18,7 +17,27 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
 
     @Override
     public String add(Publication publication) {
-        return "";
+        String query = "INSERT INTO publication (CompagnieDeDon_Patente,title, CampaignName, description, picture, publicationDate) VALUES (?,?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, publication.getCompagnieDeDon_Patente());
+            stmt.setString(2, publication.getTitle());
+            stmt.setString(3, publication.getCampaignName());
+            stmt.setString(4, publication.getDescription());
+            stmt.setString(5, publication.getPicture());
+            stmt.setDate(6, new java.sql.Date(publication.getPublicationDate().getTime()));
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return "Publication added successfully";
+            } else {
+                return "Failed to add publication";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately in your application
+            return "Error adding publication: " + e.getMessage();
+        }
     }
 
     @Override
@@ -85,6 +104,7 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
 
         return publication;
     }
+
 
 
 

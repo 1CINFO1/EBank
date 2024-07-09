@@ -109,3 +109,38 @@
     -fx-background-color: #f44336; /* Red */
     -fx-text-fill: white;
 }
+
+.ListPub {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.card-layout {
+    -fx-padding: 10px;
+    -fx-margin-bottom: 10px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-background-color: #f9f9f9;
+}
+
+.charity-name-label {
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+}
+
+.publication-title-label {
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+}
+
+.publication-description-label {
+    -fx-font-size: 14px;
+}
+
+HBox {
+    -fx-spacing: 10px;
+}
+
+VBox {
+    -fx-spacing: 10px;
+}

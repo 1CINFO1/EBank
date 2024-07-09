@@ -1,6 +1,5 @@
 package com.ebank.application.models;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 import java.sql.Date;

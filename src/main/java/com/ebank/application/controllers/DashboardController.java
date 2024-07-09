@@ -1,12 +1,11 @@
 package com.ebank.application.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -20,6 +19,15 @@ import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -27,13 +35,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import javax.swing.*;
 
 public class DashboardController implements Initializable {
 
@@ -163,8 +171,33 @@ public class DashboardController implements Initializable {
 
     private int selectedPublicationId;
 
-    private IpublicationImple publicationService;
 
+    @FXML
+    private VBox ListPublicationsCards;
+
+    @FXML
+    private Pane getAllPubList;
+
+    private IpublicationImple publicationService;
+    @FXML
+    private TableView<Publication> publicationTable;
+
+    @FXML
+    private TableColumn<Publication, String> charityNameColumn;
+
+    @FXML
+    private TableColumn<Publication, String> publicationTitleColumn;
+
+    @FXML
+    private TableColumn<Publication, String> publicationDescriptionColumn;
+
+    @FXML
+    private TableColumn<Publication, Void> actionColumn;
+
+
+
+@FXML
+private JScrollPane ListPublications;
     public DashboardController() {
         // Initialize the service
         this.publicationService = new IpublicationImple();
@@ -198,19 +231,19 @@ public class DashboardController implements Initializable {
         pubPicture.setText(publication.getPicture());
 
     }
-
     public void getAllPublication() {
         try {
             List<Publication> publications = publicationService.getAll();
             if (publications != null && !publications.isEmpty()) {
                 publicationListVBox.getChildren().clear(); // Clear previous items
                 for (Publication pub : publications) {
+                    ImageView publicationImageView = new ImageView(new Image(pub.getPicture()));
                     Label publicationLabel = new Label(
                             "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
-                                    "Picture: " + pub.getPicture() + "\n");
+                                    "Picture: " + publicationImageView + "\n");
 
                     // Create a button for donation
                     Button donateButton = new Button("Donate");
@@ -246,6 +279,59 @@ public class DashboardController implements Initializable {
         }
     }
 
+    private void loadPublications() {
+    List<Publication> publications = publicationService.getAll();
+
+        // Clear existing content
+        ListPublicationsCards.getChildren().clear();
+
+        // Create publication cards
+        for (Publication publication : publications) {
+            HBox publicationCard = createPublicationCard(publication);
+            ListPublicationsCards.getChildren().add(publicationCard);
+        }
+    }
+
+    private HBox createPublicationCard(Publication publication) {
+        HBox cardLayout = new HBox();
+        cardLayout.setSpacing(10);
+        cardLayout.setPadding(new Insets(10));
+        cardLayout.setStyle("-fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-color: #f9f9f9;");
+
+        VBox textLayout = new VBox();
+        textLayout.setSpacing(10);
+
+        Label charityNameLabel = new Label(publication.getCampaignName());
+        charityNameLabel.setFont(Font.font("System Bold", 23.0));
+
+        Label publicationTitleLabel = new Label(publication.getTitle());
+        publicationTitleLabel.setFont(Font.font("System Bold", 21.0));
+
+        Label publicationDescriptionLabel = new Label(publication.getDescription());
+        publicationDescriptionLabel.setFont(Font.font(14.0));
+
+        textLayout.getChildren().addAll(charityNameLabel, publicationTitleLabel, publicationDescriptionLabel);
+
+        ImageView publicationImageView = new ImageView(new Image(publication.getPicture()));
+        publicationImageView.setFitWidth(200.0);
+        publicationImageView.setFitHeight(183.0);
+        publicationImageView.setPreserveRatio(true);
+        HBox cardLayouts = new HBox();
+
+        Button donateButton = new Button("Donate");
+        donateButton.setOnMouseClicked(event -> {
+            // Handle donate action
+            System.out.println("Donating to publication ID: " + publication.getId());
+            selectedPublicationId = publication.getId();
+            showcharityByIdPane(selectedPublicationId);
+        });
+
+        cardLayout.getChildren().addAll(textLayout, publicationImageView, donateButton);
+        HBox.setHgrow(textLayout, Priority.ALWAYS); // Ensure textLayout grows horizontally if needed
+
+        return cardLayout;
+    }
+
     @FXML
     void showCharityPane() {
         homePane.setVisible(false);
@@ -253,11 +339,11 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(true);
-
+       // charityPane.setVisible(true);
+        getAllPubList.setVisible(true);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
-        getAllPublication();
+        loadPublications();
     }
 
     @FXML
@@ -272,9 +358,10 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+        //charityPane.setVisible(false);
         publicationPane.setVisible(true);
         transferCharityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationById(id);
 
     }
@@ -286,8 +373,8 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
-
+       // charityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
     }
@@ -299,8 +386,8 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
-
+        // charityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
         setLabels();
@@ -313,9 +400,10 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
+        // charityPane.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(true);
+        getAllPubList.setVisible(false);
     }
 
     @FXML
@@ -325,8 +413,8 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
-
+        //charityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
     }
@@ -338,8 +426,8 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-        charityPane.setVisible(false);
-
+        //charityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
     }
@@ -351,8 +439,8 @@ public class DashboardController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(true);
-        charityPane.setVisible(false);
-
+        //charityPane.setVisible(false);
+        getAllPubList.setVisible(false);
         publicationPane.setVisible(false);
         transferCharityPane.setVisible(false);
     }
