@@ -158,8 +158,8 @@
             <ComboBox fx:id="roleComboBox" layoutX="35.0" layoutY="400.0" prefHeight="26.0" prefWidth="291.0" promptText="Pick account type" stylesheets="@combo-box.css">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="User" />
-                     <String fx:value="Charity" />
+                     <String fx:value="USER" />
+                     <String fx:value="CHARITY" />
                   </FXCollections>
                </items>
             </ComboBox>

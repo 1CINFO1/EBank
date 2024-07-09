@@ -10,7 +10,7 @@ public class User {
     LocalDate dob;
     String password;
     String email;
-    private final String role = "USER";
+    String role;
 
     public User() {
     }
@@ -39,6 +39,17 @@ public class User {
         this.acc_num = acc_num;
         this.balance = balance;
         this.password = password;
+    }
+
+    public User(String name, String email, LocalDate dob, int acc_num, double balance, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+        this.password = password;
+        this.role = role;
+
     }
 
     public User(int id, String name, String email, LocalDate dob, int acc_num, double balance, String password) {
@@ -109,5 +120,9 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

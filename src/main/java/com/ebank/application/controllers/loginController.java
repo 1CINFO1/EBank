@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.AdminUser;
 import com.ebank.application.services.LoginService;
@@ -218,6 +217,14 @@ public class loginController implements Initializable {
         JOptionPane.showMessageDialog(null, "Invalid email or password");
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @FXML
     void signUp() throws SQLException {
         String name = signupName.getText();
@@ -225,11 +232,36 @@ public class loginController implements Initializable {
         String accountNumber = signupAccountNumber.getText();
         LocalDate dob = signupDOB.getValue();
         String password = signupPassword.getText();
+        String role = roleComboBox.getValue();
 
-        if (!loginService.isValid(name, email, accountNumber, password, dob)) {
-            JOptionPane.showMessageDialog(null, "Please fill in all fields correctly.");
+        if (name == null || name.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your name.");
             return;
         }
+        if (email == null || email.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your email.");
+            return;
+        }
+        if (accountNumber == null || accountNumber.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your account number.");
+            return;
+        }
+        if (dob == null) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please select your date of birth.");
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your password.");
+            return;
+        }
+        if (role == null || role.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please select your role.");
+            return;
+        }
+        if (!loginService.isValid(name, email, accountNumber, password, dob, role)) {
+            return;
+        }
+        loginService.addUser(name, email, accountNumber, dob, password, role);
 
     }
 
