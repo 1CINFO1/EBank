@@ -509,7 +509,12 @@
                         <Label layoutX="14.0" layoutY="280.0" text="Publication Date:" />
                         <DatePicker fx:id="publicationDatePicker" layoutX="14.0" layoutY="300.0" prefHeight="25.0" prefWidth="200.0" />
 
-                        <Button fx:id="confirmPublicationButton" onAction="#handleAddPublication" layoutX="260.0" layoutY="350.0" text="Confirm" />
+
+                        <Label layoutX="14.0" layoutY="340.0" text="Image:" />
+                        <ImageView fx:id="publicationImageView" layoutX="14.0" layoutY="360.0" fitHeight="100.0" fitWidth="150.0" preserveRatio="true" />
+                        <Button fx:id="selectImageButton" onAction="#handleSelectImage" layoutX="180.0" layoutY="360.0" text="Select Image" />
+
+                        <Button fx:id="confirmPublicationButton" onAction="#handleAddPublication" layoutX="260.0" layoutY="460.0" text="Confirm" />
                     </children>
                 </Pane>
 

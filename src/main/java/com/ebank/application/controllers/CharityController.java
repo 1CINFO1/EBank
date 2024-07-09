@@ -20,11 +20,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -208,7 +211,10 @@ public class CharityController implements Initializable {
 
     @FXML
     private Pane updatePublicationPane;
+    @FXML
+    private ImageView publicationImageView;
 
+    private File selectedImageFile;
     private final TransferService transferService = new TransferService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
     private final ICharityService iCharityService = new ICharityService();
@@ -226,6 +232,21 @@ public class CharityController implements Initializable {
         accNumber.setText(Integer.toString(currentUser.getAcc_num()));
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
+    }
+
+    @FXML
+    private void handleSelectImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            selectedImageFile = selectedFile;
+            Image image = new Image(selectedFile.toURI().toString());
+            publicationImageView.setImage(image);
+        }
     }
 
     @FXML
@@ -373,7 +394,6 @@ public class CharityController implements Initializable {
         Date publicationDate = Date.valueOf(publicationDatePicker.getValue());
         int charityId = Integer.parseInt(currentUser.getCompagnieDeDon_Patente());
 
-        System.out.println();
         // Create a new Publication object
         Publication publication = new Publication();
         publication.setCompagnieDeDon_Patente(charityId);
@@ -382,13 +402,28 @@ public class CharityController implements Initializable {
         publication.setDescription(description);
         publication.setPublicationDate(publicationDate);
 
+        // Set the image path if an image was selected
+        if (selectedImageFile != null) {
+            publication.setPicture(selectedImageFile.getAbsolutePath());
+        }
+
         // Call the add method in the service
         ipublicationImple.add(publication);
 
-        // Optionally, clear the form fields after adding
-        showHomePane();
+        // Clear the form fields and image view after adding
+        clearPublicationForm();
 
         // Optionally, show a success message or update the UI as needed
+        showHomePane();
+    }
+
+    private void clearPublicationForm() {
+        publicationTitleField.clear();
+        campaignNameField.clear();
+        descriptionArea.clear();
+        publicationDatePicker.setValue(null);
+        publicationImageView.setImage(null);
+        selectedImageFile = null;
     }
 
     @FXML

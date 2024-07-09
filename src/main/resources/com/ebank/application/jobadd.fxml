@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ebank.application.controllers.JobAddController">
+    xmlns:fx="http://javafx.com/fxml" fx:controller="com.ebank.application.controllers.JobAddController">
     <children>
         <Label layoutX="39.0" layoutY="45.0" text="Add Job Offer" />
         <Label layoutX="39.0" layoutY="100.0" text="Poste" />
@@ -21,10 +20,7 @@
         <Label layoutX="39.0" layoutY="300.0" text="Date d'expiration" />
         <TextField fx:id="dateExpirationField" layoutX="150.0" layoutY="296.0" promptText="YYYY-MM-DD" />
         <Button layoutX="268.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleAddJob" text="Add" />
-        
-        <!-- New CV upload section -->
-        <Label layoutX="39.0" layoutY="350.0" text="CV (PDF)" />
-        <TextField fx:id="cvField" layoutX="150.0" layoutY="346.0" promptText="Choose CV file" />
-        <Button layoutX="350.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleChooseCv" text="Browse" />
+
+
     </children>
 </AnchorPane>

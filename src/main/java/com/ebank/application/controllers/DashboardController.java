@@ -42,11 +42,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -273,7 +268,9 @@ public class DashboardController implements Initializable {
             if (publications != null && !publications.isEmpty()) {
                 publicationListVBox.getChildren().clear(); // Clear previous items
                 for (Publication pub : publications) {
-                    ImageView publicationImageView = new ImageView(new Image(pub.getPicture()));
+                    String filePath = pub.getPicture();
+                    String encodedPath = filePath.replace(" ", "%20");
+                    ImageView publicationImageView = new ImageView(new Image("file:" + encodedPath));
                     Label publicationLabel = new Label(
                             "Title: " + pub.getTitle() + "\n" +
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
@@ -347,8 +344,9 @@ public class DashboardController implements Initializable {
         publicationDescriptionLabel.setFont(Font.font(14.0));
 
         textLayout.getChildren().addAll(charityNameLabel, publicationTitleLabel, publicationDescriptionLabel);
-
-        ImageView publicationImageView = new ImageView(new Image(publication.getPicture()));
+        String filePath = publication.getPicture();
+        String encodedPath = filePath.replace(" ", "%20");
+        ImageView publicationImageView = new ImageView(new Image("file:" + encodedPath));
         publicationImageView.setFitWidth(200.0);
         publicationImageView.setFitHeight(183.0);
         publicationImageView.setPreserveRatio(true);
