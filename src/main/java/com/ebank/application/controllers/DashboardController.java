@@ -567,25 +567,8 @@ public class DashboardController implements Initializable {
             CharityCampaignModel campaignModel = charityService.getCharityBy(charityId);
 
             String receiverAccNumber = Integer.toString(campaignModel.getAcc_num());
-            String receiverEmail = campaignModel.getEmail();
 
             transferService.transfer2(amount, receiverAccNumber, currentUser);
-            System.out.println(currentUser.getEmail());
-            System.out.println(receiverEmail);
-
-            // Send confirmation email to the user
-            String userSubject = "Transfer Confirmation";
-            String userBody = "Dear " + currentUser.getName() + ",\n\nYour transfer of $" + amount + " to "
-                    + campaignModel.getName()
-                    + " has been successful.\n\nThank you for your generosity!\n\nBest regards,\nYour Charity App Team";
-            EmailUtil.sendEmail(currentUser.getEmail(), userSubject, userBody);
-
-            // Send notification email to the charity
-            String charitySubject = "You Received a Donation";
-            String charityBody = "Dear " + campaignModel.getName() + ",\n\nYou have received a donation of $" + amount
-                    + " from " + currentUser.getName() + ".\n\nBest regards,\nYour Charity App Team";
-            EmailUtil.sendEmail(campaignModel.getEmail(), charitySubject, charityBody);
-
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
             recieverTextField.setText("");
@@ -604,10 +587,6 @@ public class DashboardController implements Initializable {
             transferConfirmationText.setStyle(errorStyle);
             recieverTextField.setText("");
             transferAmountTextField2.setText("");
-        } catch (Exception e) {
-            e.printStackTrace();
-            transferConfirmationText.setText("An error occurred");
-            transferConfirmationText.setStyle(errorStyle);
         }
     }
 
