@@ -1,20 +1,18 @@
 package com.ebank.application.models;
 
-import com.ebank.application.enumeration.Role;
-
 import java.time.LocalDate;
 
 public class User {
+    int id;
     String name;
     int acc_num;
     double balance;
     LocalDate dob;
     String password;
     String email;
-    private Role role;
+    private final String role = "USER";
 
     public User() {
-
     }
 
     public User(String name, String email, LocalDate dob, int acc_num) {
@@ -26,13 +24,14 @@ public class User {
     }
 
     public User(String name, String email, LocalDate dob, int acc_num, double balance) {
-
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.acc_num = acc_num;
         this.balance = balance;
+
     }
+
     public User(String name, String email, LocalDate dob, int acc_num, double balance, String password) {
         this.name = name;
         this.email = email;
@@ -40,6 +39,34 @@ public class User {
         this.acc_num = acc_num;
         this.balance = balance;
         this.password = password;
+    }
+
+    public User(String name, String email, LocalDate dob, int acc_num, double balance, String password, String role) {
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+        this.password = password;
+
+    }
+
+    public User(int id, String name, String email, LocalDate dob, int acc_num, double balance, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.acc_num = acc_num;
+        this.balance = balance;
+        this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -88,6 +115,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
     }
 
 }

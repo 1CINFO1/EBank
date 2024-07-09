@@ -1,20 +1,16 @@
 package com.ebank.application.controllers;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.Date;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
 import com.ebank.application.models.CharityCampaignModel;
 import com.ebank.application.models.AdminUser;
+import com.ebank.application.services.LoginService;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,7 +24,6 @@ import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
 import com.ebank.application.models.User;
-import com.ebank.application.utils.MaConnexion;
 
 public class loginController implements Initializable {
 
@@ -36,7 +31,6 @@ public class loginController implements Initializable {
     // Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/eyes_closed.png")));
     // private final Image openEye = new
     // Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/eyes_open.png")));
-
     @FXML
     ImageView eyesImageView;
 
@@ -48,13 +42,18 @@ public class loginController implements Initializable {
 
     @FXML
     private TextField email;
+    @FXML
+    private Button Jobs; // Assuming this is the "Job offre" button from main.fxml
 
     @FXML
     private PasswordField signupPassword;
+
     @FXML
     private Label signupConfirmationText;
+
     @FXML
     private Label loginLabel;
+
     @FXML
     private TextField signupName;
 
@@ -66,6 +65,7 @@ public class loginController implements Initializable {
 
     @FXML
     private ToggleButton loginToggleButton;
+
     @FXML
     private DatePicker signupDOB;
 
@@ -74,11 +74,33 @@ public class loginController implements Initializable {
 
     @FXML
     private TextField shownPassword;
+
     @FXML
     private TextField shownLoginPassword;
 
     @FXML
     private ToggleButton toggleButton;
+
+    @FXML
+    private ComboBox<String> roleComboBox;
+
+    private final LoginService loginService = new LoginService();
+
+    public void showLoginPane() {
+        loginPane.setVisible(true);
+        signUpPane.setVisible(false);
+    }
+
+    public void showSignUPPane() {
+        loginPane.setVisible(false);
+        signUpPane.setVisible(true);
+    }
+
+    @FXML
+    void switchToLoginPane() {
+        loginPane.setVisible(true);
+        signUpPane.setVisible(false);
+    }
 
     @FXML
     void showPassword() {
@@ -92,84 +114,15 @@ public class loginController implements Initializable {
         shownLoginPassword.setVisible(loginToggleButton.isSelected());
     }
 
-    ResultSet rs = null;
-    PreparedStatement pst = null;
-
-    // Strings which hold css elements to easily re-use in the application
-    protected String errorStyle = "-fx-border-color: RED;";
-    String successStyle = "-fx-border-color: #A9A9A9;";
-    String textFillError = "-fx-text-fill: RED";
-    Connection conn = MaConnexion.getInstance().getCnx();
-
-    private boolean emailAlreadyExists() throws SQLException {
-        String sql = "Select * From users Where email = ?";
-        assert conn != null;
-        pst = conn.prepareStatement(sql);
-        pst.setString(1, signupEmail.getText());
-        ResultSet rs = pst.executeQuery();
-        return rs.next();
-    }
-
-    private boolean accountNumberAlreadyExists() throws SQLException {
-        String sql = "Select * From users Where account_number = ?";
-        assert conn != null;
-        pst = conn.prepareStatement(sql);
-        pst.setString(1, signupAccountNumber.getText());
-        ResultSet rs = pst.executeQuery();
-        return rs.next();
-    }
-
-    private boolean isValid() throws SQLException {
-        boolean isValid = true;
-        if (signupName.getText().isBlank() || (signupName.getText().length() < 10)) {
-            signupName.setStyle(errorStyle);
-            isValid = false;
-        } else {
-            signupName.setStyle(successStyle);
-        }
-
-        if (signupEmail.getText().isBlank() || (emailAlreadyExists())) {
-            signupEmail.setStyle(errorStyle);
-            isValid = false;
-        } else {
-            signupEmail.setStyle(successStyle);
-        }
-
-        if (signupAccountNumber.getText().isBlank() || (signupAccountNumber.getText().length() < 8)
-                || accountNumberAlreadyExists()) {
-            signupAccountNumber.setStyle(errorStyle);
-            isValid = false;
-        } else {
-            signupAccountNumber.setStyle(successStyle);
-        }
-
-        if (signupPassword.getText().isBlank() || (signupPassword.getText().length() < 8)) {
-            signupPassword.setStyle(errorStyle);
-            isValid = false;
-        } else {
-            signupPassword.setStyle(successStyle);
-        }
-
-        if (signupDOB.getValue().toString().isBlank()) {
-            signupDOB.setStyle(errorStyle);
-            isValid = false;
-        } else {
-            signupDOB.setStyle(successStyle);
-        }
-        return isValid;
-    }
-
     private void closeWindow() {
         Stage stage = (Stage) email.getScene().getWindow();
         stage.close();
     }
 
-
-    private void launchDashboard1(CharityCampaignModel c) throws IOException {
-
+    private void launchDashboard(CharityCampaignModel c) throws IOException {
         URL location = getClass().getResource("/com/ebank/application/CharityCampDashboard.fxml");
         if (location == null) {
-            throw new IOException("Cannot find dashboard.fxml");
+            throw new IOException("Cannot find CharityCampDashboard.fxml");
         }
 
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -183,184 +136,145 @@ public class loginController implements Initializable {
         stage.getIcons().add(new Image(
                 Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
         stage.setScene(new Scene(root1));
+        stage.setFullScreen(true);
         stage.show();
-        // Additional customization for charity dashboard
     }
 
     private void launchDashboard(User c) throws IOException {
-         {
-             URL location = getClass().getResource("/com/ebank/application/dashboard.fxml");
-             if (location == null) {
-                 throw new IOException("Cannot find dashboard.fxml");
-             }
-
-             FXMLLoader fxmlLoader = new FXMLLoader(location);
-             Parent root1 = fxmlLoader.load();
-             DashboardController dController = fxmlLoader.getController();
-             dController.currentUser = c;
-             dController.setLabels();
-             dController.showHomePane();
-             Stage stage = new Stage();
-             stage.setTitle("E-Bank");
-             stage.getIcons().add(new Image(
-                     Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
-             stage.setScene(new Scene(root1));
-             stage.show();
-            // Additional customization for regular user dashboard
+        URL location = getClass().getResource("/com/ebank/application/dashboard.fxml");
+        if (location == null) {
+            throw new IOException("Cannot find dashboard.fxml");
         }
 
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root1 = fxmlLoader.load();
+        DashboardController dController = fxmlLoader.getController();
+        dController.currentUser = c;
+        dController.setLabels();
+        dController.showHomePane();
+        Stage stage = new Stage();
+        stage.setTitle("E-Bank");
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+        stage.setScene(new Scene(root1));
+        stage.show();
     }
 
-    private void launchDashboard2(AdminUser c) throws IOException {
-        {
-            URL location = getClass().getResource("/com/ebank/application/adminDashboard.fxml");
-            if (location == null) {
-                throw new IOException("Cannot find dashboard.fxml");
-            }
-
-            FXMLLoader fxmlLoader = new FXMLLoader(location);
-            Parent root1 = fxmlLoader.load();
-            adminController dController = fxmlLoader.getController();
-            dController.currentUser = c;
-            dController.setLabels();
-            dController.showHomePane();
-            Stage stage = new Stage();
-            stage.setTitle("E-Bank");
-            stage.getIcons().add(new Image(
-                    Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
-            stage.setScene(new Scene(root1));
-            stage.show();
-            // Additional customization for regular user dashboard
+    private void launchDashboard(AdminUser c) throws IOException {
+        URL location = getClass().getResource("/com/ebank/application/adminDashboard.fxml");
+        if (location == null) {
+            throw new IOException("Cannot find adminDashboard.fxml");
         }
 
-    }
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root1 = fxmlLoader.load();
+        AdminController dController = fxmlLoader.getController();
+        dController.currentUser = c;
+        dController.loadMessagesView(c);
 
+        dController.setLabels();
+        dController.showHomePane();
+        Stage stage = new Stage();
+        stage.setTitle("E-Bank");
+        stage.getIcons().add(new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/com/ebank/application/icons/icon.png"))));
+        stage.setScene(new Scene(root1));
+        stage.show();
+    }
 
     @FXML
-    private void Login() {
-        if (email.getText().isBlank() || loginPassword.getText().isBlank()) {
-            email.setStyle(errorStyle);
-            loginPassword.setStyle(errorStyle);
-            loginLabel.setText("Missing Email or Password!");
+    void Login() throws SQLException, IOException {
+        String emailText = email.getText();
+        String passwordText = loginPassword.getText();
+        System.out.println("==>> " + emailText + " pw==>>" + passwordText);
+
+        if (emailText.isBlank() || passwordText.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Email or Password is empty");
             return;
         }
 
-        String charityQuery = "SELECT * FROM charitycampaignmodel WHERE email = ? AND password = ?";
-        String userQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
-        String adminQuery = "SELECT * FROM adminuser WHERE email = ? AND password = ?";
+        User regularUser = loginService.getRegularUser(emailText, passwordText);
+        if (regularUser != null && "USER".equals(regularUser.getRole())) {
+            closeWindow();
+            launchDashboard(regularUser);
+            return;
+        }
 
-        try {
-            assert conn != null;
+        CharityCampaignModel charityUser = loginService.getCharityUser(emailText, passwordText);
+        if (charityUser != null && "CHARITY".equals(charityUser.getRole())) {
+            closeWindow();
+            launchDashboard(charityUser);
+            return;
+        }
 
-            // Check in charitycampaignmodel table first
-            pst = conn.prepareStatement(charityQuery);
-            pst.setString(1, email.getText());
-            pst.setString(2, loginPassword.getText());
-            rs = pst.executeQuery();
+        AdminUser adminUser = loginService.getAdminUser(emailText, passwordText);
+        if (adminUser != null && "ADMIN".equals(adminUser.getRole())) {
+            closeWindow();
+            launchDashboard(adminUser);
+            return;
+        }
 
-            if (rs.next()) {
-                closeWindow();
-                // User is a charity campaign member
-                String name = rs.getString("name");
-                String userEmail = rs.getString("email");
-                LocalDate dob = rs.getDate("dob").toLocalDate();
-                int accNum = rs.getInt("acc_num");
-                double balance = rs.getDouble("balance");
-                String compagnieDeDonPatente = rs.getString("compagnieDeDon_Patente");
+        JOptionPane.showMessageDialog(null, "Invalid email or password");
+    }
 
-                CharityCampaignModel loggedInUser = new CharityCampaignModel(name, userEmail, dob, accNum, balance, loginPassword.getText(), compagnieDeDonPatente);
-                launchDashboard1(loggedInUser); // Launch charity campaign dashboard
-                return;
-            }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
-            // Check in users table
-            pst = conn.prepareStatement(userQuery);
-            pst.setString(1, email.getText());
-            pst.setString(2, loginPassword.getText());
-            rs = pst.executeQuery();
+    @FXML
+    void signUp() throws SQLException {
+        String name = signupName.getText();
+        String email = signupEmail.getText();
+        String accountNumber = signupAccountNumber.getText();
+        LocalDate dob = signupDOB.getValue();
+        String password = signupPassword.getText();
+        String role = roleComboBox.getValue();
 
-            if (rs.next()) {
-                closeWindow();
-                // User is a regular user
-                String name = rs.getString("name");
-                String userEmail = rs.getString("email");
-                LocalDate dob = rs.getDate("dob").toLocalDate();
-                int accNum = rs.getInt("acc_num");
-                double balance = rs.getDouble("balance");
+        if (name == null || name.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your name.");
+            return;
+        }
+        if (email == null || email.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your email.");
+            return;
+        }
+        if (accountNumber == null || accountNumber.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your account number.");
+            return;
+        }
+        if (dob == null) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please select your date of birth.");
+            return;
+        }
+        if (password == null || password.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter your password.");
+            return;
+        }
+        if (role == null || role.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please select your role.");
+            return;
+        }
+        if (!loginService.isValid(name, email, accountNumber, password, dob, role)) {
+            return;
+        }
 
-                User loggedInUser = new User(name, userEmail, dob, accNum, balance, loginPassword.getText());
-                launchDashboard(loggedInUser); // Launch regular user dashboard
-                return;
-            }
-
-            // Check in admin table
-            pst = conn.prepareStatement(adminQuery);
-            pst.setString(1, email.getText());
-            pst.setString(2, loginPassword.getText());
-            rs = pst.executeQuery();
-
-            if (rs.next()) {
-                closeWindow();
-                // User is an admin
-                String name = rs.getString("name");
-                String userEmail = rs.getString("email");
-                LocalDate dob = rs.getDate("dob").toLocalDate();
-                int accNum = rs.getInt("acc_num");
-                double balance = rs.getDouble("balance");
-
-                AdminUser loggedInUser = new AdminUser(name, userEmail, dob, accNum, balance, loginPassword.getText());
-                launchDashboard2(loggedInUser); // Launch admin dashboard
-                return;
-            }
-
-            // No user found in any table
-            email.setStyle(errorStyle);
-            loginPassword.setStyle(errorStyle);
-            loginLabel.setText("Email or password is invalid!");
-
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-            loginLabel.setText("Connection failed, please check your internet.");
-            loginLabel.setStyle(textFillError);
+        Boolean isUserAdded = loginService.addUser(name, email, accountNumber, dob, password, role);
+        if (isUserAdded) {
+            switchToLoginPane();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("User Added");
+            alert.setHeaderText(null);
+            alert.setContentText("User has been successfully added.");
+        
+            alert.showAndWait();
         }
     }
 
-    public void addUser() {
-
-        try {
-            if (isValid()) {
-                String sql = "insert into users (name, email, account_number,balance ,dob, password) values (?,?,?,?,?,?)";
-                User newUser = new User(signupName.getText(), signupEmail.getText(), signupDOB.getValue(),
-                        Integer.parseInt(signupAccountNumber.getText()));
-                assert conn != null;
-                pst = conn.prepareStatement(sql);
-                pst.setString(1, newUser.getName());
-                pst.setString(2, newUser.getEmail());
-                pst.setInt(3, newUser.getAcc_num());
-                pst.setDouble(4, newUser.getBalance());
-                pst.setDate(5, Date.valueOf(newUser.getDob()));
-                pst.setString(6, signupPassword.getText());
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Successful SignUp!");
-                showLoginPane();
-            } else {
-                signupConfirmationText.setText("Please Fill In The Data Correctly!");
-            }
-        } catch (Exception e) {
-            signupConfirmationText.setText("Please Check Your Internet Connection!");
-        }
-    }
-
-    public void showLoginPane() {
-        loginPane.setVisible(true);
-        signUpPane.setVisible(false);
-    }
-
-    public void showSignUPPane() {
-        loginPane.setVisible(false);
-        signUpPane.setVisible(true);
-    }
-
+    @SuppressWarnings("exports")
     public static void limitTextField(TextField tf) {
         final int max = 8;
         tf.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -382,4 +296,20 @@ public class loginController implements Initializable {
         Bindings.bindBidirectional(loginPassword.textProperty(), shownLoginPassword.textProperty());
         showLoginPane();
     }
+
+    @FXML
+    void Jobs(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ebank/application/jobList.fxml"));
+            Parent root = loader.load();
+            loader.getController();
+            // Optionally, pass any necessary data to the controller
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

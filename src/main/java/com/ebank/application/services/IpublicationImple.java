@@ -1,37 +1,38 @@
 package com.ebank.application.services;
 
-
-
 import com.ebank.application.interfaces.InterfaceCRUD;
 import com.ebank.application.models.Publication;
 import com.ebank.application.utils.MaConnexion;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class IpublicationImple implements InterfaceCRUD<Publication> {
     Connection cnx = MaConnexion.getInstance().getCnx();
+
     @Override
     public String add(Publication publication) {
+        String query = "INSERT INTO publication (CompagnieDeDon_Patente,title, CampaignName, description, picture, publicationDate) VALUES (?,?, ?, ?, ?, ?)";
 
-         String sql = "Insert Into Publication ( CompagnieDeDon_Patente ,title, CampaignName, Description, picture, publicationDate) " +
-                 "values ('"+publication.getCompagnieDeDon_Patente()+ "','"+ publication.getTitle()+ "','" + publication.getCampaignName()
-                 +"','"+ publication.getDescription()+ "','"+ publication.getPicture() + "','"+ publication.getPublicationDate() + "')";
-        try {
-            Statement st = cnx.createStatement();
-            int rowsAffected = st.executeUpdate(sql);
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, publication.getCompagnieDeDon_Patente());
+            stmt.setString(2, publication.getTitle());
+            stmt.setString(3, publication.getCampaignName());
+            stmt.setString(4, publication.getDescription());
+            stmt.setString(5, publication.getPicture());
+            stmt.setDate(6, new java.sql.Date(publication.getPublicationDate().getTime()));
+
+            int rowsAffected = stmt.executeUpdate();
+
             if (rowsAffected > 0) {
-                return "Publication added successfully with id "+ publication.getId();
+                return "Publication added successfully";
             } else {
-                return "Failed to add publication.";
+                return "Failed to add publication";
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // Handle the exception appropriately in your application
+            return "Error adding publication: " + e.getMessage();
         }
     }
 
@@ -52,8 +53,8 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
         String sql = "select * from publication";
         try {
             Statement st = cnx.createStatement();
-            ResultSet rs=st.executeQuery(sql);
-            while(rs.next()){
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
                 Publication publication = new Publication();
 
                 publication.setId(rs.getInt("id"));
@@ -69,7 +70,33 @@ public class IpublicationImple implements InterfaceCRUD<Publication> {
             throw new RuntimeException(e);
         }
 
-
         return publications;
     }
+
+    public Publication getById(int id) {
+        Publication publication = null;
+        String sql = "SELECT * FROM publication WHERE id = ?";
+
+        try {
+            PreparedStatement pst = cnx.prepareStatement(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                publication = new Publication();
+                publication.setId(rs.getInt("id"));
+                publication.setTitle(rs.getString("title"));
+                publication.setCampaignName(rs.getString("campaignName"));
+                publication.setDescription(rs.getString("description"));
+                publication.setPublicationDate(rs.getDate("publicationDate"));
+                publication.setPicture(rs.getString("picture"));
+                publication.setCompagnieDeDon_Patente(rs.getInt("compagnieDeDon_Patente"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return publication;
+    }
+
 }

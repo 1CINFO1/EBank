@@ -32,3 +32,115 @@
     -fx-font-size: 14px;
     -fx-text-fill: #666;
 }
+
+/* styles.css */
+
+.publication-pane {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 1);
+}
+
+.publication-list-view {
+    -fx-background-color: white;
+    -fx-padding: 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+}
+
+
+
+.publication-table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-table-cell-border-color: transparent;
+}
+
+
+
+.publication-table-view .column-header-background {
+    -fx-background-color: #FFD700; /* Yellow color for header background */
+}
+
+.publication-table-view .column-header, .publication-table-view .column-header-background {
+    -fx-border-color: #FFD700;
+    -fx-border-width: 0 1 1 0;
+}
+
+.publication-table-view .column-header-background .label {
+    -fx-text-fill: #333333; /* Dark text color for contrast */
+    -fx-font-weight: bold;
+}
+
+.publication-table-view .table-cell {
+    -fx-border-width: 0 1 1 0;
+    -fx-border-color: #d0d0d0;
+    -fx-padding: 8px;
+}
+
+.publication-table-view .table-row-cell:filled:selected, .publication-table-view .table-cell:filled:selected {
+    -fx-background-color: #FFD700;
+    -fx-text-fill: white;
+}
+
+.publication-table-view .table-row-cell:filled:hover, .publication-table-view .table-cell:filled:hover {
+    -fx-background-color: #FFD700;
+}
+.publication-table-view .column-header {
+    -fx-background-color: yellow;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 5px;
+}
+
+.button-edit {
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white;
+}
+
+.button-delete {
+    -fx-background-color: #f44336; /* Red */
+    -fx-text-fill: white;
+}
+
+.ListPub {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+.card-layout {
+    -fx-padding: 10px;
+    -fx-margin-bottom: 10px;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+    -fx-background-color: #f9f9f9;
+}
+
+.charity-name-label {
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+}
+
+.publication-title-label {
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+}
+
+.publication-description-label {
+    -fx-font-size: 14px;
+}
+
+HBox {
+    -fx-spacing: 10px;
+}
+
+VBox {
+    -fx-spacing: 10px;
+}

@@ -60,3 +60,10 @@ Thumbs.db
 
 # env
 .env
+/.mvn/
+/out
+/target/
+/.idea/
+/.vscode/
+/nbproject/
+/setup/

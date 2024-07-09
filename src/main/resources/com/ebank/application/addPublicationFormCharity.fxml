@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.ebank.application.controllers.PublicationController"
+            prefHeight="400.0" prefWidth="600.0">
+    <Pane fx:id="getAllPubList" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <VBox prefHeight="446.0" prefWidth="720.0">
+                <children>
+                    <ScrollPane prefHeight="448.0" prefWidth="720.0">
+                        <content>
+                            <VBox fx:id="ListPublicationsCards" prefHeight="736.0" prefWidth="706.0" styleClass="ListPub">
+                                <children>
+                                    <HBox fx:id="publicationCard" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="657.0" VBox.vgrow="SOMETIMES">
+                                        <children>
+                                            <VBox prefHeight="184.0" prefWidth="387.0" styleClass="card-layout">
+                                                <children>
+                                                    <Label fx:id="charityName" prefHeight="25.0" prefWidth="366.0" text="Charity Name" textAlignment="RIGHT">
+                                                        <font>
+                                                            <Font name="System Bold" size="23.0" />
+                                                        </font>
+                                                    </Label>
+                                                    <Label fx:id="PublicationTitle" prefHeight="24.0" prefWidth="365.0" text="Publication Title">
+                                                        <font>
+                                                            <Font name="System Bold" size="21.0" />
+                                                        </font>
+                                                    </Label>
+                                                    <Label fx:id="pubDescription2" prefHeight="106.0" prefWidth="384.0" text="Publication Description">
+                                                        <font>
+                                                            <Font size="14.0" />
+                                                        </font>
+                                                    </Label>
+                                                </children>
+                                            </VBox>
+                                            <ImageView fx:id="pubPicture2" fitHeight="183.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                <HBox.margin>
+                                                    <Insets right="10.0" />
+                                                </HBox.margin>
+                                            </ImageView>
+                                            <Button fx:id="DonateButton2" mnemonicParsing="false" prefHeight="25.0" prefWidth="77.0" text="Donate">
+                                                <HBox.margin>
+                                                    <Insets right="20.0" />
+                                                </HBox.margin>
+                                            </Button>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets bottom="20.0" left="40.0" right="40.0" top="50.0" />
+                                        </VBox.margin>
+                                    </HBox>
+                                </children>
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+                </children>
+            </VBox>
+        </children>
+    </Pane>
+</AnchorPane>

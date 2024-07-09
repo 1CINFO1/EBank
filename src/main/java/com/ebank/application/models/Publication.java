@@ -1,5 +1,7 @@
 package com.ebank.application.models;
 
+import javafx.scene.layout.HBox;
+
 import java.sql.Date;
 
 public class Publication {
@@ -7,10 +9,36 @@ public class Publication {
     private String title;
     private String campaignName;
     private String description;
+    private HBox action;
+
+    public Publication(String title, String description, String campaignName, String status) {
+        this.title = title;
+        this.description = description;
+        this.campaignName = campaignName;
+
+    }
+
+    public Publication(int id, String title, String campaignName, String description, String status) {
+        this.id = id;
+        this.title = title;
+        this.campaignName = campaignName;
+        this.description = description;
+    }
+
+    public Publication(String title, String campaignName, String description, String picture, String status) {
+        this.title = title;
+        this.campaignName = campaignName;
+        this.description = description;
+        this.picture = picture;
+    }
+
     private String picture;
     private Date publicationDate;
-    private String CompagnieDeDon_Patente;
-    public Publication(int id, String CompagnieDeDon_Patente, String campaignName, String title, String description, String picture, Date publicationDate) {
+    private int CompagnieDeDon_Patente;
+
+    @SuppressWarnings("exports")
+    public Publication(int id, int CompagnieDeDon_Patente, String campaignName, String title, String description,
+            String picture, Date publicationDate) {
         this.id = id;
         this.campaignName = campaignName;
         this.title = title;
@@ -20,11 +48,11 @@ public class Publication {
         this.CompagnieDeDon_Patente = CompagnieDeDon_Patente;
     }
 
-    public String getCompagnieDeDon_Patente() {
+    public int getCompagnieDeDon_Patente() {
         return CompagnieDeDon_Patente;
     }
 
-    public void setCompagnieDeDon_Patente(String compagnieDeDon_Patente) {
+    public void setCompagnieDeDon_Patente(int compagnieDeDon_Patente) {
         CompagnieDeDon_Patente = compagnieDeDon_Patente;
     }
 
@@ -72,11 +100,21 @@ public class Publication {
         this.picture = picture;
     }
 
+    @SuppressWarnings("exports")
     public Date getPublicationDate() {
         return publicationDate;
     }
 
+    @SuppressWarnings("exports")
     public void setPublicationDate(Date publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public HBox getAction() {
+        return action;
+    }
+
+    public void setAction(HBox action) {
+        this.action = action;
     }
 }
