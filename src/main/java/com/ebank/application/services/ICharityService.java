@@ -38,7 +38,7 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
 
     }
 
-    public void update(Publication publication) {
+    public void update(Publication publication, int a) {
         String sql = "UPDATE publication SET title = ?, CampaignName = ?, Description = ?, picture = ?, publicationDate = ? WHERE ID = ?";
         try {
             PreparedStatement pst = cnx.prepareStatement(sql);
@@ -46,9 +46,9 @@ public class ICharityService implements InterfaceCRUD<CharityCampaignModel> {
             pst.setString(2, publication.getCampaignName());
             pst.setString(3, publication.getDescription());
             pst.setString(4, publication.getPicture());
-            pst.setDate(5, new java.sql.Date(publication.getPublicationDate().getTime())); // Assuming publicationDate
-                                                                                           // is a java.util.Date
-            pst.setInt(6, publication.getId());
+
+            pst.setDate(5, publication.getPublicationDate()); // Assuming publicationDate is a java.util.Date
+            pst.setInt(6, a);
             pst.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating publication with ID: " + publication.getId(), e);
