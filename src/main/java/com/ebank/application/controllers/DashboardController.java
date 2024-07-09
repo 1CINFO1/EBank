@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import com.ebank.application.models.CharityCampaignModel;
@@ -43,9 +42,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
 import javax.swing.*;
 
 public class DashboardController implements Initializable {
@@ -515,12 +512,12 @@ private JScrollPane ListPublications;
             // Send confirmation email to the user
             String userSubject = "Transfer Confirmation";
             String userBody = "Dear " + currentUser.getName() + ",\n\nYour transfer of $" + amount + " to " + campaignModel.getName() + " has been successful.\n\nThank you for your generosity!\n\nBest regards,\nYour Charity App Team";
-            sendMimeEmail(currentUser.getEmail(), userSubject, userBody);
+            EmailUtil.sendEmail(currentUser.getEmail(), userSubject, userBody);
 
             // Send notification email to the charity
             String charitySubject = "You Received a Donation";
             String charityBody = "Dear " + campaignModel.getName() + ",\n\nYou have received a donation of $" + amount + " from " + currentUser.getName() + ".\n\nBest regards,\nYour Charity App Team";
-            sendMimeEmail(campaignModel.getEmail(), charitySubject, charityBody);
+            EmailUtil.sendEmail(campaignModel.getEmail(), charitySubject, charityBody);
 
             transferConfirmationText.setText("Transfer Succeeded");
             transferConfirmationText.setStyle(successStyle);
@@ -544,35 +541,6 @@ private JScrollPane ListPublications;
             e.printStackTrace();
             transferConfirmationText.setText("An error occurred");
             transferConfirmationText.setStyle(errorStyle);
-        }
-    }
-
-    private void sendMimeEmail(String toEmail, String subject, String body) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("saif.juini6", "Option123");
-            }
-        });
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("saif.juini6@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-            message.setSubject(subject);
-            message.setText(body);
-
-            Transport.send(message);
-
-            System.out.println("MimeMessage Email sent successfully.");
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
         }
     }
 
