@@ -12,6 +12,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -24,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -157,6 +162,18 @@ public class AdminController implements Initializable {
     private TableColumn<Publication, HBox> column4;
 
     @FXML
+    private Pane stasPaneId;
+
+    @FXML
+    private BarChart<String, Number> statisticsChart;
+
+    @FXML
+    private CategoryAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
+
+    @FXML
     private Pane messagerPane;
 
     private final IpublicationImple ipublicationImple = new IpublicationImple();
@@ -174,6 +191,7 @@ public class AdminController implements Initializable {
         homePane.setVisible(false);
         messagerPane.setVisible(true);
         publicationPane.setVisible(false);
+        stasPaneId.setVisible(false);
     }
 
     @FXML
@@ -181,6 +199,7 @@ public class AdminController implements Initializable {
         homePane.setVisible(true);
         messagerPane.setVisible(false);
         publicationPane.setVisible(false);
+        stasPaneId.setVisible(false);
         setLabels();
     }
 
@@ -188,7 +207,49 @@ public class AdminController implements Initializable {
         homePane.setVisible(false);
         messagerPane.setVisible(false);
         publicationPane.setVisible(true);
+        stasPaneId.setVisible(false);
         handleLoadPublications();
+
+    }
+
+    @FXML
+    void showStatisticsPane(ActionEvent event) {
+        // Hide other panes if needed
+        homePane.setVisible(false);
+        messagerPane.setVisible(false);
+        publicationPane.setVisible(false);
+
+        // Show statistics pane
+        stasPaneId.setVisible(true);
+
+        // Update axes labels
+        CategoryAxis xAxis = (CategoryAxis) statisticsChart.getXAxis();
+        xAxis.setLabel("Campaign Names");
+
+        NumberAxis yAxis = (NumberAxis) statisticsChart.getYAxis();
+        yAxis.setLabel("Number of Publications");
+
+        // Populate statistics chart with data
+        showStatistics();
+    }
+
+    private void showStatistics() {
+        // Clear any previous data in the chart
+        statisticsChart.getData().clear();
+
+        // Example: Get the publication counts per campaign from your adminService
+        Map<String, Integer> publicationCounts = adminService.getPublicationCountPerCampaign();
+
+        // Create a series to hold the data
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        // Populate the series with data
+        publicationCounts.forEach((campaignName, count) -> {
+            series.getData().add(new XYChart.Data<>(campaignName, count));
+        });
+
+        // Add series to chart
+        statisticsChart.getData().add(series);
     }
 
     @FXML

@@ -9,7 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdminService implements InterfaceCRUD<Publication> {
 
@@ -78,5 +80,26 @@ public class AdminService implements InterfaceCRUD<Publication> {
             throw new RuntimeException(e);
         }
     }
+
+    public Map<String, Integer> getPublicationCountPerCampaign() {
+        Map<String, Integer> publicationCounts = new HashMap<>();
+        String sql = "SELECT campaignName, COUNT(*) AS count FROM publication GROUP BY campaignName";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String campaignName = rs.getString("campaignName");
+                int count = rs.getInt("count");
+                publicationCounts.put(campaignName, count);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving publication counts per campaign", e);
+        }
+
+        return publicationCounts;
+    }
+
+
+
 
 }
