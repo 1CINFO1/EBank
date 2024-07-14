@@ -18,18 +18,19 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
     }
 
 
-    public String add(Cheque c,String titulaire,int id) {
+    public String add(String titulaire,int id,int numberOfPages) {
 
         System.out.println(id);
         System.out.println(titulaire);
 
 
-        String req = "INSERT INTO `Cheque`( `dateEmission`,`titulaire`,`user_id`) VALUES (?,?,?)";
+        String req = "INSERT INTO `Cheque`( `dateEmission`,`titulaire`,`user_id`,`numberOfPapers`) VALUES (?,?,?,?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
-            ps.setDate(1, new java.sql.Date(c.getDateEmission().getTime()));
+            ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             ps.setString(2, titulaire);
             ps.setInt(3,id);
+            ps.setInt(4,numberOfPages);
             ps.executeUpdate();
 
             return("all set");
@@ -45,7 +46,7 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
 
     @Override
     public void delete(int id) {
-        String req = "DELETE FROM `Cheque` WHERE `id`=?";
+        String req = "DELETE FROM `cheque` WHERE `id`=?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setInt(1, id);
@@ -58,7 +59,7 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
 
     @Override
     public void update(Cheque c , int id) {
-        String req = "UPDATE `Cheque` SET  `dateEmission`=?, `titulaire`=? WHERE `id`=?";
+        String req = "UPDATE `cheque` SET  `dateEmission`=?, `titulaire`=? WHERE `id`=?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setDate(1, new java.sql.Date(c.getDateEmission().getTime()));
@@ -73,21 +74,36 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
 
     @Override
     public List<Cheque> getAll() {
+        return List.of();
+    }
+
+    public List<Cheque> getChequesByUserId(int user_Id) {
         List<Cheque> cheques = new ArrayList<>();
-        String req = "SELECT * FROM `Cheque`";
-        try {
-            Statement st = cnx.createStatement();
-            ResultSet res = st.executeQuery(req);
-            while (res.next()) {
-                Cheque c = new Cheque();
-                c.setId(res.getInt("id"));
-                c.setDateEmission(res.getDate("Date"));
-                c.setTitulaire(res.getString("titulaire"));
-                cheques.add(c);
+
+        String sql = "SELECT * FROM cheque WHERE `user_id` = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql)) {
+            stmt.setInt(1, user_Id); // Set the user_Id parameter
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    java.util.Date dateEmission = rs.getDate("dateEmission");
+                    String titulaire = rs.getString("titulaire");
+                    int numberOfPapers = rs.getInt("numberOfPapers"); // Check if this matches your database column name
+                    int userId = rs.getInt("user_id");
+                    String status = rs.getString("status");
+
+                    // Assuming Cheque constructor parameters are in the correct order
+                    Cheque cheque = new Cheque(id, dateEmission, titulaire, numberOfPapers, userId);
+                    System.out.println("Fetched Cheque: " + cheque);
+                    cheques.add(cheque);
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error retrieving cheques by user ID", e);
         }
+
         return cheques;
     }
+
+
 }

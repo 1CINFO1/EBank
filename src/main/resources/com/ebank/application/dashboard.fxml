@@ -18,9 +18,11 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="809.0" stylesheets="@styleCharity.css"
-   xmlns="http://javafx.com/javafx/22"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
+            xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
    <left>
       <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
          <children>
@@ -165,6 +167,22 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button fx:id="chequeDemandsButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showChequeDemandsPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Cheque Demands" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/logo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
          </children>
          <BorderPane.margin>
             <Insets />
@@ -468,34 +486,52 @@
             <Pane fx:id="cartePane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Pane fx:id="ajoutCheckPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TextField fx:id="titleField" alignment="CENTER" prefHeight="76.0" prefWidth="617.0" style="-fx-background-color: #FFD700;" text="Ajouter un carnet cheque ">
+                  <TextField fx:id="titleField" alignment="CENTER" prefHeight="76.0" prefWidth="617.0" style="-fx-background-color: #FFD700;" text="Demander un carnet de cheque">
                      <font>
                         <Font name="Arial Black" size="29.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="nameField" layoutX="248.0" layoutY="211.0" prefHeight="30.0" prefWidth="194.0" />
-                  <Button fx:id="addButton" onAction="#handleAddButtonAction" layoutX="26.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Ajouter " textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button fx:id="cancelButton" onAction="#handleCancelButtonAction" layoutX="425.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Annuler " textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
 
-                  <Label layoutX="71.0" layoutY="133.0" text="Date d'emission " />
-                  <Label layoutX="14.0" layoutY="216.0" text="Nom Titulaire du carnet du carnet " />
-                  <DatePicker fx:id="dateField" layoutX="210.0" layoutY="128.0" />
+                  <Label layoutX="14.0" layoutY="216.0" text="Nombre de pages" />
+                  <TextField fx:id="numberOfPagesField" layoutX="248.0" layoutY="211.0" prefHeight="30.0" prefWidth="194.0" />
+                  <Button fx:id="addButton" onAction="#addCheque" layoutX="26.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" text="Ajouter " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="cancelButton" onAction="#handleCancelButtonAction" layoutX="425.0" layoutY="340.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="142.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" text="Annuler " textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                </children>
             </Pane>
+
+            <Pane fx:id="ChequeList" prefHeight="600" prefWidth="800" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TableView fx:id="chequeTableList" layoutX="50.0" layoutY="100.0" prefHeight="400.0" prefWidth="900">
+                     <columns>
+                        <TableColumn fx:id="column1" prefWidth="150" text="titulaire" />
+                        <TableColumn fx:id="column2" prefWidth="350" text="user_id" />
+                        <TableColumn fx:id="column3" prefWidth="150" text="number of pages" />
+                        <TableColumn fx:id="column4" prefWidth="200" text="status" />
+                        <TableColumn fx:id="actionColumn" prefWidth="118.0" text="Actions" />
+                     </columns>
+                  </TableView>
+                  <Label fx:id="headerLabel" layoutX="50.0" layoutY="20.0" prefHeight="61.0" prefWidth="700.0" text="Liste des demandes des publication" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                     <font>
+                        <Font name="Gill Sans MT Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+
 
          </children>
       </AnchorPane>

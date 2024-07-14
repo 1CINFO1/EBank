@@ -2,23 +2,26 @@ package com.ebank.application.controllers;
 
 import com.ebank.application.models.AdminUser;
 import com.ebank.application.models.CharityCampaignModel;
+import com.ebank.application.models.Cheque;
 import com.ebank.application.models.Publication;
+import com.ebank.application.services.AdminService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -143,9 +146,34 @@ public class adminController implements Initializable {
 
     @FXML
     private VBox publicationListVBox;
+    @FXML
+    private Pane chequeDemandsPane;
+
+
+
+
+    @FXML
+    private TableView<Cheque> chequeTableList;
+
+    @FXML
+    private TableColumn<Cheque, String> column1;
+
+    @FXML
+    private TableColumn<Cheque, Integer> column2;
+
+    @FXML
+    private TableColumn<Cheque, Integer> column3;
+
+    @FXML
+    private TableColumn<Cheque, String> column4;
+
+    @FXML
+    private TableColumn<Cheque, HBox> actionColumn;
+
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
+    private final AdminService adminService = new AdminService();
 
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -210,7 +238,53 @@ public class adminController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleLoadCheques() {
+        column1.setCellValueFactory(new PropertyValueFactory<>("titulaire"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("numberOfPapers"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("status"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
 
+        loadCheques();
+    }
+
+    private void loadCheques() {
+        ObservableList<Cheque> cheques = FXCollections.observableArrayList();
+        for (Cheque cheque : adminService.getAllCheques()) {
+            HBox actionButtons = createActionButtons(cheque);
+            cheque.setAction(actionButtons);
+            cheques.add(cheque);
+        }
+        chequeTableList.setItems(cheques);
+    }
+
+    private HBox createActionButtons(Cheque cheque) {
+        Button approveButton = new Button("Ready");
+        approveButton.getStyleClass().add("action-button");
+        approveButton.setOnAction(event -> {
+            int chequeId = cheque.getId();
+            System.out.println(chequeId);
+            adminService.approveCheque(chequeId);
+            loadCheques();
+        });
+
+        HBox hbox = new HBox(approveButton);
+        hbox.getStyleClass().add("hbox-actions");
+        return hbox;
+    }
+
+    @FXML
+    void showChequeDemandsPane(){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        chequeDemandsPane.setVisible(true);
+        handleLoadCheques();
+
+    }
     @FXML
     void showDepositPane() {
         homePane.setVisible(false);
@@ -218,7 +292,7 @@ public class adminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-
+        chequeDemandsPane.setVisible(false);
 
     }
 
@@ -229,7 +303,7 @@ public class adminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-
+        chequeDemandsPane.setVisible(false);
         setLabels();
     }
 
@@ -241,7 +315,7 @@ public class adminController implements Initializable {
         transferPane.setVisible(true);
         converterPane.setVisible(false);
 
-
+        chequeDemandsPane.setVisible(false);
     }
 
     @FXML
@@ -251,7 +325,7 @@ public class adminController implements Initializable {
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
-
+        chequeDemandsPane.setVisible(false);
     }
 
     @FXML
@@ -261,7 +335,7 @@ public class adminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(true);
-
+        chequeDemandsPane.setVisible(false);
     }
 
 

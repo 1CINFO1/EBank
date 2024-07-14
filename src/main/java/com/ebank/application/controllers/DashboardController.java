@@ -18,14 +18,19 @@ import com.ebank.application.models.AdminUser;
 import com.ebank.application.models.Cheque;
 import com.ebank.application.models.Publication;
 import com.ebank.application.models.User;
+import com.ebank.application.services.AdminService;
 import com.ebank.application.services.ChequeService;
 import com.ebank.application.services.IpublicationImple;
 import com.ebank.application.services.TransfertService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javafx.fxml.FXML;
@@ -162,10 +167,34 @@ public class DashboardController implements Initializable {
 
     @FXML
     private Button cancelButton;
+    @FXML
+    private TextField numberOfPagesField;
+
+    @FXML
+    private Pane ChequeList;
+
+
+    @FXML
+    private TableView<Cheque> chequeTableList;
+
+    @FXML
+    private TableColumn<Cheque, String> column1;
+
+    @FXML
+    private TableColumn<Cheque, Integer> column2;
+
+    @FXML
+    private TableColumn<Cheque, Integer> column3;
+
+    @FXML
+    private TableColumn<Cheque, String> column4;
+
+    @FXML
+    private TableColumn<Cheque, HBox> actionColumn;
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
-
+    private final AdminService adminService = new AdminService();
     private final ChequeService chequeService = new ChequeService();
 
     protected String errorStyle = "-fx-text-fill: RED;";
@@ -182,6 +211,55 @@ public class DashboardController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+    @FXML
+    private void handleLoadCheques() {
+        column1.setCellValueFactory(new PropertyValueFactory<>("titulaire"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("numberOfPapers"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("status"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+
+        loadCheques();
+    }
+
+    private void loadCheques() {
+        ObservableList<Cheque> cheques = FXCollections.observableArrayList();
+        for (Cheque cheque : chequeService.getChequesByUserId(currentUser.getId())) {
+            HBox actionButtons = createActionButtons(cheque);
+            cheque.setAction(actionButtons);
+            cheques.add(cheque);
+        }
+        chequeTableList.setItems(cheques);
+    }
+
+    private HBox createActionButtons(Cheque cheque) {
+        Button approveButton = new Button("Delete");
+        approveButton.getStyleClass().add("action-button");
+        approveButton.setOnAction(event -> {
+            int chequeId = cheque.getId();
+            System.out.println(chequeId);
+            chequeService.delete(chequeId);
+            loadCheques();
+        });
+
+        HBox hbox = new HBox(approveButton);
+        hbox.getStyleClass().add("hbox-actions");
+        return hbox;
+    }
+
+    @FXML
+    void showChequeDemandsPane(){
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        ChequeList.setVisible(true);
+        handleLoadCheques();
+
+    }
+
+
 
     public void getAllPublication() {
         try {
@@ -230,37 +308,22 @@ public class DashboardController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleAddButtonAction() {
-        String name = nameField.getText();
-        LocalDate localDate = dateField.getValue();
 
-        if (name != null && !name.isEmpty() && localDate != null) {
-            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Cheque cheque = new Cheque();
-            cheque.setDateEmission(date);
-            cheque.setTitulaire(name);
-            String result = addCheque(cheque);
-            System.out.println(result);
-            // Optionally, clear the fields or show a success message
-            nameField.clear();
-            dateField.setValue(null);
-        } else {
-            // Show an error message
-            System.out.println("Please fill all fields.");
-        }
-    }
 
     @FXML
     private void handleCancelButtonAction() {
         // Optionally, clear the fields or close the window
-        nameField.clear();
-        dateField.setValue(null);
+        showHomePane();
     }
 
-    public String addCheque(Cheque c) {
-        int a = currentUser.getId();
-        return chequeService.add(c, currentUser.getName(), a);
+    @FXML
+    public void addCheque() {
+        int userId = currentUser.getId();
+        String nom = currentUser.getName();
+        String numberOfPagesText = numberOfPagesField.getText();
+        int numberOfPages = Integer.parseInt(numberOfPagesText);
+        chequeService.add(nom, userId,numberOfPages);
+        showHomePane();
     }
 
     @FXML
@@ -272,7 +335,13 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         ajoutCheckPane.setVisible(true);
+        ChequeList.setVisible(false);
         cartePane.setVisible(false);
+        numberOfPagesField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                numberOfPagesField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     @FXML
@@ -285,6 +354,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(true);
         getAllPublication();
         cartePane.setVisible(false);
+        ChequeList.setVisible(false);
         ajoutCheckPane.setVisible(false);
 
     }
@@ -299,6 +369,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         cartePane.setVisible(false);
         ajoutCheckPane.setVisible(false);
+        ChequeList.setVisible(false);
 
     }
 
@@ -312,6 +383,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         cartePane.setVisible(false);
         ajoutCheckPane.setVisible(false);
+        ChequeList.setVisible(false);
 
         setLabels();
     }
@@ -325,6 +397,7 @@ public class DashboardController implements Initializable {
         converterPane.setVisible(false);
         charityPane.setVisible(false);
         cartePane.setVisible(false);
+        ChequeList.setVisible(false);
 
     }
 
@@ -338,6 +411,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         cartePane.setVisible(false);
         ajoutCheckPane.setVisible(false);
+        ChequeList.setVisible(false);
 
     }
 
@@ -351,6 +425,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         cartePane.setVisible(false);
         ajoutCheckPane.setVisible(false);
+        ChequeList.setVisible(false);
 
     }
 
@@ -364,6 +439,7 @@ public class DashboardController implements Initializable {
         charityPane.setVisible(false);
         cartePane.setVisible(true);
         ajoutCheckPane.setVisible(false);
+        ChequeList.setVisible(false);
 
     }
 
