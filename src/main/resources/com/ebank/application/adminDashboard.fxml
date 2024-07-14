@@ -114,7 +114,23 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-
+        <!-- youssef  -->
+ <Button fx:id="cartebancairebButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" layoutX="10.0" layoutY="320.0" mnemonicParsing="false" onAction="#showConverterPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Converter" textAlignment="CENTER" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="C:\Users\ASUS\Downloads\credit-card.gif" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+                <!-- youssef -->
             </children>
             <BorderPane.margin>
                 <Insets />

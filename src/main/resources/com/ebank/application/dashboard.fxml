@@ -139,7 +139,7 @@
                <graphic>
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/carte.png" />
+                        <Image url="@icons/credit-card.gif" />
                      </image>
                   </ImageView>
                </graphic>
@@ -154,7 +154,7 @@
                <graphic>
                   <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/logo_white.png" />
+                        <Image url="@icons/cheque.gif" />
                      </image>
                   </ImageView>
                </graphic>
