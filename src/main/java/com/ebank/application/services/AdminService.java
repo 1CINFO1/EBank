@@ -36,6 +36,11 @@ public class AdminService implements InterfaceCRUD<Publication> {
     }
 
 
+
+
+
+
+
     public List<Cheque> getAllCheques() {
         List<Cheque> cheques = new ArrayList<>();
 
@@ -94,6 +99,23 @@ public class AdminService implements InterfaceCRUD<Publication> {
         }
 
         return publicationCounts;
+    }
+    public Map<String, Integer> getChequeCountPerUser() {
+        Map<String, Integer> chequeCounts = new HashMap<>();
+        String sql = "SELECT titulaire, COUNT(*) AS count FROM cheque GROUP BY titulaire";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String titulaire = rs.getString("titulaire");
+                int count = rs.getInt("count");
+                chequeCounts.put(titulaire, count);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving cheque counts per user", e);
+        }
+
+        return chequeCounts;
     }
 
 

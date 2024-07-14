@@ -18,6 +18,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -34,6 +38,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -170,6 +175,20 @@ public class adminController implements Initializable {
     @FXML
     private TableColumn<Cheque, HBox> actionColumn;
 
+    @FXML
+    private Pane stasChequePaneId;
+
+    @FXML
+    private BarChart<String, Number> statisticschequeChart;
+
+
+    @FXML
+    private CategoryAxis xAxis;
+
+
+    @FXML
+    private NumberAxis yAxis;
+
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
@@ -181,6 +200,63 @@ public class adminController implements Initializable {
 
     public AdminUser currentUser = new AdminUser();
     ResultSet rs = null;
+
+
+
+    @FXML
+    void showchequeStatisticsPane(ActionEvent event) {
+        // Hide other panes if needed
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        chequeDemandsPane.setVisible(false);
+        stasChequePaneId.setVisible(true);
+
+        // Update axes labels
+        CategoryAxis xAxis = (CategoryAxis) statisticschequeChart.getXAxis();
+        xAxis.setLabel("Campaign Names");
+
+
+        NumberAxis yAxis = (NumberAxis) statisticschequeChart.getYAxis();
+        yAxis.setLabel("Number of Publications");
+
+        // Populate statistics chart with data
+        showStatistics();
+    }
+
+    private void showStatistics() {
+        // Clear any previous data in the chart
+        statisticschequeChart.getData().clear();
+
+        // Example: Get the publication counts per campaign from your adminService
+        Map<String, Integer> publicationCounts = adminService.getChequeCountPerUser();
+
+        // Create a series to hold the data
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        // Populate the series with data
+        publicationCounts.forEach((campaignName, count) -> {
+            series.getData().add(new XYChart.Data<>(campaignName, count));
+        });
+
+        // Add series to chart
+        statisticschequeChart.getData().add(series);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void setLabels() {
         name.setText(currentUser.getName());
@@ -282,6 +358,8 @@ public class adminController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(true);
+        stasChequePaneId.setVisible(false);
+
         handleLoadCheques();
 
     }
@@ -293,7 +371,7 @@ public class adminController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
-
+        stasChequePaneId.setVisible(false);
     }
 
     @FXML
@@ -304,6 +382,7 @@ public class adminController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
+        stasChequePaneId.setVisible(false);
         setLabels();
     }
 
@@ -314,7 +393,7 @@ public class adminController implements Initializable {
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         converterPane.setVisible(false);
-
+        stasChequePaneId.setVisible(false);
         chequeDemandsPane.setVisible(false);
     }
 
@@ -326,6 +405,7 @@ public class adminController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
+        stasChequePaneId.setVisible(false);
     }
 
     @FXML
@@ -336,6 +416,7 @@ public class adminController implements Initializable {
         transferPane.setVisible(false);
         converterPane.setVisible(true);
         chequeDemandsPane.setVisible(false);
+        stasChequePaneId.setVisible(false);
     }
 
 

@@ -19,6 +19,9 @@
 
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="624.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.adminController" stylesheets="@styleCharity.css">
     <left>
         <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
@@ -129,6 +132,23 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
+                <Button fx:id="statisticsChequeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showchequeStatisticsPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Cheque Demands" textAlignment="CENTER" textFill="WHITE">
+                    <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/logo.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </Button>
+
+
             </children>
             <BorderPane.margin>
                 <Insets />
@@ -486,7 +506,24 @@
                         </Label>
                     </children>
                 </Pane>
+                <Pane fx:id="stasChequePaneId"  prefHeight="550.6666666666666" prefWidth="563.3333333333334" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <BarChart fx:id="statisticschequeChart" layoutX="80.0" layoutY="148.0" prefHeight="389.0" prefWidth="430.0">
+                            <xAxis>
+                                <CategoryAxis side="BOTTOM" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis side="LEFT" />
+                            </yAxis>
+                        </BarChart>
+                        <Label layoutX="42.0" layoutY="25.0" prefHeight="39.0" prefWidth="313.0" text="number of cheque demnands per Users">
+                            <font>
+                                <Font name="Britannic Bold" size="19.0" />
+                            </font>
+                        </Label>
+                    </children>
 
+                </Pane>
             </children>
         </AnchorPane>
     </center>
