@@ -173,7 +173,6 @@ public class DashboardController implements Initializable {
     @FXML
     private Pane ChequeList;
 
-
     @FXML
     private TableView<Cheque> chequeTableList;
 
@@ -211,6 +210,7 @@ public class DashboardController implements Initializable {
         balance.setText(String.format("%.2f", currentUser.getBalance()) + "$");
         emailLabel.setText(currentUser.getEmail());
     }
+
     @FXML
     private void handleLoadCheques() {
         column1.setCellValueFactory(new PropertyValueFactory<>("titulaire"));
@@ -248,18 +248,19 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    void showChequeDemandsPane(){
+    void showChequeDemandsPane() {
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         converterPane.setVisible(false);
         ChequeList.setVisible(true);
+        ajoutCheckPane.setVisible(false);
+        cartePane.setVisible(false);
+
         handleLoadCheques();
 
     }
-
-
 
     public void getAllPublication() {
         try {
@@ -308,8 +309,6 @@ public class DashboardController implements Initializable {
         }
     }
 
-
-
     @FXML
     private void handleCancelButtonAction() {
         // Optionally, clear the fields or close the window
@@ -322,7 +321,7 @@ public class DashboardController implements Initializable {
         String nom = currentUser.getName();
         String numberOfPagesText = numberOfPagesField.getText();
         int numberOfPages = Integer.parseInt(numberOfPagesText);
-        chequeService.add(nom, userId,numberOfPages);
+        chequeService.add(nom, userId, numberOfPages);
         showHomePane();
     }
 

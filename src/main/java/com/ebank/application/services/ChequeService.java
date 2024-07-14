@@ -3,8 +3,8 @@ package com.ebank.application.services;
 
 import com.ebank.application.utils.MaConnexion;
 import com.ebank.application.interfaces.InterfaceCRUD;
-import  com.ebank.application.models.Cheque;
-import  com.ebank.application.utils.MaConnexion;
+import com.ebank.application.models.Cheque;
+import com.ebank.application.utils.MaConnexion;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,23 +17,21 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
         this.cnx = MaConnexion.getInstance().getCnx();
     }
 
-
-    public String add(String titulaire,int id,int numberOfPages) {
+    public String add(String titulaire, int id, int numberOfPages) {
 
         System.out.println(id);
         System.out.println(titulaire);
 
-
-        String req = "INSERT INTO `Cheque`( `dateEmission`,`titulaire`,`user_id`,`numberOfPapers`) VALUES (?,?,?,?)";
+        String req = "INSERT INTO `cheque`( `dateEmission`,`titulaire`,`user_id`,`numberOfPapers`) VALUES (?,?,?,?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
             ps.setString(2, titulaire);
-            ps.setInt(3,id);
-            ps.setInt(4,numberOfPages);
+            ps.setInt(3, id);
+            ps.setInt(4, numberOfPages);
             ps.executeUpdate();
 
-            return("all set");
+            return ("all set");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +56,7 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
     }
 
     @Override
-    public void update(Cheque c , int id) {
+    public void update(Cheque c, int id) {
         String req = "UPDATE `cheque` SET  `dateEmission`=?, `titulaire`=? WHERE `id`=?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
@@ -68,7 +66,7 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
             ps.executeUpdate();
             System.out.println("Cheque mis à jour avec succès!");
         } catch (SQLException e) {
-            throw new RuntimeException("Error while updating the cheque",e);
+            throw new RuntimeException("Error while updating the cheque", e);
         }
     }
 
@@ -104,6 +102,5 @@ public class ChequeService implements InterfaceCRUD<Cheque> {
 
         return cheques;
     }
-
 
 }

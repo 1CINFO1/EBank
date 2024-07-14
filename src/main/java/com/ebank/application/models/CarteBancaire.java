@@ -8,23 +8,28 @@ public class CarteBancaire {
     private Date dateExpiration;
     private String titulaire;
     private String type;
+    private String status;
 
     public CarteBancaire() {
+        this.status = "In Progress";
     }
 
-    public CarteBancaire(int id, String numero, Date dateExpiration, String titulaire, String type) {
+    public CarteBancaire(int id, String numero, Date dateExpiration, String titulaire, String type, String status) {
         this.id = id;
         this.numero = numero;
         this.dateExpiration = dateExpiration;
         this.titulaire = titulaire;
         this.type = type;
+        this.status = status;
     }
 
-    public CarteBancaire(String numero, Date dateExpiration, String titulaire, String type) {
+    public CarteBancaire(String numero, Date dateExpiration, String titulaire, String type, String status) {
         this.numero = numero;
         this.dateExpiration = dateExpiration;
         this.titulaire = titulaire;
         this.type = type;
+        this.status = status;
+
     }
 
     public int getId() {
@@ -67,6 +72,14 @@ public class CarteBancaire {
         this.type = type;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "CarteBancaire{" +
@@ -75,6 +88,7 @@ public class CarteBancaire {
                 ", dateExpiration=" + dateExpiration +
                 ", titulaire='" + titulaire + '\'' +
                 ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

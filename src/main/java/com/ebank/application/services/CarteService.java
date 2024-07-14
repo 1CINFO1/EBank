@@ -18,13 +18,14 @@ public class CarteService implements InterfaceCRUD<CarteBancaire> {
 
     @Override
     public String add(CarteBancaire c) {
-        String req = "INSERT INTO `CarteBancaire`(`numero`, `dateExpiration`, `titulaire`, `type`) VALUES (?,?,?,?)";
+        String req = "INSERT INTO `CarteBancaire`(`numero`, `dateExpiration`, `titulaire`, `type`, `status`) VALUES (?,?,?,?,?)";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setString(1, c.getNumero());
             ps.setDate(2, new java.sql.Date(c.getDateExpiration().getTime()));
             ps.setString(3, c.getTitulaire());
             ps.setString(4, c.getType());
+            ps.setString(5, c.getStatus());
 
             ps.executeUpdate();
             System.out.println("CarteBancaire ajoutée avec succès (prep)!");
@@ -50,12 +51,15 @@ public class CarteService implements InterfaceCRUD<CarteBancaire> {
 
     @Override
     public void update(CarteBancaire c, int id) {
-        String req = "UPDATE `CarteBancaire` SET `numero` = ?, `dateExpiration` = ? WHERE `id` = ?";
+        String req = "UPDATE `CarteBancaire` SET `numero` = ?, `dateExpiration` = ?, `titulaire` = ?, `type` = ?, `status` = ? WHERE `id` = ?";
         try {
             PreparedStatement ps = cnx.prepareStatement(req);
             ps.setString(1, c.getNumero());
             ps.setDate(2, new java.sql.Date(c.getDateExpiration().getTime()));
-            ps.setInt(3, id);
+            ps.setString(3, c.getTitulaire());
+            ps.setString(4, c.getType());
+            ps.setString(5, c.getStatus());
+            ps.setInt(6, id);
             ps.executeUpdate();
             System.out.println("carte updated successfully!");
         } catch (SQLException e) {
@@ -77,6 +81,7 @@ public class CarteService implements InterfaceCRUD<CarteBancaire> {
                 cb.setDateExpiration(res.getDate("dateExpiration"));
                 cb.setTitulaire(res.getString("titulaire"));
                 cb.setType(res.getString("type"));
+                cb.setStatus(res.getString("status"));
                 cartes.add(cb);
             }
         } catch (SQLException e) {

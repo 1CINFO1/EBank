@@ -7,10 +7,11 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class CarteController {
     private CarteService carteService;
@@ -28,16 +29,33 @@ public class CarteController {
     private Button confirmerButton;
 
     @FXML
-    private Button annulerButton;
-
-    @FXML
-    private Button autreOptionButton;
-
-    @FXML
     private ComboBox<String> typeCarteComboBox;
 
     @FXML
-    private ListView<CarteBancaire> cartesListView;
+    private TableView<CarteBancaire> cartesTableView;
+
+    @FXML
+    private TableColumn<CarteBancaire, Integer> idColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, String> numeroColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, Date> dateExpirationColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, String> titulaireColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, String> typeColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, Void> modifierColumn;
+
+    @FXML
+    private TableColumn<CarteBancaire, Void> supprimerColumn;
+    @FXML
+    private TableColumn<CarteBancaire, String> statusColumn;
 
     public CarteController() {
         this.carteService = new CarteService();
@@ -51,13 +69,67 @@ public class CarteController {
         typeCarteComboBox.setItems(cardTypes);
         typeCarteComboBox.getSelectionModel().selectFirst();
 
-        // Load existing cards into the ListView
+        // Initialize table columns
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        numeroColumn.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        dateExpirationColumn.setCellValueFactory(new PropertyValueFactory<>("dateExpiration"));
+        titulaireColumn.setCellValueFactory(new PropertyValueFactory<>("titulaire"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Add button to Modifier column
+        addButtonToTable(modifierColumn, "Modifier", this::handleModifierAction);
+
+        // Add button to Supprimer column
+        addButtonToTable(supprimerColumn, "Supprimer", this::handleSupprimerAction);
+
+        // Load existing cards into the TableView
+        refreshCartesList();
+    }
+
+    private void addButtonToTable(TableColumn<CarteBancaire, Void> column, String text,
+            java.util.function.Consumer<CarteBancaire> action) {
+        Callback<TableColumn<CarteBancaire, Void>, TableCell<CarteBancaire, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<CarteBancaire, Void> call(final TableColumn<CarteBancaire, Void> param) {
+                return new TableCell<>() {
+                    private final Button btn = new Button(text);
+
+                    {
+                        btn.setOnAction((ActionEvent event) -> {
+                            CarteBancaire data = getTableView().getItems().get(getIndex());
+                            action.accept(data);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        };
+
+        column.setCellFactory(cellFactory);
+    }
+
+    private void handleModifierAction(CarteBancaire carte) {
+        updateCarte(carte);
+    }
+
+    private void handleSupprimerAction(CarteBancaire carte) {
+        deleteCarte(carte.getId());
         refreshCartesList();
     }
 
     private void refreshCartesList() {
         List<CarteBancaire> cartes = getAllCartes();
-        cartesListView.setItems(FXCollections.observableArrayList(cartes));
+        cartesTableView.setItems(FXCollections.observableArrayList(cartes));
     }
 
     @FXML
@@ -78,50 +150,6 @@ public class CarteController {
         showAlert(Alert.AlertType.INFORMATION, "Ajout de carte", result);
         clearFields();
         refreshCartesList();
-    }
-
-    @FXML
-    private void annulerButtonAction(ActionEvent event) {
-        clearFields();
-    }
-
-    @FXML
-    private void autreOptionButtonAction(ActionEvent event) {
-        CarteBancaire selectedCarte = cartesListView.getSelectionModel().getSelectedItem();
-        if (selectedCarte != null) {
-            showOptionsDialog(selectedCarte);
-        } else {
-            showAlert(Alert.AlertType.WARNING, "Sélection", "Veuillez sélectionner une carte dans la liste.");
-        }
-    }
-
-    private void showOptionsDialog(CarteBancaire carte) {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Options de carte");
-        dialog.setHeaderText("Choisissez une option pour la carte " + carte.getNumero());
-
-        ButtonType updateButtonType = new ButtonType("Modifier", ButtonBar.ButtonData.OK_DONE);
-        ButtonType deleteButtonType = new ButtonType("Supprimer", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(updateButtonType, deleteButtonType, ButtonType.CANCEL);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == updateButtonType) {
-                return "update";
-            } else if (dialogButton == deleteButtonType) {
-                return "delete";
-            }
-            return null;
-        });
-
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(option -> {
-            if ("update".equals(option)) {
-                updateCarte(carte);
-            } else if ("delete".equals(option)) {
-                deleteCarte(carte.getId());
-                refreshCartesList();
-            }
-        });
     }
 
     private void updateCarte(CarteBancaire carte) {

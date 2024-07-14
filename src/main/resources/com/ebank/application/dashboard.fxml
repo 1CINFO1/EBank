@@ -21,14 +21,14 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="702.0" prefWidth="809.0" stylesheets="@styleCharity.css"
-            xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
+   xmlns="http://javafx.com/javafx/22"
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ebank.application.controllers.DashboardController">
    <left>
-      <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
-         <children>
+      <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="10.0" stylesheets="@style.css" BorderPane.alignment="CENTER">
+         <children >
             <Button fx:id="homeButton" alignment="TOP_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showHomePane" prefHeight="71.0" prefWidth="154.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Home" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="58.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
@@ -49,7 +49,7 @@
             </Button>
             <Button fx:id="depositButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showDepositPane" prefHeight="67.0" prefWidth="154.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Deposit" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
@@ -67,7 +67,7 @@
             </Button>
             <Button fx:id="withdrawButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showWithdrawPane" prefHeight="70.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Withdraw" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="56.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
@@ -85,7 +85,7 @@
             </Button>
             <Button fx:id="transferButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showTransferPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Transfer" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -118,7 +118,7 @@
             </Button>
             <!-- <Button fx:id="charityButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showCharityPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Charity" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -136,7 +136,7 @@
             </Button> -->
             <Button fx:id="carteButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showCartePane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Carte" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="4.0" top="4.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">

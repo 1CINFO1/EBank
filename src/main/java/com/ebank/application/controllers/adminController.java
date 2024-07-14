@@ -44,7 +44,6 @@ import java.util.ResourceBundle;
 
 public class adminController implements Initializable {
 
-
     @FXML
     private Button charityButton;
     @FXML
@@ -133,7 +132,8 @@ public class adminController implements Initializable {
 
     @FXML
     private Pane transferPane;
-
+    @FXML
+    private Pane cartePane;
     @FXML
     private TextField withdrawAmountTextField;
 
@@ -153,9 +153,6 @@ public class adminController implements Initializable {
     private VBox publicationListVBox;
     @FXML
     private Pane chequeDemandsPane;
-
-
-
 
     @FXML
     private TableView<Cheque> chequeTableList;
@@ -181,14 +178,11 @@ public class adminController implements Initializable {
     @FXML
     private BarChart<String, Number> statisticschequeChart;
 
-
     @FXML
     private CategoryAxis xAxis;
 
-
     @FXML
     private NumberAxis yAxis;
-
 
     private final TransfertService transfertService = new TransfertService();
     private final IpublicationImple ipublicationImple = new IpublicationImple();
@@ -197,11 +191,8 @@ public class adminController implements Initializable {
     protected String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
-
     public AdminUser currentUser = new AdminUser();
     ResultSet rs = null;
-
-
 
     @FXML
     void showchequeStatisticsPane(ActionEvent event) {
@@ -213,11 +204,11 @@ public class adminController implements Initializable {
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
         stasChequePaneId.setVisible(true);
+        cartePane.setVisible(false);
 
         // Update axes labels
         CategoryAxis xAxis = (CategoryAxis) statisticschequeChart.getXAxis();
         xAxis.setLabel("Campaign Names");
-
 
         NumberAxis yAxis = (NumberAxis) statisticschequeChart.getYAxis();
         yAxis.setLabel("Number of Publications");
@@ -245,19 +236,6 @@ public class adminController implements Initializable {
         statisticschequeChart.getData().add(series);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void setLabels() {
         name.setText(currentUser.getName());
         dob.setText(currentUser.getDob().toString());
@@ -279,8 +257,7 @@ public class adminController implements Initializable {
                                     "Campaign Name: " + pub.getCampaignName() + "\n" +
                                     "Description: " + pub.getDescription() + "\n" +
                                     "Publication Date: " + pub.getPublicationDate() + "\n" +
-                                    "Picture: " + pub.getPicture() + "\n"
-                    );
+                                    "Picture: " + pub.getPicture() + "\n");
 
                     // Create a button for donation
                     Button donateButton = new Button("Donate");
@@ -300,7 +277,8 @@ public class adminController implements Initializable {
                     // Create a VBox to hold the label and donate button
                     VBox publicationBox = new VBox();
                     publicationBox.getChildren().addAll(publicationLabel, donateButton);
-                    publicationBox.setStyle("-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
+                    publicationBox.setStyle(
+                            "-fx-padding: 19; -fx-border-style: solid inside; -fx-border-width: 2; -fx-border-insets: 5; -fx-border-radius: 5; -fx-border-color: gray;");
 
                     // Add the VBox to the publicationListVBox
                     publicationListVBox.getChildren().add(publicationBox);
@@ -351,7 +329,7 @@ public class adminController implements Initializable {
     }
 
     @FXML
-    void showChequeDemandsPane(){
+    void showChequeDemandsPane() {
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
@@ -360,9 +338,11 @@ public class adminController implements Initializable {
         chequeDemandsPane.setVisible(true);
         stasChequePaneId.setVisible(false);
 
+        cartePane.setVisible(false);
         handleLoadCheques();
 
     }
+
     @FXML
     void showDepositPane() {
         homePane.setVisible(false);
@@ -372,6 +352,8 @@ public class adminController implements Initializable {
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
         stasChequePaneId.setVisible(false);
+        cartePane.setVisible(false);
+
     }
 
     @FXML
@@ -383,6 +365,8 @@ public class adminController implements Initializable {
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
         stasChequePaneId.setVisible(false);
+        cartePane.setVisible(false);
+
         setLabels();
     }
 
@@ -394,6 +378,8 @@ public class adminController implements Initializable {
         transferPane.setVisible(true);
         converterPane.setVisible(false);
         stasChequePaneId.setVisible(false);
+        cartePane.setVisible(false);
+
         chequeDemandsPane.setVisible(false);
     }
 
@@ -406,6 +392,8 @@ public class adminController implements Initializable {
         converterPane.setVisible(false);
         chequeDemandsPane.setVisible(false);
         stasChequePaneId.setVisible(false);
+        cartePane.setVisible(false);
+
     }
 
     @FXML
@@ -417,8 +405,22 @@ public class adminController implements Initializable {
         converterPane.setVisible(true);
         chequeDemandsPane.setVisible(false);
         stasChequePaneId.setVisible(false);
+        cartePane.setVisible(false);
+
     }
 
+    @FXML
+    void showCartePane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        converterPane.setVisible(false);
+        chequeDemandsPane.setVisible(false);
+        cartePane.setVisible(true);
+        stasChequePaneId.setVisible(false);
+
+    }
 
     @FXML
     public void confirmDeposit() {
@@ -493,7 +495,6 @@ public class adminController implements Initializable {
         }
     }
 
-
     public void logout() throws IOException {
         URL location = getClass().getResource("/com/ebank/application/login.fxml");
         if (location == null) {
@@ -522,7 +523,8 @@ public class adminController implements Initializable {
 
     public double convert(String from, String to, double amount) throws IOException {
         double result;
-        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to=" + to;
+        String url_str = "https://v6.exchangerate-api.com/v6/102db8a095627d3b05f54c7a/convert?from=" + from + "&to="
+                + to;
         URL url = new URL(url_str);
         HttpURLConnection request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("GET");
@@ -577,10 +579,11 @@ public class adminController implements Initializable {
         loginController.limitTextField(depositAmountTextField);
         loginController.limitTextField(withdrawAmountTextField);
         loginController.limitTextField(transferAmountTextField);
-        String[] currencies = new String[]{"USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
-                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD"};
+        String[] currencies = new String[] { "USD", "EUR", "GBP", "CAD", "AED", "EGP", "SAR", "INR", "JPY", "CHF",
+                "RUB", "SGD", "SEK", "BRL", "IQD", "MAD", "CNY", "MXN", "KWD", "TRY", "ARS", "LYD", "AUD" };
         firstCurrency.getItems().addAll(currencies);
         secondCurrency.getItems().addAll(currencies);
+        loadCarteView();
     }
 
     public void updatePublication(ActionEvent actionEvent) {
@@ -590,5 +593,20 @@ public class adminController implements Initializable {
     }
 
     public void deletePublication(ActionEvent actionEvent) {
+    }
+
+    public void loadCarteView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/ebank/application/adminCarteView.fxml"));
+            Pane carteView = loader.load();
+
+            cartePane.getChildren().add(carteView);
+
+            carteView.prefWidthProperty().bind(cartePane.widthProperty());
+            carteView.prefHeightProperty().bind(cartePane.heightProperty());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

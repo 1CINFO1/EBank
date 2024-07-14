@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml" fx:controller="com.ebank.application.controllers.AdminCarteController" prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <TableView fx:id="cartesTableView" layoutX="10.0" layoutY="10.0" prefHeight="350.0" prefWidth="580.0">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50.0"/>
+                <TableColumn fx:id="numeroColumn" text="Numéro" prefWidth="100.0"/>
+                <TableColumn fx:id="dateExpirationColumn" text="Date d'expiration" prefWidth="120.0"/>
+                <TableColumn fx:id="titulaireColumn" text="Titulaire" prefWidth="100.0"/>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="80.0"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="80.0"/>
+                <TableColumn fx:id="actionColumn" text="Action" prefWidth="120.0"/>
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
