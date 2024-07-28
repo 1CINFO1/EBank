@@ -24,6 +24,9 @@ import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
 import com.ebank.application.models.User;
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.util.Properties;
 
 public class loginController implements Initializable {
 
@@ -225,6 +228,58 @@ public class loginController implements Initializable {
         alert.showAndWait();
     }
 
+    private void sendWelcomeEmail(String recipientEmail, String recipientName) {
+        // Sender's email credentials
+        final String senderEmail = "example@gmail.com"; // Use your email
+        final String senderPassword = "pwd"; // Use your email password or app password
+
+        // SMTP server properties
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        // Create a Session object
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
+
+        try {
+            // Create a MimeMessage object
+            Message message = new MimeMessage(session);
+
+            // Set From: header field
+            message.setFrom(new InternetAddress(senderEmail));
+
+            // Set To: header field
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+
+            // Set Subject: header field
+            message.setSubject("Welcome to E-Bank!");
+
+            // Set the actual message
+            String emailContent = "Dear " + recipientName + ",\n\n"
+                    + "Welcome to E-Bank! We're thrilled to have you on board.\n\n"
+                    + "Your account has been successfully created. You can now log in to access our services.\n\n"
+                    + "If you have any questions or need assistance, please don't hesitate to contact our support team.\n\n"
+                    + "Best regards,\nThe E-Bank Team";
+
+            message.setText(emailContent);
+
+            // Send the message
+            Transport.send(message);
+
+            System.out.println("Welcome email sent successfully to " + recipientEmail);
+
+        } catch (MessagingException e) {
+            System.err.println("Failed to send welcome email: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void signUp() throws SQLException {
         String name = signupName.getText();
@@ -264,12 +319,14 @@ public class loginController implements Initializable {
 
         Boolean isUserAdded = loginService.addUser(name, email, accountNumber, dob, password, role);
         if (isUserAdded) {
+            sendWelcomeEmail(email, name);
+
             switchToLoginPane();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("User Added");
             alert.setHeaderText(null);
             alert.setContentText("User has been successfully added.");
-        
+
             alert.showAndWait();
         }
     }
